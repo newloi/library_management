@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.librarymanagement"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.librarymanagement"
@@ -58,4 +58,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 }

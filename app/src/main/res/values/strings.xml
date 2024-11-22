@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LibraryManagement</string>
+    <string name="tai_khoan_thu_vien">Tài khoản thư viện</string>
+    <string name="ten_dang_nhap">Ten Dang Nhap</string>
 </resources>
