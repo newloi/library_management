@@ -1,4 +1,6 @@
 package com.example.librarymanagement.ui
 
-class BookViewModel {
+import androidx.lifecycle.ViewModel
+
+class BookViewModel : ViewModel() {
 }

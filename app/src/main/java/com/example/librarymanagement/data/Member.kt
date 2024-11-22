@@ -1,3 +1,10 @@
 package com.example.librarymanagement.data
 
-data class Member()
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "members")
+data class Member(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0
+)
