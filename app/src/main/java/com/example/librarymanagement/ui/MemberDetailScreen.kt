@@ -33,13 +33,12 @@ private fun MemberDetail(
         modifier = modifier
             .padding(32.dp)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
             text = "Ảnh",
             modifier = modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.titleLarge
         )
         Image(
             painter = painterResource(memberImage),
@@ -48,8 +47,7 @@ private fun MemberDetail(
         )
         Text(
             text = "Thông tin thành viên",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.titleLarge
         )
         InfoAbout(
             label = "Họ và tên",
@@ -60,24 +58,24 @@ private fun MemberDetail(
             InfoAbout(
                 label = "Giới tính",
                 value = member.gender,
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier.weight(1f)
             )
             Spacer(modifier = modifier.width(32.dp))
             InfoAbout(
                 label = "Ngày sinh",
                 value = member.dateOfBirth,
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier.weight(1.5f)
             )
         }
         InfoAbout(
             label = "Địa chỉ",
             value = member.address,
-            modifier = modifier.weight(1f)
+            modifier = modifier.fillMaxWidth()
         )
         InfoAbout(
             label = "Ngày đăng kí",
             value = member.registrationDate,
-            modifier = modifier.weight(2f)
+            modifier = modifier.fillMaxWidth()
         )
 
     }

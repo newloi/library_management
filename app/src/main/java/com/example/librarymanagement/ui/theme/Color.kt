@@ -10,6 +10,7 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
+val MainColor = Color(0xFF2F94F9)
 val LoginBackground = Color(0xFF83BCF6)
 val LoginTitle = Color(0xFF1B5288)
 val RegisterNow = Color(0xFF3180D0)

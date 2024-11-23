@@ -20,12 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
+import com.example.librarymanagement.ui.theme.Roboto
 
 @Composable
 fun BookDetailScreen(modifier: Modifier = Modifier) {
@@ -40,13 +43,12 @@ private fun BookDetail(
 ) {
     Column(
         modifier = modifier.padding(32.dp).fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
             text = "Ảnh",
             modifier = modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.titleLarge
         )
         Image(
             painter = painterResource(bookImage),
@@ -55,8 +57,7 @@ private fun BookDetail(
         )
         Text(
             text = "Thông tin sách",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.titleLarge
         )
         InfoAbout(
             label = "Tên",
@@ -110,10 +111,15 @@ fun InfoAbout(
             )
         },
         value = value,
-        textStyle = MaterialTheme.typography.bodyMedium,
+        textStyle = TextStyle(
+            fontFamily = Roboto,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            color = Color.Black
+        ),
         onValueChange = {},
         enabled = false,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(10.dp),
         modifier = modifier
     )
 }
