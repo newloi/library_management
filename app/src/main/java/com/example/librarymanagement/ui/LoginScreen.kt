@@ -1,5 +1,6 @@
 package com.example.librarymanagement.ui
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
@@ -7,11 +8,14 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -24,6 +28,7 @@ import com.example.librarymanagement.R
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -52,28 +57,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(bottom = 20.dp, top = 40.dp)
             )
-            TextField(
-                label = {Text(text = "Tên đăng nhập")},
-                value = "",
-                onValueChange = {  },
-                shape = RoundedCornerShape(16.dp),
-                modifier = modifier
-            )
-            
+            TextFieldAbout(label = "Tên đăng nhập")
             Spacer(modifier = Modifier.height(10.dp))
-            TextField(
-                label = {Text(text = "Mật khẩu")},
-                value = "",
-                onValueChange = {  },
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.eye),
-                        contentDescription = null
-                    )
-                },
-                shape = RoundedCornerShape(16.dp),
-                modifier = modifier
-            )
+            TextFieldAbout(label = "Mật khẩu", icon = R.drawable.eye)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -132,6 +118,31 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextFieldAbout(
+    @DrawableRes icon: Int = 0,
+    label: String,
+    modifier: Modifier = Modifier) {
+    TextField(
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        value = "",
+        onValueChange = {  },
+        shape= RoundedCornerShape(16.dp),
+        trailingIcon = { Icon(painterResource(icon), contentDescription = null) },
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = Color.Transparent, // Tắt đường gạch dưới khi focus
+            unfocusedIndicatorColor = Color.Transparent // Tắt đường gạch dưới khi không focus
+        ),
+        modifier = modifier.padding(top= 8.dp, bottom = 8.dp)
+    )
 }
 
 @Preview(showBackground = true)

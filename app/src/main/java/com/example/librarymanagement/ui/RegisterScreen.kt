@@ -14,13 +14,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +33,7 @@ import com.example.librarymanagement.ui.theme.LoginBackground
 import com.example.librarymanagement.ui.theme.MainColor
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen (modifier: Modifier = Modifier){
     Surface(color = LoginBackground, modifier = modifier.fillMaxSize() ) {
@@ -45,56 +49,15 @@ fun RegisterScreen (modifier: Modifier = Modifier){
 
             Spacer(modifier= modifier.padding(10.dp))
 
-            TextField(
-                label = {Text(text = "Nhập email của bạn")},
-                value = "",
-                onValueChange = {  },
-                shape= RoundedCornerShape(16.dp),
-
-                modifier = Modifier.padding(top= 8.dp, bottom = 8.dp)
-            )
-            TextField(
-                label = {Text(text = "Tên đăng nhập")},
-                value = "",
-                onValueChange = {  },
-                shape= RoundedCornerShape(16.dp),
-                modifier = Modifier.padding(top= 8.dp, bottom = 8.dp)
-            )
-
-            TextField(
-                label = {Text(text = "Nhập mật khẩu")},
-                value = "",
-                onValueChange = {  },
-                shape= RoundedCornerShape(16.dp),
-                modifier = Modifier.padding(top= 8.dp, bottom = 8.dp),
-
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.eye),
-                        contentDescription = null
-                    )
-                }
-            )
-            TextField(
-                label = {Text(text = "Nhập lại mật khẩu")},
-                value = "",
-                onValueChange = {  },
-                shape= RoundedCornerShape(16.dp),
-                modifier = Modifier.padding(top= 8.dp),
-
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.eye),
-                        contentDescription = null
-                    )
-                }
-            )
+            TextFieldAbout(label = "Nhập email của bạn")
+            TextFieldAbout(label = "Tên đăng nhập")
+            TextFieldAbout(label = "Nhập mật khẩu", icon = R.drawable.eye)
             Text(
                 text= "Mật khẩu gồm 6 ký tự",
                 modifier = Modifier.fillMaxWidth().padding(start= 32.dp, top= 2.dp,bottom=10.dp),
-                textAlign = TextAlign.Start,
-
+                textAlign = TextAlign.Start
             )
+            TextFieldAbout(label = "Nhập lại mật khẩu", icon = R.drawable.eye)
 
             Button(
                 onClick = {/*ToDo*/},
