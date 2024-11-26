@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LibraryManagement</string>
+    <string name="app_name">Quản lý thư viện</string>
     <string name="ten_dang_nhap">Ten Dang Nhap</string>
     <string name="quen_mat_khau">Quên mật khẩu?</string>
     <string name="dang_nhap">Đăng nhập</string>

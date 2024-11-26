@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
+import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -169,7 +171,7 @@ private fun FilterBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun TopAppBarPreview() {
+fun SearchAndFilterTopAppBarPreview() {
     LibraryManagementTheme {
         SearchAndFilterTopAppBar()
     }
@@ -256,13 +258,40 @@ fun InfoAppBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun AppBarPreview() {
+fun InfoAppBarPreview() {
     LibraryManagementTheme {
-        Scaffold(topBar = { SearchAndFilterTopAppBar() }) { innerPadding ->
+        Scaffold(topBar = { InfoAppBar() }) { innerPadding ->
             Text(
                 text = "newloi",
                 modifier = Modifier.padding(innerPadding)
             )
         }
+    }
+}
+
+@Composable
+fun BottomAppBar(modifier: Modifier = Modifier) {
+    Row(modifier = modifier) {
+        Tab(
+            selected = true,
+            onClick = { },
+            text = {
+                Text(text = "Sách")
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.book_duotone_line),
+                    contentDescription = "Sách"
+                )
+            }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BottomAppBarPreview() {
+    LibraryManagementTheme {
+        BottomAppBar()
     }
 }
