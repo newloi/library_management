@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,7 +52,26 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(bottom = 20.dp, top = 40.dp)
             )
-           //trtrtrtrt
+            TextField(
+                label = {Text(text = "Tên đăng nhập")},
+                value = "",
+                onValueChange = {  },
+                shape = RoundedCornerShape(16.dp),
+                modifier = modifier
+            )
+            TextField(
+                label = {Text(text = "Mật khẩu")},
+                value = "",
+                onValueChange = {  },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(R.drawable.eye),
+                        contentDescription = null
+                    )
+                },
+                shape = RoundedCornerShape(16.dp),
+                modifier = modifier
+            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
