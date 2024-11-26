@@ -1,9 +1,9 @@
 package com.example.librarymanagement.ui
 
-import android.graphics.Paint.Align
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,13 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -37,14 +36,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
+import com.example.librarymanagement.ui.theme.MainColor
 import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +72,7 @@ fun SearchAndFilterTopAppBar(modifier: Modifier = Modifier) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Hủy tìm kiếm",
-                        modifier = modifier.clickable {
+                        modifier = Modifier.clickable {
                             if(searchText.isNotEmpty()) {
                                 searchText = ""
                             } else active = false
@@ -80,19 +80,15 @@ fun SearchAndFilterTopAppBar(modifier: Modifier = Modifier) {
                     )
                 }
             },
-            modifier = modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             //Lich su tim kiem
         }
-        HorizontalDivider(modifier = modifier
+        HorizontalDivider(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp))
         FilterBar()
     }
-}
-
-enum class OptionsFilter() {
-    INCREASING, DECREASING
 }
 
 @Composable
@@ -100,13 +96,15 @@ private fun FilterBar(modifier: Modifier = Modifier) {
     var isIncreasing by remember { mutableStateOf(true) }
     var isExpanded by remember { mutableStateOf(false) }
     Row(
-        modifier = modifier.fillMaxWidth().padding(start = 16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
             onClick = { isIncreasing = !isIncreasing },
-            modifier = modifier.width(50.dp)
+            modifier = Modifier.width(50.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -114,7 +112,9 @@ private fun FilterBar(modifier: Modifier = Modifier) {
                 Icon(
                     painter = painterResource(R.drawable.filter_options),
                     contentDescription = null,
-                    modifier = modifier.size(24.dp).padding(end = 4.dp)
+                    modifier = Modifier
+                        .size(24.dp)
+                        .padding(end = 4.dp)
                 )
                 Text(
                     text = if (isIncreasing) "A-Z" else "Z-A",
@@ -124,7 +124,7 @@ private fun FilterBar(modifier: Modifier = Modifier) {
         }
         IconButton(
             onClick = {isExpanded = true},
-            modifier = modifier.padding(end = 12.dp)
+            modifier = Modifier.padding(end = 12.dp)
         ) {
             Icon(
                 painter = painterResource(R.drawable.filter_alt),
@@ -145,9 +145,9 @@ private fun FilterBar(modifier: Modifier = Modifier) {
                             style = MaterialTheme.typography.labelMedium
                         )
                     },
-                    modifier = modifier.height(40.dp)
+                    modifier = Modifier.height(40.dp)
                 )
-                HorizontalDivider(modifier = modifier
+                HorizontalDivider(modifier = Modifier
                     .fillMaxWidth()
                     .height(0.5.dp))
                 DropdownMenuItem(
@@ -161,11 +161,10 @@ private fun FilterBar(modifier: Modifier = Modifier) {
                             style = MaterialTheme.typography.labelMedium
                         )
                     },
-                    modifier = modifier.height(40.dp)
+                    modifier = Modifier.height(40.dp)
                 )
             }
         }
-
     }
 }
 
@@ -215,7 +214,7 @@ fun InfoAppBar(modifier: Modifier = Modifier) {
                         Text(
                             text = "Sửa",
                             style = MaterialTheme.typography.labelMedium,
-                            modifier = modifier.padding(start = 20.dp)
+                            modifier = Modifier.padding(start = 20.dp)
                         )
                     },
                     trailingIcon = {
@@ -224,9 +223,9 @@ fun InfoAppBar(modifier: Modifier = Modifier) {
                             contentDescription = "Sửa thông tin"
                         )
                     },
-                    modifier = modifier.height(40.dp)
+                    modifier = Modifier.height(40.dp)
                 )
-                HorizontalDivider(modifier = modifier
+                HorizontalDivider(modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp))
                 DropdownMenuItem(
@@ -239,7 +238,7 @@ fun InfoAppBar(modifier: Modifier = Modifier) {
                             text = "Xóa",
                             style = MaterialTheme.typography.labelMedium,
                             color = Delete,
-                            modifier = modifier.padding(start = 20.dp)
+                            modifier = Modifier.padding(start = 20.dp)
                         )
                     },
                     trailingIcon = {
@@ -249,10 +248,11 @@ fun InfoAppBar(modifier: Modifier = Modifier) {
                             tint = Delete
                         )
                     },
-                    modifier = modifier.height(40.dp)
+                    modifier = Modifier.height(40.dp)
                 )
             }
-        }
+        },
+        modifier = modifier.shadow(4.dp)
     )
 }
 
@@ -260,7 +260,11 @@ fun InfoAppBar(modifier: Modifier = Modifier) {
 @Composable
 fun InfoAppBarPreview() {
     LibraryManagementTheme {
-        Scaffold(topBar = { InfoAppBar() }) { innerPadding ->
+        Scaffold(
+            topBar = { SearchAndFilterTopAppBar(modifier = Modifier.shadow(1.dp)) },
+            bottomBar = { HomeBottomAppBar() }
+        
+        ) { innerPadding ->
             Text(
                 text = "newloi",
                 modifier = Modifier.padding(innerPadding)
@@ -270,28 +274,70 @@ fun InfoAppBarPreview() {
 }
 
 @Composable
-fun BottomAppBar(modifier: Modifier = Modifier) {
-    Row(modifier = modifier) {
-        Tab(
-            selected = true,
-            onClick = { },
-            text = {
-                Text(text = "Sách")
-            },
-            icon = {
-                Icon(
-                    painter = painterResource(R.drawable.book_duotone_line),
-                    contentDescription = "Sách"
-                )
-            }
+fun HomeBottomAppBar(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier.fillMaxWidth().shadow(1.dp).padding(top = 20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TabIcon(
+            selectedIcon = R.drawable.book_colored,
+            unSelectedIcon = R.drawable.book,
+            label = "Sách",
+            modifier = Modifier.weight(1f)
+        )
+        TabIcon(
+            selectedIcon = R.drawable.group_colored,
+            unSelectedIcon = R.drawable.group,
+            label = "Thành viên",
+            modifier = Modifier.weight(1f)
+        )
+        TabIcon(
+            selectedIcon = R.drawable.setting_line_light_colored,
+            unSelectedIcon = R.drawable.setting_line_light,
+            label = "Cài đặt",
+            modifier = Modifier.weight(1f)
         )
     }
+}
+
+/**
+ * Tạo tab với tiêu đề [label],
+ * khi nhấn vào tab hiện icon [selectedIcon],
+ * ngược lại hiện [unSelectedIcon]
+ */
+@Composable
+private fun TabIcon(
+    @DrawableRes selectedIcon: Int,
+    @DrawableRes unSelectedIcon: Int,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Tab(
+        selected = true,
+        onClick = { },
+        text = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodySmall
+            )
+        },
+        icon = {
+            Icon(
+                painter = if(true) painterResource(selectedIcon)
+                else painterResource(unSelectedIcon),
+                contentDescription = label,
+                modifier = Modifier.size(40.dp)
+            )
+        },
+        selectedContentColor = MainColor,
+        modifier = modifier
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun BottomAppBarPreview() {
     LibraryManagementTheme {
-        BottomAppBar()
+        HomeBottomAppBar()
     }
 }
