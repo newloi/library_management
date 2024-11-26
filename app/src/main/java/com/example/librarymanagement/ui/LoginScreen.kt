@@ -59,6 +59,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 shape = RoundedCornerShape(16.dp),
                 modifier = modifier
             )
+            
+            Spacer(modifier = Modifier.height(10.dp))
             TextField(
                 label = {Text(text = "Mật khẩu")},
                 value = "",
@@ -131,21 +133,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-
-
-@Composable
-fun EditNumberField(s: String, modifier: Modifier = Modifier) {
-
-    TextField(
-        label = {Text(text = s)},
-        value = "",
-        onValueChange = {  },
-        shape = RoundedCornerShape(16.dp),
-        modifier = modifier
-    )
-}
-
-
 
 @Preview(showBackground = true)
 @Composable
