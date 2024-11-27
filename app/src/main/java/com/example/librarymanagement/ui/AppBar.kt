@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
@@ -21,6 +23,8 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -276,8 +280,8 @@ fun InfoAppBarPreview() {
 @Composable
 fun HomeBottomAppBar(modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier.fillMaxWidth().shadow(1.dp).padding(top = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.fillMaxWidth().shadow(1.dp).height(84.dp),
+        verticalAlignment = Alignment.Bottom
     ) {
         TabIcon(
             selectedIcon = R.drawable.book_colored,
@@ -326,7 +330,7 @@ private fun TabIcon(
                 painter = if(true) painterResource(selectedIcon)
                 else painterResource(unSelectedIcon),
                 contentDescription = label,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(35.dp)
             )
         },
         selectedContentColor = MainColor,
@@ -339,5 +343,34 @@ private fun TabIcon(
 fun BottomAppBarPreview() {
     LibraryManagementTheme {
         HomeBottomAppBar()
+    }
+}
+
+@Composable
+fun AddButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FloatingActionButton(
+        onClick = onClick,
+        shape = RoundedCornerShape(999.dp),
+        containerColor = MainColor,
+        elevation = FloatingActionButtonDefaults.elevation(4.dp),
+        modifier = Modifier.size(56.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = "Thêm",
+            tint = Color.White,
+            modifier = Modifier.size(40.dp),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewButton() {
+    LibraryManagementTheme {
+        AddButton(onClick = {})
     }
 }
