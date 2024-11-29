@@ -207,58 +207,9 @@ private fun MemberInfo(
 }
 
 /**
- * Hop thoai hien ra khi nhan vao dau ba cham cua the sach [nameOfMember]
+ * Hop thoai hien ra khi xoa
  */
-@Composable
-fun DialogConfirmDeleteMember(
-    nameOfMember: String,
-    modifier: Modifier = Modifier
-) {
-    AlertDialog(
-        title = {
-            Text(
-                text = "Xóa thành viên",
-                style = MaterialTheme.typography.headlineMedium
-            )
-        },
-        text = {
-            Text(
-                text = stringResource(R.string.delete_member_warning, nameOfMember),
-                style = MaterialTheme.typography.bodyMedium
-            )
-        },
-        onDismissRequest = { },
-        confirmButton = {
-            Button(
-                onClick = { },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Delete),
-                modifier = Modifier.size(100.dp, 44.dp).alpha(0.66f)
-            ) {
-                Text(
-                    text = "Xóa",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = { },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Cancel),
-                modifier = Modifier.size(100.dp, 44.dp)
-            ) {
-                Text(
-                    text = "Không",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black
-                )
-            }
-        },
-        shape = RoundedCornerShape(10.dp),
-        modifier = modifier
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable

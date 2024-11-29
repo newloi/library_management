@@ -15,12 +15,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -40,17 +46,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
+import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
 import com.example.librarymanagement.ui.theme.Roboto
+import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -350,27 +360,27 @@ fun InfoAbout(
     value: String,
     modifier:Modifier = Modifier
 ) {
-    OutlinedTextField(
-        label = {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
+    Column(modifier = modifier) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+        )
+        OutlinedTextField(
+            value = value,
+            textStyle = TextStyle(
+                fontFamily = Roboto,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
                 color = Color.Black
-            )
-        },
-        value = value,
-        textStyle = TextStyle(
-            fontFamily = Roboto,
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            color = Color.Black
-        ),
-        singleLine = true,
-        onValueChange = {},
-        enabled = false,
-        shape = RoundedCornerShape(10.dp),
-        modifier = modifier.height(60.dp)
-    )
+            ),
+            singleLine = true,
+            onValueChange = {},
+            enabled = false,
+            shape = RoundedCornerShape(10.dp),
+            modifier = modifier.height(52.dp)
+        )
+    }
 }
 
 @Composable
@@ -455,5 +465,115 @@ fun TextFieldAbout(
             unfocusedIndicatorColor = Color.Transparent // Tắt đường gạch dưới khi không focus
         ),
         modifier = modifier.padding(top= 8.dp, bottom = 8.dp)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropList(
+    label: String,
+    items: List<Any>,
+    modifier: Modifier = Modifier
+) {
+    var selected by remember { mutableStateOf("") }
+    var isExpanded by remember { mutableStateOf(false) }
+    ExposedDropdownMenuBox(
+        expanded = isExpanded,
+        onExpandedChange = { isExpanded = !isExpanded }
+    ) {
+        OutlinedTextField(
+            label = {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelMedium
+                )
+            },
+            value = selected,
+            onValueChange = {},
+            trailingIcon = {
+                Icon(
+                    imageVector = if(isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    contentDescription = null
+                )
+            },
+            readOnly = true,
+            shape = RoundedCornerShape(10.dp),
+            modifier = modifier.height(60.dp).menuAnchor()
+        )
+        ExposedDropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false }
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = item.toString()
+                        )
+                    },
+                    onClick = {
+                        selected = item.toString()
+                        isExpanded = false
+                    },
+
+                    )
+            }
+        }
+    }
+}
+
+@Composable
+fun ConfirmDialog(
+    title: String,
+    content: String,
+    cancelLabel: String,
+    confirmLabel: String,
+    cancelColor: Color,
+    confirmColor: Color,
+    modifier: Modifier = Modifier
+) {
+    AlertDialog(
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineMedium
+            )
+        },
+        text = {
+            Text(
+                text = content,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        onDismissRequest = {  },
+        confirmButton = {
+            Button(
+                onClick = { },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = confirmColor),
+                modifier = Modifier.size(100.dp, 44.dp).alpha(0.66f)
+            ) {
+                Text(
+                    text = confirmLabel,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = { },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = cancelColor),
+                modifier = Modifier.size(100.dp, 44.dp)
+            ) {
+                Text(
+                    text = cancelLabel,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.Black
+                )
+            }
+        },
+        shape = RoundedCornerShape(10.dp),
+        modifier = modifier
     )
 }
