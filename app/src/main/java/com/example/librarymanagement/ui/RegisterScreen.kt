@@ -55,9 +55,9 @@ fun RegisterScreen (modifier: Modifier = Modifier){
             Text(
                 text= "Mật khẩu gồm 6 ký tự",
                 modifier = Modifier.fillMaxWidth().padding(start= 32.dp, top= 2.dp,bottom=10.dp),
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
+
             )
-            TextFieldAbout(label = "Nhập lại mật khẩu", icon = R.drawable.eye)
 
             Button(
                 onClick = {/*ToDo*/},
