@@ -45,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -79,8 +80,7 @@ fun MembersScreen(
     ) { innerPadding ->
         LazyColumn(
             modifier = modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(members) { member ->
                 MemberInfo(member = member)
@@ -102,11 +102,9 @@ private fun MemberInfo(
         modifier = modifier
             .fillMaxWidth()
             .height(84.dp),
-        elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        ),
-        border = BorderStroke(1.dp, Cancel)
+        )
     ) {
         Row(
             verticalAlignment = Alignment.Top
@@ -117,7 +115,7 @@ private fun MemberInfo(
                 Image(
                     painter = painterResource(R.drawable.lamda_people),
                     contentDescription = member.name,
-                    modifier = Modifier.size(60.dp).clip(CircleShape),
+                    modifier = Modifier.size(65.dp).clip(CircleShape),
 
                 )
                 Spacer(modifier = Modifier.width(12.dp))
@@ -148,7 +146,8 @@ private fun MemberInfo(
             ) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Chỉnh sửa"
+                    contentDescription = "Chỉnh sửa",
+                    modifier = Modifier.rotate(90f)
                 )
                 DropdownMenu(
                     expanded = isExpanded,

@@ -96,54 +96,24 @@ private fun BookDetail(
             InfoAbout(
                 label = "Năm",
                 value = book.year.toString(),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.width(120.dp)
             )
-            Spacer(modifier = Modifier.width(32.dp))
+            Spacer(modifier = Modifier.weight(1f))
             InfoAbout(
                 label = "Thể loại",
                 value = book.type,
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.width(200.dp)
             )
         }
         InfoAbout(
             label = "Số lượng",
             value = book.quantities.toString(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.width(120.dp)
         )
     }
 }
 
-/**
- * Text field cho thuoc tinh [label] voi gia tri [value]
- */
-@Composable
-fun InfoAbout(
-    label: String,
-    value: String,
-    modifier:Modifier = Modifier
-) {
-    OutlinedTextField(
-        label = {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.Black
-            )
-        },
-        value = value,
-        textStyle = TextStyle(
-            fontFamily = Roboto,
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            color = Color.Black
-        ),
-        singleLine = true,
-        onValueChange = {},
-        enabled = false,
-        shape = RoundedCornerShape(10.dp),
-        modifier = modifier.height(60.dp)
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable
