@@ -100,7 +100,19 @@ private fun AddNewMember(
             Spacer(modifier = Modifier.weight(1f))
             AddInfo(label = "Ngày sinh", modifier = Modifier.width(200.dp))
         }
-
+        AddInfo(label = "Địa chỉ", modifier = Modifier.fillMaxWidth())
+        AddInfo(label = "Họ và tên", modifier = Modifier.fillMaxWidth())
+        Button(
+            onClick = {},
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+            modifier = Modifier.align(Alignment.End).size(100.dp, 40.dp)
+        ) {
+            Text(
+                text = "Xong",
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
     }
 }
 

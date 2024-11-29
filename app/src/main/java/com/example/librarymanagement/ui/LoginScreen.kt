@@ -120,30 +120,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TextFieldAbout(
-    @DrawableRes icon: Int = 0,
-    label: String,
-    modifier: Modifier = Modifier) {
-    TextField(
-        label = {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        },
-        value = "",
-        onValueChange = {  },
-        shape= RoundedCornerShape(16.dp),
-        trailingIcon = { Icon(painterResource(icon), contentDescription = null) },
-        colors = TextFieldDefaults.textFieldColors(
-            focusedIndicatorColor = Color.Transparent, // Tắt đường gạch dưới khi focus
-            unfocusedIndicatorColor = Color.Transparent // Tắt đường gạch dưới khi không focus
-        ),
-        modifier = modifier.padding(top= 8.dp, bottom = 8.dp)
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable

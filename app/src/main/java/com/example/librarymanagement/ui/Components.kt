@@ -31,6 +31,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -170,6 +172,7 @@ private fun FilterBar(modifier: Modifier = Modifier) {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoAppBar(modifier: Modifier = Modifier) {
@@ -256,7 +259,10 @@ fun InfoAppBar(modifier: Modifier = Modifier) {
 @Composable
 fun HomeBottomAppBar(modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier.fillMaxWidth().shadow(1.dp).height(84.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .shadow(1.dp)
+            .height(84.dp),
         verticalAlignment = Alignment.Bottom
     ) {
         TabIcon(
@@ -417,5 +423,37 @@ fun AddAppBar(
             }
         },
         modifier = modifier.shadow(4.dp)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextFieldAbout(
+    @DrawableRes icon: Int? = null,
+    label: String,
+    modifier: Modifier = Modifier) {
+    TextField(
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        value = "",
+        onValueChange = {  },
+        shape= RoundedCornerShape(16.dp),
+        trailingIcon = {
+            if(icon != null){
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = null
+                )
+            }
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = Color.Transparent, // Tắt đường gạch dưới khi focus
+            unfocusedIndicatorColor = Color.Transparent // Tắt đường gạch dưới khi không focus
+        ),
+        modifier = modifier.padding(top= 8.dp, bottom = 8.dp)
     )
 }
