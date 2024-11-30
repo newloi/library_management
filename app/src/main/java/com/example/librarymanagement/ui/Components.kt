@@ -32,6 +32,7 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -431,7 +432,14 @@ fun AddAppBar(
 fun TextFieldAbout(
     @DrawableRes icon: Int? = null,
     label: String,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
+    // Tính toán modifier trước khi gọi TextField
+
+
+
+
+    // Gọi TextField với modifier đã được cập nhật
     TextField(
         label = {
             Text(
@@ -440,10 +448,10 @@ fun TextFieldAbout(
             )
         },
         value = "",
-        onValueChange = {  },
-        shape= RoundedCornerShape(16.dp),
+        onValueChange = { },
+        shape = RoundedCornerShape(16.dp),
         trailingIcon = {
-            if(icon != null){
+            if (icon != null) {
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = null
@@ -454,6 +462,8 @@ fun TextFieldAbout(
             focusedIndicatorColor = Color.Transparent, // Tắt đường gạch dưới khi focus
             unfocusedIndicatorColor = Color.Transparent // Tắt đường gạch dưới khi không focus
         ),
-        modifier = modifier.padding(top= 8.dp, bottom = 8.dp)
+        modifier = modifier.fillMaxWidth()
+
+
     )
 }

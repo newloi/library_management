@@ -8,6 +8,9 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +36,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.librarymanagement.ui.theme.LoginBackground
+import com.example.librarymanagement.ui.theme.MainColor
+import com.example.librarymanagement.ui.theme.Roboto
 
 
 @Composable
@@ -70,26 +75,57 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     border = null,
                     modifier = Modifier.padding(vertical = 1.dp)
                 ) {
-                    Text(stringResource(R.string.quen_mat_khau))
+                    Text(
+                        stringResource(R.string.quen_mat_khau),
+                        fontSize = 13.sp,
+                        fontFamily = Roboto
+                        )
                 }
             }
 
             Button(
                 onClick = {/*TODO*/ },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MainColor)
 
             ) {
-                Text(stringResource(R.string.dang_nhap))
+                Text(
+                    text= stringResource(R.string.dang_nhap),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
-            Text(
-                text = stringResource(R.string.ghi_nho),
-                fontSize = 13.sp,
-                modifier = Modifier
-                    .padding(top = 1.dp)
-                    .align(alignment = Alignment.Start)
 
-            )
+            Spacer(Modifier.height(4.dp))
+
+            var rememberMe by remember { mutableStateOf(true) } // Trạng thái của checkbox
+            // Checkbox và Ghi nhớ thông tin
+            Row(
+                verticalAlignment = Alignment.CenterVertically, // Căn giữa checkbox và văn bản
+                modifier = Modifier.padding(start = 16.dp).fillMaxWidth()
+            ) {
+                Checkbox(
+                    checked = rememberMe,
+                    onCheckedChange = { rememberMe = it },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Color.Black, // Màu checkbox khi được chọn
+                        uncheckedColor = Color.Gray, // Màu checkbox khi chưa được chọn
+                        checkmarkColor = Color.White, // Màu dấu tích bên trong
+
+                    ) ,
+                    modifier = Modifier.size(16.dp)
+                )
+
+
+
+                Text(
+                    text = stringResource(R.string.ghi_nho), // "Ghi nhớ thông tin đăng nhập"
+                    fontSize = 13.sp,
+                    fontFamily = Roboto,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth().padding(top= 10.dp),
                 horizontalArrangement = Arrangement.Center,
@@ -97,20 +133,22 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = "Chưa có tài khoản?",
-                    fontSize = 13.sp,
+                    style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.padding(end = 0.dp)
 
                 )
                 OutlinedButton(
                     onClick = {/*TODO*/ },
                     border = null,
-                    modifier = Modifier.padding(start = 0.dp)
+                    modifier = Modifier.padding(start = 0.dp),
+
 
                 ) {
                     Text(
                         text = stringResource(R.string.dang_ky),
-                        fontSize = 13.sp,
-                        modifier = Modifier.padding(start = 0.dp)
+                        style = MaterialTheme.typography.labelMedium
+
+
                     )
                 }
             }
@@ -119,8 +157,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable
