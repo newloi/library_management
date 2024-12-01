@@ -32,7 +32,7 @@ fun MemberDetailScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { InfoAppBar() }
+        topBar = { InfoAppBar(title = "Thanh") }
     ) { innerPadding ->
         MemberDetail(memberImage = memberImage, member = member, modifier.padding(innerPadding))
     }

@@ -74,7 +74,11 @@ fun BorrowRequestsScreen(
             }
         },
         floatingActionButton = { AddButton(onClick = {}) },
-        bottomBar = { HomeBottomAppBar() }
+        bottomBar = {
+            Column {
+                HomeBottomAppBar(modifier = Modifier.shadow(1.dp))
+            }
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.padding(innerPadding),

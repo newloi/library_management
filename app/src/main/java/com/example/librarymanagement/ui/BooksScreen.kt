@@ -87,7 +87,7 @@ fun BooksScreen(
             }
         },
         floatingActionButton = { AddButton(onClick = {}) },
-        bottomBar = { HomeBottomAppBar() }
+        bottomBar = { HomeBottomAppBar(modifier = Modifier.shadow(1.dp)) }
     ) { innerPadding ->
         LazyColumn(
             modifier = modifier.padding(innerPadding),
