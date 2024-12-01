@@ -697,6 +697,28 @@ fun BorrowStateBottomBar(
     }
 }
 
+@Composable
+fun InfoAboutTable(
+    value: String,
+    modifier:Modifier = Modifier
+) {
+        OutlinedTextField(
+            value = value,
+            textStyle = TextStyle(
+                fontFamily = Roboto,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black
+            ),
+            singleLine = true,
+            onValueChange = {},
+            enabled = false,
+            shape = RoundedCornerShape(5.dp),
+            modifier = modifier.height(52.dp).fillMaxWidth()
+        )
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun ComponentPreview() {
