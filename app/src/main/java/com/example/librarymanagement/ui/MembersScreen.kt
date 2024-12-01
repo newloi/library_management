@@ -74,7 +74,21 @@ fun MembersScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { SearchAndFilterTopAppBar(modifier = Modifier.shadow(2.dp).fillMaxWidth()) },
+        topBar = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                SearchTopBar(
+                    placeholder = "Nhập tên hoặc mã thành viên",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                )
+                FilterBar()
+                HorizontalDivider(modifier = Modifier.shadow(4.dp))
+            }
+        },
         floatingActionButton = { AddButton(onClick = {}) },
         bottomBar = { HomeBottomAppBar() }
     ) { innerPadding ->
@@ -209,7 +223,22 @@ private fun MemberInfo(
 /**
  * Hop thoai hien ra khi xoa
  */
-
+@Composable
+private fun DialogConfirmDeleteMember(
+    nameOfMember: String,
+    modifier: Modifier = Modifier
+) {
+    ConfirmDialog(
+        title = "Xóa thành viên",
+        content = stringResource(R.string.delete_member_warning, nameOfMember),
+        cancelLabel = "Không",
+        confirmLabel = "Xóa",
+        cancelColor = Cancel,
+        confirmColor = Delete,
+        alpha = 0.66f,
+        modifier = modifier
+    )
+}
 
 @Preview(showBackground = true)
 @Composable

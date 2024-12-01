@@ -1,16 +1,22 @@
 package com.example.librarymanagement.ui
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -34,8 +40,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -53,6 +61,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
@@ -64,8 +73,10 @@ import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchAndFilterTopAppBar(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+fun SearchTopBar(
+    placeholder: String,
+    modifier: Modifier = Modifier
+) {
         var searchText by remember{ mutableStateOf("") }
         var active by remember { mutableStateOf(false) }
 
@@ -75,7 +86,7 @@ fun SearchAndFilterTopAppBar(modifier: Modifier = Modifier) {
             onSearch = { /* Xu ly tim kiem */ },
             active = active,
             onActiveChange = { active = it },
-            placeholder = { Text(text = "Tìm kiếm...") },
+            placeholder = { Text(text = placeholder) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -95,19 +106,14 @@ fun SearchAndFilterTopAppBar(modifier: Modifier = Modifier) {
                     )
                 }
             },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = modifier
         ) {
             //Lich su tim kiem
         }
-        HorizontalDivider(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 12.dp))
-        FilterBar()
-    }
 }
 
 @Composable
-private fun FilterBar(modifier: Modifier = Modifier) {
+fun FilterBar(modifier: Modifier = Modifier) {
     var isIncreasing by remember { mutableStateOf(true) }
     var isExpanded by remember { mutableStateOf(false) }
     Row(
@@ -288,6 +294,12 @@ fun HomeBottomAppBar(modifier: Modifier = Modifier) {
             modifier = Modifier.weight(1f)
         )
         TabIcon(
+            selectedIcon = R.drawable.rent_book_colored,
+            unSelectedIcon = R.drawable.rent,
+            label = "Đơn mượn",
+            modifier = Modifier.weight(1f)
+        )
+        TabIcon(
             selectedIcon = R.drawable.setting_line_light_colored,
             unSelectedIcon = R.drawable.setting_line_light,
             label = "Cài đặt",
@@ -378,7 +390,7 @@ fun InfoAbout(
             onValueChange = {},
             enabled = false,
             shape = RoundedCornerShape(10.dp),
-            modifier = modifier.height(52.dp)
+            modifier = Modifier.height(52.dp)
         )
     }
 }
@@ -479,7 +491,8 @@ fun DropList(
     var isExpanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = isExpanded,
-        onExpandedChange = { isExpanded = !isExpanded }
+        onExpandedChange = { isExpanded = !isExpanded },
+        modifier = modifier
     ) {
         OutlinedTextField(
             label = {
@@ -498,11 +511,14 @@ fun DropList(
             },
             readOnly = true,
             shape = RoundedCornerShape(10.dp),
-            modifier = modifier.height(60.dp).menuAnchor()
+            modifier = Modifier
+                .height(60.dp)
+                .menuAnchor()
         )
         ExposedDropdownMenu(
             expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }
+            onDismissRequest = { isExpanded = false },
+            modifier = Modifier.height(200.dp)
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
@@ -515,7 +531,7 @@ fun DropList(
                         selected = item.toString()
                         isExpanded = false
                     },
-
+                    modifier = Modifier.height(32.dp)
                     )
             }
         }
@@ -530,6 +546,7 @@ fun ConfirmDialog(
     confirmLabel: String,
     cancelColor: Color,
     confirmColor: Color,
+    alpha: Float = 1f,
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
@@ -551,7 +568,9 @@ fun ConfirmDialog(
                 onClick = { },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = confirmColor),
-                modifier = Modifier.size(100.dp, 44.dp).alpha(0.66f)
+                modifier = Modifier
+                    .size(100.dp, 44.dp)
+                    .alpha(alpha)
             ) {
                 Text(
                     text = confirmLabel,
@@ -576,4 +595,68 @@ fun ConfirmDialog(
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
     )
+}
+
+@Composable
+fun FilterByDateBar(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier.fillMaxWidth().padding(start = 40.dp, end = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        InputDate(placeholder = "Ngày")
+        Text(text = "/", style = MaterialTheme.typography.bodyMedium)
+        InputDate(placeholder = "Tháng")
+        Text(text = "/", style = MaterialTheme.typography.bodyMedium)
+        InputDate(placeholder = "Năm")
+        IconButton(
+            onClick = {}
+        ) {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Tìm kiếm",
+                tint = MainColor
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InputDate(
+    modifier: Modifier = Modifier,
+    placeholder: String,
+
+) {
+    TextField(
+        value = "",
+        onValueChange = {},
+        placeholder = {
+            Text(
+                text = placeholder,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            containerColor = Color.Transparent,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            focusedPlaceholderColor = MainColor,
+            unfocusedPlaceholderColor = Color.Gray
+        ),
+        modifier = modifier.width(75.dp)
+    )
+}
+
+@Composable
+fun BorrowStateBottomBar(
+    modifier: Modifier = Modifier
+) {
+//    TabRow() { }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ComponentPreview() {
+    Box(modifier = Modifier.fillMaxSize()){ BorrowStateBottomBar() }
 }

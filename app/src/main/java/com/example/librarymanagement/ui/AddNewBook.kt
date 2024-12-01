@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
+import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.MainColor
 
@@ -117,8 +118,21 @@ private fun AddNewBook(
     }
 }
 
+@Composable
+fun ConfirmCancel(modifier: Modifier = Modifier) {
+    ConfirmDialog(
+        title = "Hủy thay đổi",
+        content = "Các dữ liệu đã hủy sẽ không được lưu. Xác nhận hủy?",
+        cancelLabel = "Giữ lại",
+        confirmLabel = "Hủy",
+        cancelColor = Cancel,
+        confirmColor = MainColor,
+        modifier = modifier
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun AddNewBookScreenPreview() {
-    LibraryManagementTheme { AddNewBookScreen() }
+    LibraryManagementTheme { ConfirmCancel() }
 }
