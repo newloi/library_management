@@ -1,8 +1,6 @@
 package com.example.librarymanagement.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,9 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -41,7 +37,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -61,18 +56,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
-import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
 import com.example.librarymanagement.ui.theme.Roboto
-import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -655,6 +648,17 @@ private fun InputDate(
     )
 }
 
+fun Modifier.shadowWithOffset(
+    elevation: Dp,
+    shape: RoundedCornerShape = RoundedCornerShape(0.dp),
+    clip: Boolean = false,
+    offsetY: Dp = 0.dp
+): Modifier {
+    return this
+        .shadow(elevation = elevation, shape = shape, clip = clip) // Áp dụng shadow gốc
+        .offset(y = offsetY) // Thêm offset Y
+}
+
 @Composable
 fun BorrowStateBottomBar(
     modifier: Modifier = Modifier
@@ -662,13 +666,10 @@ fun BorrowStateBottomBar(
     var selectedTabIndex by remember { mutableStateOf(0) }
 
     Box(
-        modifier = Modifier.fillMaxWidth().shadow(elevation = 8.dp).offset(y = 10.dp).height(50.dp)
+        modifier = Modifier.fillMaxWidth().shadowWithOffset(elevation = 2.dp, offsetY =(4).dp)
     ) {
         TabRow(
             selectedTabIndex = selectedTabIndex,
-            divider = {
-                HorizontalDivider(modifier = Modifier.width(1.dp))
-            },
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
@@ -698,5 +699,5 @@ fun BorrowStateBottomBar(
 @Preview(showBackground = true)
 @Composable
 fun ComponentPreview() {
-    Box(modifier = Modifier.fillMaxSize()){ BorrowStateBottomBar() }
+    InfoAbout(label = "Abc", value = "bca")
 }
