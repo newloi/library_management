@@ -229,61 +229,71 @@ fun BorrowRequestsPreview() {
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
             BorrowRequest(
                 id = 1,
                 memberName = "Nguyen Van A",
                 bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024"
+                borrowDate = "01/12/2024",
+                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
             ),
         )
     )

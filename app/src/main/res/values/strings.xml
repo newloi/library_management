@@ -12,7 +12,6 @@
     <string name="ngay_dang_ki">Ngày đăng ký: %s</string>
     <string name="ngay_muon">Ngày mượn: %s</string>
     <string name="id">ID: %d</string>
-    <string name="don">Đơn: %d</string>
     <string name="sach">Sách: %d</string>
-
+    <string name="don_muon">Don muon: %d</string>
 </resources>

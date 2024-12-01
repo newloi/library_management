@@ -11,4 +11,10 @@ data class BorrowRequest(
     val memberName: String,
     val bookName: String,
     val borrowDate: String,
+    val bookCount: Int,
+    val exceptDate: String,
+    val returnDate: String,
+    val state: String
+
+
 )

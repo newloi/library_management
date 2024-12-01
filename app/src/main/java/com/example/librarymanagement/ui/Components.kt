@@ -395,7 +395,7 @@ fun InfoAbout(
             onValueChange = {},
             enabled = false,
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.height(52.dp)
+            modifier = Modifier.height(52.dp).fillMaxWidth()
         )
     }
 }
