@@ -1,4 +1,4 @@
-package com.example.librarymanagement.ui
+package com.example.librarymanagement.ui.member
 
 import androidx.lifecycle.ViewModel
 

@@ -1,4 +1,4 @@
-package com.example.librarymanagement.ui
+package com.example.librarymanagement.ui.book
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -13,51 +13,42 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
-import com.example.librarymanagement.ui.theme.Delete
+import com.example.librarymanagement.ui.AddAppBar
+import com.example.librarymanagement.ui.AddInfo
+import com.example.librarymanagement.ui.ConfirmDialog
+import com.example.librarymanagement.ui.navigation.NavigationDestination
+import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.MainColor
-import com.example.librarymanagement.ui.theme.Roboto
+
+object AddNewBookDestination : NavigationDestination {
+    override val route = "add_new_book"
+    override val title = ""
+}
 
 @Composable
-fun  AddMemberScreen() {
+fun AddNewBookScreen() {
     Scaffold(
-        topBar = { AddAppBar(title = "Thêm thành viên") }
+        topBar = { AddAppBar(title = "Thêm sách") }
     ) { innerPadding ->
-        AddNewMember(modifier = Modifier.padding(innerPadding))
+        AddNewBook(modifier = Modifier.padding(innerPadding))
     }
 }
 
 @Composable
-private fun AddNewMember(
+private fun AddNewBook(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -67,7 +58,7 @@ private fun AddNewMember(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth().height(180.dp)) {
-            Column() {
+            Column {
                 Text(
                     text = "Nhập ảnh",
                     style = MaterialTheme.typography.titleLarge,
@@ -110,17 +101,18 @@ private fun AddNewMember(
             }
         }
         Text(
-            text = "Nhập thông tin thành viên",
+            text = "Nhập thông tin sách",
             style = MaterialTheme.typography.titleLarge
         )
-        AddInfo(label = "Họ và tên", modifier = Modifier.fillMaxWidth())
+        AddInfo(label = "Tên sách", modifier = Modifier.fillMaxWidth())
+        AddInfo(label = "Tác giả", modifier = Modifier.fillMaxWidth())
+        AddInfo(label = "Nhà xuất bản", modifier = Modifier.fillMaxWidth())
         Row {
-            DropList(label = "Giới tính", items = listOf("Nam", "Nữ", "Khác"), modifier = Modifier.width(108.dp))
+            AddInfo(label = "Năm xuất bản", modifier = Modifier.width(120.dp))
             Spacer(modifier = Modifier.weight(1f))
-            AddInfo(label = "Ngày sinh", modifier = Modifier.width(200.dp))
+            AddInfo(label = "Thể loại", modifier = Modifier.width(200.dp))
         }
-        AddInfo(label = "Địa chỉ", modifier = Modifier.fillMaxWidth())
-        AddInfo(label = "Họ và tên", modifier = Modifier.fillMaxWidth())
+        AddInfo(label = "Số lượng", modifier = Modifier.width(120.dp))
         Button(
             onClick = {},
             shape = RoundedCornerShape(16.dp),
@@ -135,8 +127,21 @@ private fun AddNewMember(
     }
 }
 
+@Composable
+fun ConfirmCancel(modifier: Modifier = Modifier) {
+    ConfirmDialog(
+        title = "Hủy thay đổi",
+        content = "Các dữ liệu đã hủy sẽ không được lưu. Xác nhận hủy?",
+        cancelLabel = "Giữ lại",
+        confirmLabel = "Hủy",
+        cancelColor = Cancel,
+        confirmColor = MainColor,
+        modifier = modifier
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
-fun AddNewMemberScreenPreview() {
-    LibraryManagementTheme { AddMemberScreen() }
+fun AddNewBookScreenPreview() {
+    LibraryManagementTheme { ConfirmCancel() }
 }

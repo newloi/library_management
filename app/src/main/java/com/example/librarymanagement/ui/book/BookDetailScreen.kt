@@ -1,4 +1,4 @@
-package com.example.librarymanagement.ui
+package com.example.librarymanagement.ui.book
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
@@ -9,36 +9,41 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
+import com.example.librarymanagement.ui.InfoAbout
+import com.example.librarymanagement.ui.InfoAppBar
+import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
-import com.example.librarymanagement.ui.theme.Roboto
+
+object BookDetailDestination : NavigationDestination {
+    override val route = "book_detail"
+    override val title = ""
+}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BookDetailScreen(
-    @DrawableRes bookImage: Int,
-    book: Book,
+    @DrawableRes bookImage: Int = 0,
+    book: Book = Book(name = "Cau truc du lieu va giai thuat",
+        author = "Nguyen Tuan Dung",
+        publisher = "NXB Back Khoa",
+        year = 2024,
+        type = "IT",
+        quantities = 3),
     modifier: Modifier = Modifier
 ) {
     Scaffold(

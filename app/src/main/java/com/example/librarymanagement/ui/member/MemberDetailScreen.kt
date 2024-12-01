@@ -1,8 +1,7 @@
-package com.example.librarymanagement.ui
+package com.example.librarymanagement.ui.member
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.checkScrollableContainerConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +23,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Member
+import com.example.librarymanagement.ui.InfoAbout
+import com.example.librarymanagement.ui.InfoAppBar
+import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
+
+object MemberDetailDestination : NavigationDestination {
+    override val route = "member_detail"
+    override val title = ""
+}
 
 @Composable
 fun MemberDetailScreen(

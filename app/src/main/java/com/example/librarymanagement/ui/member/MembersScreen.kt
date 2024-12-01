@@ -1,6 +1,5 @@
-package com.example.librarymanagement.ui
+package com.example.librarymanagement.ui.member
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,26 +14,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,39 +34,47 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.Book
+import com.example.librarymanagement.data.Member
+import com.example.librarymanagement.ui.AddButton
+import com.example.librarymanagement.ui.ConfirmDialog
+import com.example.librarymanagement.ui.FilterBar
+import com.example.librarymanagement.ui.HomeBottomAppBar
+import com.example.librarymanagement.ui.SearchTopBar
+import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
-import com.example.librarymanagement.ui.theme.LoginBackground
 import com.example.librarymanagement.ui.theme.Title
 
-/** Thiết kế màn hình hiển thị list sách */
+/** Thiết kế màn hình hiển thị list thanh vien */
+
+object MembersDestination : NavigationDestination {
+    override val route = "members"
+    override val title = ""
+}
 
 /**
- * Man hinh home o tab Sach, hien thi danh sach [books] dang co
+ * Man hinh home o tab Member, hien thi danh sach [Members] dang co
  */
 @Composable
-fun BooksScreen(
-    books: List<Book>,
+fun MembersScreen(
+    members: List<Member>,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 SearchTopBar(
-                    placeholder = "Nhập tên hoặc mã sách",
+                    placeholder = "Nhập tên hoặc mã thành viên",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 HorizontalDivider(
@@ -91,34 +91,31 @@ fun BooksScreen(
     ) { innerPadding ->
         LazyColumn(
             modifier = modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(books) { book ->
-                BookInfo(book = book)
+            items(members) { member ->
+                MemberInfo(member = member)
             }
         }
     }
 }
 
 /**
- * The bieu dien cho cuon sach [book] o tab Sach
+ * The bieu dien cho cuon sach [Member] o tab Sach
  */
 @Composable
-private fun BookInfo(
-    book: Book,
+private fun MemberInfo(
+    member: Member,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(124.dp),
-        elevation = CardDefaults.cardElevation(2.dp),
+            .height(84.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        ),
-        border = BorderStroke(1.dp, Cancel)
+        )
     ) {
         Row(
             verticalAlignment = Alignment.Top
@@ -127,9 +124,10 @@ private fun BookInfo(
                 .padding(12.dp)
                 .weight(1f)) {
                 Image(
-                    painter = painterResource(R.drawable.rectangle_4165),
-                    contentDescription = book.name,
-                    modifier = Modifier.size(81.dp, 97.dp)
+                    painter = painterResource(R.drawable.lamda_people),
+                    contentDescription = member.name,
+                    modifier = Modifier.size(65.dp).clip(CircleShape),
+
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(
@@ -137,23 +135,17 @@ private fun BookInfo(
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = book.name,
+                        text = member.name,
                         style = MaterialTheme.typography.titleMedium,
                         color = Title
                     )
                     Text(
-                        text = book.author,
+                        text = stringResource(R.string.ma_so, member.id),
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = MaterialTheme.typography.bodySmall.toSpanStyle()) {
-                                append("Số lượng: ")
-                            }
-                            withStyle(style = MaterialTheme.typography.titleSmall.toSpanStyle()) {
-                                append(book.quantities.toString())
-                            }
-                        }
+                        text = stringResource(R.string.ngay_dang_ki, member.registrationDate),
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
@@ -165,7 +157,8 @@ private fun BookInfo(
             ) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Chỉnh sửa"
+                    contentDescription = "Chỉnh sửa",
+                    modifier = Modifier.rotate(90f)
                 )
                 DropdownMenu(
                     expanded = isExpanded,
@@ -225,16 +218,16 @@ private fun BookInfo(
 }
 
 /**
- * Hop thoai hien ra khi nhan vao dau ba cham cua the sach [nameOfBook]
+ * Hop thoai hien ra khi xoa
  */
 @Composable
-fun DialogConfirmDeleteBook(
-    nameOfBook: String,
+private fun DialogConfirmDeleteMember(
+    nameOfMember: String,
     modifier: Modifier = Modifier
 ) {
     ConfirmDialog(
-        title = "Xóa sách",
-        content = stringResource(R.string.delete_book_warning, nameOfBook),
+        title = "Xóa thành viên",
+        content = stringResource(R.string.delete_member_warning, nameOfMember),
         cancelLabel = "Không",
         confirmLabel = "Xóa",
         cancelColor = Cancel,
@@ -246,90 +239,98 @@ fun DialogConfirmDeleteBook(
 
 @Preview(showBackground = true)
 @Composable
-fun DialogPreview() {
+fun DialogMemberPreview() {
     LibraryManagementTheme {
-        DialogConfirmDeleteBook(nameOfBook = "Cau truc du lieu va giai thuat")
+        DialogConfirmDeleteMember(nameOfMember = "Cau truc du lieu va giai thuat")
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
+fun PreviewMember() {
     LibraryManagementTheme {
-        BooksScreen(
-            books = listOf(
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+        MembersScreen(
+            members = listOf(
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
-                Book(
-                    name = "Cau truc du lieu va giai thuat hahahahah",
-                    author = "Nguyen Tuan Dung",
-                    publisher = "NXB Back Khoa",
-                    year = 2024,
-                    type = "IT",
-                    quantities = 3
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
                 ),
+                Member(
+                    id = 0,
+                    name = "Phan Minh Vuong",
+                    gender = "Female",
+                    dateOfBirth = "27/11/2024",
+                    address = "DHBKHN",
+                    registrationDate = "27/11/2024"
+                )
             )
         )
     }

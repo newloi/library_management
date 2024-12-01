@@ -70,6 +70,7 @@ import com.example.librarymanagement.ui.theme.Roboto
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
+    search: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier
 ) {
@@ -79,7 +80,7 @@ fun SearchTopBar(
         SearchBar(
             query = searchText,
             onQueryChange = { searchText = it }, //Cap nhat noi dung tim kiem
-            onSearch = { /* Xu ly tim kiem */ },
+            onSearch = { search(searchText) },
             active = active,
             onActiveChange = { active = it },
             placeholder = { Text(text = placeholder) },
