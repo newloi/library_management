@@ -76,7 +76,8 @@ fun BorrowRequestsScreen(
         floatingActionButton = { AddButton(onClick = {}) },
         bottomBar = {
             Column {
-                HomeBottomAppBar(modifier = Modifier.shadow(1.dp))
+                BorrowStateBottomBar()
+                HomeBottomAppBar()
             }
         }
     ) { innerPadding ->

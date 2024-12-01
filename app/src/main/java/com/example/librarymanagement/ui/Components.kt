@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -604,7 +605,9 @@ fun ConfirmDialog(
 @Composable
 fun FilterByDateBar(modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier.fillMaxWidth().padding(start = 40.dp, end = 20.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 40.dp, end = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -657,32 +660,37 @@ fun BorrowStateBottomBar(
     modifier: Modifier = Modifier
 ) {
     var selectedTabIndex by remember { mutableStateOf(0) }
-    TabRow(
-        selectedTabIndex = selectedTabIndex,
-        divider = {
-            HorizontalDivider(modifier = Modifier.width(1.dp))
-        },
-        indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
-                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                color = MainColor, // Thay đổi màu sắc cho gạch dưới (indicator)
-            )
-        },
-        modifier = modifier
+
+    Box(
+        modifier = Modifier.fillMaxWidth().shadow(elevation = 8.dp).offset(y = 10.dp).height(50.dp)
     ) {
-        listOf("Chưa trả", "Đã trả").forEachIndexed { index, state ->
-            Tab(
-                selected = true,
-                text = {
-                    Text(
-                        text = state,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                onClick = {},
-                selectedContentColor = MainColor,
-                modifier = Modifier.height(30.dp)
-            )
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            divider = {
+                HorizontalDivider(modifier = Modifier.width(1.dp))
+            },
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                    color = MainColor, // Thay đổi màu sắc cho gạch dưới (indicator)
+                )
+            },
+
+            ) {
+            listOf("Chưa trả", "Đã trả").forEachIndexed { index, state ->
+                Tab(
+                    selected = true,
+                    text = {
+                        Text(
+                            text = state,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
+                    onClick = {},
+                    selectedContentColor = MainColor,
+                    modifier = Modifier.height(30.dp)
+                )
+            }
         }
     }
 }
