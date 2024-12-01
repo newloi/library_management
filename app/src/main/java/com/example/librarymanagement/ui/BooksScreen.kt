@@ -71,7 +71,21 @@ fun BooksScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { SearchAndFilterTopAppBar(modifier = Modifier.shadow(2.dp).fillMaxWidth()) },
+        topBar = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                SearchTopBar(
+                    placeholder = "Nhập tên hoặc mã sách",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                )
+                FilterBar()
+                HorizontalDivider(modifier = Modifier.shadow(4.dp))
+            }
+        },
         floatingActionButton = { AddButton(onClick = {}) },
         bottomBar = { HomeBottomAppBar() }
     ) { innerPadding ->
@@ -218,48 +232,14 @@ fun DialogConfirmDeleteBook(
     nameOfBook: String,
     modifier: Modifier = Modifier
 ) {
-    AlertDialog(
-        title = {
-            Text(
-                text = "Xóa sách",
-                style = MaterialTheme.typography.headlineMedium
-            )
-        },
-        text = {
-            Text(
-                text = stringResource(R.string.delete_book_warning, nameOfBook),
-                style = MaterialTheme.typography.bodyMedium
-            )
-        },
-        onDismissRequest = { },
-        confirmButton = {
-            Button(
-                onClick = { },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Delete),
-                modifier = Modifier.size(100.dp, 44.dp).alpha(0.66f)
-            ) {
-                Text(
-                    text = "Xóa",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = { },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Cancel),
-                modifier = Modifier.size(100.dp, 44.dp)
-            ) {
-                Text(
-                    text = "Không",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black
-                )
-            }
-        },
-        shape = RoundedCornerShape(10.dp),
+    ConfirmDialog(
+        title = "Xóa sách",
+        content = stringResource(R.string.delete_book_warning, nameOfBook),
+        cancelLabel = "Không",
+        confirmLabel = "Xóa",
+        cancelColor = Cancel,
+        confirmColor = Delete,
+        alpha = 0.66f,
         modifier = modifier
     )
 }

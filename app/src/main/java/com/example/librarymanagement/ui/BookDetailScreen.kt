@@ -78,7 +78,7 @@ private fun BookDetail(
             style = MaterialTheme.typography.titleLarge
         )
         InfoAbout(
-            label = "Tên",
+            label = "Tên sách",
             value = book.name,
             modifier = Modifier.fillMaxWidth()
         )
@@ -94,7 +94,7 @@ private fun BookDetail(
         )
         Row(modifier = Modifier) {
             InfoAbout(
-                label = "Năm",
+                label = "Năm xuất bản",
                 value = book.year.toString(),
                 modifier = Modifier.width(120.dp)
             )
