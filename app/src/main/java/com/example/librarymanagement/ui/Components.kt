@@ -44,6 +44,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -191,11 +193,14 @@ fun FilterBar(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoAppBar(modifier: Modifier = Modifier) {
+fun InfoAppBar(
+    title: String,
+    modifier: Modifier = Modifier
+) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Name Screen",
+                text = title,
                 style = MaterialTheme.typography.headlineMedium
             )
         },
@@ -277,7 +282,6 @@ fun HomeBottomAppBar(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(1.dp)
             .height(84.dp),
         verticalAlignment = Alignment.Bottom
     ) {
@@ -652,7 +656,35 @@ private fun InputDate(
 fun BorrowStateBottomBar(
     modifier: Modifier = Modifier
 ) {
-//    TabRow() { }
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        divider = {
+            HorizontalDivider(modifier = Modifier.width(1.dp))
+        },
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                color = MainColor, // Thay đổi màu sắc cho gạch dưới (indicator)
+            )
+        },
+        modifier = modifier
+    ) {
+        listOf("Chưa trả", "Đã trả").forEachIndexed { index, state ->
+            Tab(
+                selected = true,
+                text = {
+                    Text(
+                        text = state,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                onClick = {},
+                selectedContentColor = MainColor,
+                modifier = Modifier.height(30.dp)
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
