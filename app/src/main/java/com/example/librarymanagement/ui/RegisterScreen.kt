@@ -73,14 +73,13 @@ fun RegisterScreen (modifier: Modifier = Modifier){
             ) {
                 Text(
                     text="Đăng ký",
-                    style = MaterialTheme.typography.bodyMedium,
-
-
-
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
 
             }
+
+
         }
     }
 }

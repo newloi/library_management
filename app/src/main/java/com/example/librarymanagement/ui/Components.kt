@@ -191,11 +191,13 @@ fun FilterBar(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoAppBar(modifier: Modifier = Modifier) {
+fun InfoAppBar(
+    title: String,
+    modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Name Screen",
+                text = title,
                 style = MaterialTheme.typography.headlineMedium
             )
         },
