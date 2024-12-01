@@ -3,6 +3,7 @@ package com.example.librarymanagement.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -54,23 +55,25 @@ import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
 import com.example.librarymanagement.ui.theme.Title
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BorrowRequestsScreen(
     borrowRequests: List<BorrowRequest>
 ) {
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                SearchTopBar(
-                    placeholder = "Nhập mã đơn hoặc tên thành viên",
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-                HorizontalDivider(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp))
-                FilterByDateBar()
-                HorizontalDivider(modifier = Modifier.shadow(4.dp))
+            Box(modifier = Modifier.fillMaxWidth().shadow(2.dp)) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    SearchTopBar(
+                        placeholder = "Nhập mã đơn hoặc tên thành viên",
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    )
+                    FilterByDateBar()
+                }
             }
         },
         floatingActionButton = { AddButton(onClick = {}) },
