@@ -81,6 +81,7 @@ fun BooksScreen(
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 SearchTopBar(
+                    search = {},
                     placeholder = "Nhập tên hoặc mã sách",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -93,7 +94,7 @@ fun BooksScreen(
                 HorizontalDivider(modifier = Modifier.shadow(4.dp))
             }
         },
-        floatingActionButton = { AddButton(onClick = {}) },
+        floatingActionButton = { AddButton(onClick = navigateToAddNewBook) },
         bottomBar = { HomeBottomAppBar(modifier = Modifier.shadow(1.dp)) }
     ) { innerPadding ->
         if(bookScreenUiState.books.isEmpty()) {

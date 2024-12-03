@@ -32,6 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.BorrowRequest
+import com.example.librarymanagement.ui.navigation.NavigationDestination
+
+object BorrowRequestDetailDestination : NavigationDestination {
+    override val route = "borrow_request_detail"
+    override val title = ""
+}
 
 @Composable
 fun BorrowRequestDetailScreen(borrowRequest : BorrowRequest) {

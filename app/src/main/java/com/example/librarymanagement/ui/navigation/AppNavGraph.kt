@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.librarymanagement.data.BorrowRequest
+import com.example.librarymanagement.ui.BorrowRequestDetailDestination
+import com.example.librarymanagement.ui.BorrowRequestDetailScreen
 import com.example.librarymanagement.ui.book.AddNewBookDestination
 import com.example.librarymanagement.ui.book.AddNewBookScreen
 import com.example.librarymanagement.ui.book.BookDetailDestination
