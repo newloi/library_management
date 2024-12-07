@@ -19,9 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -67,27 +67,37 @@ object MembersDestination : NavigationDestination {
  */
 @Composable
 fun MembersScreen(
-    members: List<Member>,
+    navigateToAddNewMember: () -> Unit,
+    navigateToBooksScreen: () -> Unit,
+    navigateToBorrowRequestsScreen: () -> Unit,
+    members: List<Member> = listOf(),
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 SearchTopBar(
+                    search = {},
                     placeholder = "Nhập tên hoặc mã thành viên",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-                HorizontalDivider(
+                Divider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp)
                 )
                 FilterBar()
-                HorizontalDivider(modifier = Modifier.shadow(4.dp))
+                Divider(modifier = Modifier.shadow(4.dp))
             }
         },
-        floatingActionButton = { AddButton(onClick = {}) },
-        bottomBar = { HomeBottomAppBar(modifier = Modifier.shadow(1.dp)) }
+        floatingActionButton = { AddButton(onClick = navigateToAddNewMember) },
+        bottomBar = {
+            HomeBottomAppBar(
+                navigateToBooksScreen = navigateToBooksScreen,
+                navigateToBorrowRequestsScreen = navigateToBorrowRequestsScreen,
+                modifier = Modifier.shadow(1.dp)
+            )
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = modifier.padding(innerPadding),
@@ -184,7 +194,7 @@ private fun MemberInfo(
                         },
                         modifier = Modifier.height(40.dp)
                     )
-                    HorizontalDivider(
+                    Divider(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
@@ -250,6 +260,9 @@ fun DialogMemberPreview() {
 fun PreviewMember() {
     LibraryManagementTheme {
         MembersScreen(
+            navigateToBorrowRequestsScreen = {},
+            navigateToAddNewMember = {},
+            navigateToBooksScreen = {},
             members = listOf(
                 Member(
                     id = 0,

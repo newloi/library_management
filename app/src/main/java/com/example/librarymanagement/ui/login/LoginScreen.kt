@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.librarymanagement.R
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -44,7 +43,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(R.drawable.logo),
+                painter = painterResource(0),
                 contentDescription = "logo"
             )
             Text(
@@ -55,7 +54,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             )
             TextFieldAbout(label = "Tên đăng nhập")
             Spacer(modifier = Modifier.height(10.dp))
-            TextFieldAbout(label = "Mật khẩu", icon = R.drawable.eye)
+            TextFieldAbout(label = "Mật khẩu", icon = 0)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -67,7 +66,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(vertical = 1.dp)
                 ) {
                     Text(
-                        stringResource(R.string.quen_mat_khau),
+                        text = "Quên mật khẩu",
                         fontSize = 13.sp,
                         fontFamily = Roboto
                         )
@@ -82,7 +81,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             ) {
                 Text(
-                    text= stringResource(R.string.dang_nhap),
+                    text= "Đăng nhập",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -110,7 +109,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
 
                 Text(
-                    text = stringResource(R.string.ghi_nho), // "Ghi nhớ thông tin đăng nhập"
+                    text = "Ghi nhớ thông tin đăng nhập", // "Ghi nhớ thông tin đăng nhập"
                     fontSize = 13.sp,
                     fontFamily = Roboto,
                     modifier = Modifier.padding(start = 8.dp)
@@ -136,7 +135,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
                 ) {
                     Text(
-                        text = stringResource(R.string.dang_ky),
+                        text = "Đăng ký ngay",
                         style = MaterialTheme.typography.labelMedium
 
 

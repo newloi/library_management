@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -15,8 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -26,13 +25,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -165,7 +164,7 @@ fun FilterBar(modifier: Modifier = Modifier) {
                     },
                     modifier = Modifier.height(40.dp)
                 )
-                HorizontalDivider(modifier = Modifier
+                Divider(modifier = Modifier
                     .fillMaxWidth()
                     .height(0.5.dp))
                 DropdownMenuItem(
@@ -190,6 +189,8 @@ fun FilterBar(modifier: Modifier = Modifier) {
 @Composable
 fun InfoAppBar(
     title: String,
+    navigateToEdit: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
@@ -201,10 +202,10 @@ fun InfoAppBar(
         },
         navigationIcon = {
             IconButton(
-                onClick = {}
+                onClick = navigateBack
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Trở về"
                 )
             }
@@ -225,7 +226,7 @@ fun InfoAppBar(
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
-                        /* Sua thong tin */
+                        navigateToEdit()
                     },
                     text = {
                         Text(
@@ -242,7 +243,7 @@ fun InfoAppBar(
                     },
                     modifier = Modifier.height(40.dp)
                 )
-                HorizontalDivider(modifier = Modifier
+                Divider(modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp))
                 DropdownMenuItem(
@@ -273,7 +274,13 @@ fun InfoAppBar(
     )
 }
 @Composable
-fun HomeBottomAppBar(modifier: Modifier = Modifier) {
+fun HomeBottomAppBar(
+    navigateToBooksScreen: () -> Unit = {},
+    navigateToMembersScreen: () -> Unit = {},
+    navigateToBorrowRequestsScreen: () -> Unit = {},
+    navigateToSettingScreen: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -281,24 +288,28 @@ fun HomeBottomAppBar(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.Bottom
     ) {
         TabIcon(
+            navigateToAnother = navigateToBooksScreen,
             selectedIcon = R.drawable.book_colored,
             unSelectedIcon = R.drawable.book,
             label = "Sách",
             modifier = Modifier.weight(1f)
         )
         TabIcon(
+            navigateToAnother = navigateToMembersScreen,
             selectedIcon = R.drawable.group_colored,
             unSelectedIcon = R.drawable.group,
             label = "Thành viên",
             modifier = Modifier.weight(1f)
         )
         TabIcon(
+            navigateToAnother = navigateToBorrowRequestsScreen,
             selectedIcon = R.drawable.rent_book_colored,
             unSelectedIcon = R.drawable.rent,
             label = "Đơn mượn",
             modifier = Modifier.weight(1f)
         )
         TabIcon(
+            navigateToAnother = navigateToSettingScreen,
             selectedIcon = R.drawable.setting_line_light_colored,
             unSelectedIcon = R.drawable.setting_line_light,
             label = "Cài đặt",
@@ -314,6 +325,7 @@ fun HomeBottomAppBar(modifier: Modifier = Modifier) {
  */
 @Composable
 private fun TabIcon(
+    navigateToAnother: () -> Unit,
     @DrawableRes selectedIcon: Int,
     @DrawableRes unSelectedIcon: Int,
     label: String,
@@ -321,7 +333,7 @@ private fun TabIcon(
 ) {
     Tab(
         selected = true,
-        onClick = { },
+        onClick = navigateToAnother,
         text = {
             Text(
                 text = label,
@@ -423,6 +435,8 @@ fun AddInfo(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAppBar(
+//    navigaveBack: () -> Unit,
+//    showDialog: Boolean,
     modifier: Modifier = Modifier,
     title: String
 ) {
@@ -438,7 +452,7 @@ fun AddAppBar(
                 onClick = {}
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Trở về"
                 )
             }
@@ -471,7 +485,7 @@ fun TextFieldAbout(
                 )
             }
         },
-        colors = TextFieldDefaults.textFieldColors(
+        colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent, // Tắt đường gạch dưới khi focus
             unfocusedIndicatorColor = Color.Transparent // Tắt đường gạch dưới khi không focus
         ),

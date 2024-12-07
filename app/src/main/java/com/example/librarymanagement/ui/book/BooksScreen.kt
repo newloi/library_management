@@ -2,6 +2,7 @@ package com.example.librarymanagement.ui.book
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,9 +20,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,7 +53,7 @@ import com.example.librarymanagement.ui.ConfirmDialog
 import com.example.librarymanagement.ui.FilterBar
 import com.example.librarymanagement.ui.HomeBottomAppBar
 import com.example.librarymanagement.ui.SearchTopBar
-import com.example.librarymanagement.ui.ViewModelProvider
+import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
@@ -72,8 +73,11 @@ object BooksDestination : NavigationDestination {
 @Composable
 fun BooksScreen(
     navigateToAddNewBook: () -> Unit,
-    bookScreenViewModel: BooksScreenViewModel = viewModel(factory = ViewModelProvider.Factory),
-    modifier: Modifier = Modifier
+    navigateToMembersScreen: () -> Unit,
+    navigateToBorrowRequestsScreen: () -> Unit,
+    navigateToEditBook: () -> Unit,
+    navigateToBookDetailScreen: () -> Unit,
+    bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
 
@@ -85,26 +89,36 @@ fun BooksScreen(
                     placeholder = "Nhập tên hoặc mã sách",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-                HorizontalDivider(
+                Divider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp)
                 )
                 FilterBar()
-                HorizontalDivider(modifier = Modifier.shadow(4.dp))
+                Divider(modifier = Modifier.shadow(4.dp))
             }
         },
         floatingActionButton = { AddButton(onClick = navigateToAddNewBook) },
-        bottomBar = { HomeBottomAppBar(modifier = Modifier.shadow(1.dp)) }
+        bottomBar = {
+            HomeBottomAppBar(
+                navigateToMembersScreen = navigateToMembersScreen,
+                navigateToBorrowRequestsScreen = navigateToBorrowRequestsScreen,
+                modifier = Modifier.shadow(1.dp)
+            )
+        }
     ) { innerPadding ->
         if(bookScreenUiState.books.isEmpty()) {
             LazyColumn(
-                modifier = modifier.padding(innerPadding),
+                modifier = Modifier.padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
             ) {
                 items(bookScreenUiState.books) { book ->
-                    BookInfo(book = book)
+                    BookInfo(
+                        navigateToBookDetailScreen = navigateToBookDetailScreen,
+                        navigateToEditBook = navigateToEditBook,
+                        book = book
+                    )
                 }
             }
         } else {
@@ -122,13 +136,17 @@ fun BooksScreen(
 @Composable
 private fun BookInfo(
     book: Book,
+    navigateToBookDetailScreen: () -> Unit,
+    navigateToEditBook: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(124.dp),
+            .height(124.dp)
+            .clickable { navigateToBookDetailScreen() },
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -189,7 +207,7 @@ private fun BookInfo(
                     DropdownMenuItem(
                         onClick = {
                             isExpanded = false
-                            /* Sua thong tin */
+                            navigateToEditBook()
                         },
                         text = {
                             Text(
@@ -206,7 +224,7 @@ private fun BookInfo(
                         },
                         modifier = Modifier.height(40.dp)
                     )
-                    HorizontalDivider(
+                    Divider(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
@@ -214,7 +232,7 @@ private fun BookInfo(
                     DropdownMenuItem(
                         onClick = {
                             isExpanded = false
-                            /* Xoa */
+                            showDialog = true
                         },
                         text = {
                             Text(
@@ -237,6 +255,7 @@ private fun BookInfo(
             }
         }
     }
+    if(showDialog) DialogConfirmDeleteBook(nameOfBook = book.name)
 }
 
 /**
@@ -267,12 +286,12 @@ fun DialogConfirmDeleteBook(
 //    }
 //}
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    LibraryManagementTheme {
-        BooksScreen(
-            navigateToAddNewBook = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview() {
+//    LibraryManagementTheme {
+//        BooksScreen(
+//            navigateToAddNewBook = {}
+//        )
+//    }
+//}

@@ -44,10 +44,17 @@ fun BookDetailScreen(
         year = 2024,
         type = "IT",
         quantities = 3),
+    navigateToEditBook: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { InfoAppBar(title = stringResource(R.string.sach, book.id)) }
+        topBar = {
+            InfoAppBar(
+                navigateToEdit = navigateToEditBook,
+                navigateBack = navigateBack,
+                title = stringResource(R.string.sach, book.id))
+        }
     ) { innerPadding ->
         BookDetail(
             bookImage = bookImage,
@@ -127,14 +134,8 @@ fun BookDetailBodyPreview() {
     LibraryManagementTheme {
         BookDetailScreen(
             bookImage = R.drawable.lamda_image,
-            book = Book(
-                name = "Cau truc du lieu va giai thuat",
-                author = "Nguyen Tuan Dung",
-                publisher = "NXB Back Khoa",
-                year = 2024,
-                type = "IT",
-                quantities = 3
-            )
+            navigateToEditBook = {},
+            navigateBack = {}
         )
     }
 }

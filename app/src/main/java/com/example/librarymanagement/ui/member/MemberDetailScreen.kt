@@ -35,12 +35,26 @@ object MemberDetailDestination : NavigationDestination {
 
 @Composable
 fun MemberDetailScreen(
-    @DrawableRes memberImage: Int,
-    member: Member,
+    @DrawableRes memberImage: Int =  R.drawable.book,
+    member: Member =  Member(
+                name = "Lưu Ngọc Lợi",
+                gender = "Nam",
+                dateOfBirth = "24/05/2004",
+                address = "Hưng Yên",
+                registrationDate = "22/11/2024"
+            ),
+    navigateToEditMember: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { InfoAppBar(title = stringResource(R.string.thanh_vien, member.id)) }
+        topBar = {
+            InfoAppBar(
+                navigateToEdit = navigateToEditMember,
+                navigateBack = navigateBack,
+                title = stringResource(R.string.thanh_vien, member.id)
+            )
+        }
     ) { innerPadding ->
         MemberDetail(memberImage = memberImage, member = member, modifier.padding(innerPadding))
     }
@@ -106,19 +120,19 @@ private fun MemberDetail(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MemberDetailPreview() {
-    LibraryManagementTheme {
-        MemberDetailScreen(
-            memberImage = R.drawable.book,
-            member = Member(
-                name = "Lưu Ngọc Lợi",
-                gender = "Nam",
-                dateOfBirth = "24/05/2004",
-                address = "Hưng Yên",
-                registrationDate = "22/11/2024"
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MemberDetailPreview() {
+//    LibraryManagementTheme {
+//        MemberDetailScreen(
+//            memberImage = R.drawable.book,
+//            member = Member(
+//                name = "Lưu Ngọc Lợi",
+//                gender = "Nam",
+//                dateOfBirth = "24/05/2004",
+//                address = "Hưng Yên",
+//                registrationDate = "22/11/2024"
+//            )
+//        )
+//    }
+//}

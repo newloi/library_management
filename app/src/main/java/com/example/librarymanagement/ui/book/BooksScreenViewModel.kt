@@ -27,10 +27,10 @@ class BooksScreenViewModel( bookRepository: BookRepository ) : ViewModel() {
     }
 
     fun search(searchText: String) {
-        viewModelScope.launch {
-            booksScreenUiState =
-            bookRepository.getAllBooksStream().map { BooksScreenUiState(books = it) }
-        }
+//        viewModelScope.launch {
+//            booksScreenUiState =
+//            bookRepository.getAllBooksStream().map { BooksScreenUiState(books = it) }
+//        }
     }
 }
 
