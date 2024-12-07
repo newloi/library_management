@@ -381,7 +381,8 @@ fun AddButton(
 fun InfoAbout(
     label: String,
     value: String,
-    modifier:Modifier = Modifier
+    modifier:Modifier = Modifier,
+    canEdit: Boolean = false
 ) {
     Column(modifier = modifier) {
         Text(
@@ -399,7 +400,7 @@ fun InfoAbout(
             ),
             singleLine = true,
             onValueChange = {},
-            enabled = false,
+            enabled = canEdit,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.height(52.dp).fillMaxWidth()
         )
