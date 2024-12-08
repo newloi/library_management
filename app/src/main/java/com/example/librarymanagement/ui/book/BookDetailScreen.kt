@@ -17,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,8 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
+import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAppBar
 import com.example.librarymanagement.ui.navigation.NavigationDestination
@@ -33,7 +37,8 @@ import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 
 object BookDetailDestination : NavigationDestination {
     override val route = "book_detail"
-    override val title = ""
+    const val bookIdArg = "bookId"
+    val routeWithArgs = "$route/{$bookIdArg}"
 }
 
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -48,8 +53,11 @@ fun BookDetailScreen(
         quantities = 3),
     navigateToEditBook: () -> Unit,
     navigateBack: () -> Unit,
+    bookDetailViewModel: BookDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
+    val bookDetailUiState by bookDetailViewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             InfoAppBar(
@@ -60,7 +68,7 @@ fun BookDetailScreen(
     ) { innerPadding ->
         BookDetail(
 //            bookImage = bookImage,
-            book = book,
+            book = bookDetailUiState.currentBook,
             modifier = modifier.padding(innerPadding)
         )
     }

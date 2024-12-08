@@ -20,10 +20,10 @@ interface BookDao {
     suspend fun delete(book: Book)
 
     @Query("SELECT * FROM books WHERE id = :id")
-    fun getItem(id: Int): Flow<Book>
+    fun getBook(id: Int): Flow<Book>
 
     @Query("SELECT * FROM books ORDER BY name ASC")
-    fun getAllItems(): Flow<List<Book>>
+    fun getAllBooks(): Flow<List<Book>>
 
     @Query("SELECT * FROM books WHERE name LIKE '%'||:searchText||'%' OR id = CAST(:searchText AS INTEGER)")
     fun search(searchText: String): Flow<List<Book>>

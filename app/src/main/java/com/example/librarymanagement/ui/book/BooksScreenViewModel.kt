@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class BooksScreenViewModel( bookRepository: BookRepository ) : ViewModel() {
-    val _booksScreenUiState = MutableStateFlow(BooksScreenUiState())
+class BooksScreenViewModel(bookRepository: BookRepository) : ViewModel() {
+//    val _booksScreenUiState = MutableStateFlow(BooksScreenUiState())
     val booksScreenUiState: StateFlow<BooksScreenUiState> =
         bookRepository.getAllBooksStream().map { BooksScreenUiState(books = it) }
             .stateIn(

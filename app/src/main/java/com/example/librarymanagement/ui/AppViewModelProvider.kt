@@ -5,12 +5,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.librarymanagement.LibraryManagementApplication
+import com.example.librarymanagement.ui.book.AddNewBookViewModel
 import com.example.librarymanagement.ui.book.BooksScreenViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             BooksScreenViewModel( libraryManagementApplication().container.bookRepository )
+        }
+        initializer {
+            AddNewBookViewModel( libraryManagementApplication().container.bookRepository )
         }
 
     }

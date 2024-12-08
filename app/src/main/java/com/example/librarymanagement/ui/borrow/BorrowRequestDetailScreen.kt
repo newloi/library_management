@@ -31,7 +31,7 @@ import com.example.librarymanagement.ui.navigation.NavigationDestination
 
 object BorrowRequestDetailDestination : NavigationDestination {
     override val route = "borrow_request_detail"
-    override val title = ""
+//    override val title = ""
 }
 
 @Composable

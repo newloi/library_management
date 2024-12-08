@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,8 +37,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.BorrowRequest
 import com.example.librarymanagement.ui.AddButton
@@ -52,7 +55,7 @@ import com.example.librarymanagement.ui.theme.Title
 
 object BorrowRequestsDestination : NavigationDestination {
     override val route = "borrow_requests"
-    override val title = ""
+//    override val title = ""
 }
 
 @Composable
@@ -61,11 +64,14 @@ fun BorrowRequestsScreen(
     navigateToBooksScreen: () -> Unit,
     navigateToMembersScreen: () -> Unit,
     navigateToSettingScreen: () -> Unit,
-    borrowRequests: List<BorrowRequest> = listOf()
+    borrowRequests: List<BorrowRequest> = listOf(),
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
-            Box(modifier = Modifier.fillMaxWidth().shadow(2.dp)) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .shadow(2.dp)) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     SearchTopBar(
                         search = {},
@@ -94,12 +100,22 @@ fun BorrowRequestsScreen(
             }
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
-        ) {
-            items(borrowRequests) { borrowRequest ->
-                BorrowRequest(borrowRequest)
+        Box(modifier = modifier.padding(innerPadding).fillMaxSize()) {
+            if(borrowRequests.isNotEmpty()) {
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                ) {
+                    items(borrowRequests) { borrowRequest ->
+                        BorrowRequest(borrowRequest)
+                    }
+                }
+            } else {
+                Text(
+                    text = "Chưa có đơn mượn nào!",
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxSize().padding(top = 16.dp)
+                )
             }
         }
     }

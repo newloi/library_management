@@ -64,7 +64,7 @@ import com.example.librarymanagement.ui.theme.Title
 
 object MembersDestination : NavigationDestination {
     override val route = "members"
-    override val title = ""
+//    override val title = ""
 }
 
 /**
@@ -139,8 +139,8 @@ fun MembersScreen(
                 }
             } else {
                 Text(
-                    text = "Kho sách trống!",
-                    fontSize = 24.sp,
+                    text = "Chưa có thành viên nào!",
+                    style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxSize().padding(top = 16.dp)
                 )
