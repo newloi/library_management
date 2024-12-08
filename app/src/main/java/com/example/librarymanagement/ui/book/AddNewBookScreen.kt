@@ -78,6 +78,7 @@ private fun AddNewBook(
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
                     modifier = Modifier.size(150.dp, 34.dp)
                 ) {
@@ -90,6 +91,7 @@ private fun AddNewBook(
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
                     modifier = Modifier.size(150.dp, 34.dp)
                 ) {
@@ -109,7 +111,7 @@ private fun AddNewBook(
         AddInfo(label = "Nhà xuất bản", modifier = Modifier.fillMaxWidth())
         Row {
             AddInfo(label = "Năm xuất bản", modifier = Modifier.width(120.dp))
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(16.dp))
             AddInfo(label = "Thể loại", modifier = Modifier.width(200.dp))
         }
         AddInfo(label = "Số lượng", modifier = Modifier.width(120.dp))
@@ -117,6 +119,7 @@ private fun AddNewBook(
             onClick = {},
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
             modifier = Modifier.align(Alignment.End).size(100.dp, 40.dp)
         ) {
             Text(
@@ -143,5 +146,5 @@ fun ConfirmCancel(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun AddNewBookScreenPreview() {
-    LibraryManagementTheme { ConfirmCancel() }
+    LibraryManagementTheme { AddNewBookScreen() }
 }

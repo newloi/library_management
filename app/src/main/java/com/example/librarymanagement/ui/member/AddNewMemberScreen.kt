@@ -77,6 +77,7 @@ private fun AddNewMember(
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
                     modifier = Modifier.size(150.dp, 34.dp)
                 ) {
@@ -89,6 +90,7 @@ private fun AddNewMember(
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
                     modifier = Modifier.size(150.dp, 34.dp)
                 ) {
@@ -106,7 +108,7 @@ private fun AddNewMember(
         AddInfo(label = "Họ và tên", modifier = Modifier.fillMaxWidth())
         Row {
             DropList(label = "Giới tính", items = listOf("Nam", "Nữ", "Khác"), modifier = Modifier.width(108.dp))
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(16.dp))
             AddInfo(label = "Ngày sinh", modifier = Modifier.width(200.dp))
         }
         AddInfo(label = "Địa chỉ", modifier = Modifier.fillMaxWidth())
@@ -114,6 +116,7 @@ private fun AddNewMember(
         Button(
             onClick = {},
             shape = RoundedCornerShape(16.dp),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MainColor),
             modifier = Modifier.align(Alignment.End).size(100.dp, 40.dp)
         ) {
