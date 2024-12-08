@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -54,9 +56,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -412,6 +416,8 @@ fun AddInfo(
     modifier: Modifier = Modifier,
     label: String
 ) {
+    val focusManager = LocalFocusManager.current
+    var text by remember { mutableStateOf("") }
     OutlinedTextField(
         label = {
             Text(
@@ -419,16 +425,20 @@ fun AddInfo(
                 style = MaterialTheme.typography.labelMedium
             )
         },
-        value = "",
+        value = text,
         textStyle = TextStyle(
             fontFamily = Roboto,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             color = Color.Black
         ),
-        onValueChange = {},
+        onValueChange = {newText -> text = newText},
         singleLine = true,
         shape = RoundedCornerShape(10.dp),
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+        keyboardActions = KeyboardActions(
+            onDone = {focusManager.clearFocus()}
+        ),
         modifier = modifier.height(60.dp)
     )
 }
