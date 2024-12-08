@@ -97,13 +97,14 @@ private fun AddNewBook(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(32.dp)
             .clickable(
                 indication = null,
-                interactionSource = MutableInteractionSource()
+                interactionSource = interactionSource
             ){ focusManager.clearFocus() },
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
