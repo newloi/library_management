@@ -2,6 +2,7 @@ package com.example.librarymanagement.ui
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -81,6 +82,7 @@ import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
 import com.example.librarymanagement.ui.member.MembersDestination
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
+import com.example.librarymanagement.ui.theme.MoreDarkGray
 import com.example.librarymanagement.ui.theme.Roboto
 import kotlinx.coroutines.selects.select
 
@@ -587,6 +589,73 @@ fun DropList(
         }
     }
 }
+
+@Composable
+fun GenderDropList(
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    var selectedGender by remember { mutableStateOf(label) }
+    var expanded by remember { mutableStateOf(false) }
+    val genders = listOf("Nam", "Nữ", "Khác")
+
+    Column(modifier = modifier) {
+        Text(
+            text = "Giới tính",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+        )
+
+        // Dropdown menu với TextField
+        Box {
+            OutlinedTextField(
+                value = selectedGender,
+                onValueChange = { },
+                textStyle = TextStyle(
+                    fontFamily = Roboto,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Black
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp)
+                    .clickable { expanded = !expanded }
+                    .border(
+                        width = 1.dp,
+                        color = MoreDarkGray,
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                enabled = false,
+                readOnly = true,
+                shape = RoundedCornerShape(10.dp),
+                trailingIcon = {
+                    Icon(
+                        imageVector = if(expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Dropdown icon"
+                    )
+                }
+            )
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                genders.forEach { gender ->
+                    DropdownMenuItem(
+                        text = { Text(text = gender) },
+                        onClick = {
+                            selectedGender = gender.toString()
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun ConfirmDialog(
