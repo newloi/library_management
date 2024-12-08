@@ -1,6 +1,8 @@
 package com.example.librarymanagement.ui.book
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,10 +61,15 @@ fun AddNewBookScreen(
 private fun AddNewBook(
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(32.dp)
+            .clickable(
+                indication = null,
+                interactionSource = MutableInteractionSource()
+            ){ focusManager.clearFocus() },
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth().height(180.dp)) {
@@ -85,6 +93,7 @@ private fun AddNewBook(
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
                     modifier = Modifier.size(150.dp, 34.dp)
                 ) {
@@ -97,6 +106,7 @@ private fun AddNewBook(
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
                     modifier = Modifier.size(150.dp, 34.dp)
                 ) {
@@ -116,7 +126,7 @@ private fun AddNewBook(
         AddInfo(label = "Nhà xuất bản", modifier = Modifier.fillMaxWidth())
         Row {
             AddInfo(label = "Năm xuất bản", modifier = Modifier.width(120.dp))
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(16.dp))
             AddInfo(label = "Thể loại", modifier = Modifier.width(200.dp))
         }
         AddInfo(label = "Số lượng", modifier = Modifier.width(120.dp))
@@ -124,6 +134,7 @@ private fun AddNewBook(
             onClick = {},
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
             modifier = Modifier.align(Alignment.End).size(100.dp, 40.dp)
         ) {
             Text(
@@ -150,5 +161,5 @@ fun ConfirmCancel(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun AddNewBookScreenPreview() {
-    LibraryManagementTheme { ConfirmCancel() }
+    LibraryManagementTheme { AddNewBookScreen() }
 }
