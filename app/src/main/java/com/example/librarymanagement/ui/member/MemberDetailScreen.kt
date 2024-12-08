@@ -32,7 +32,7 @@ import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 
 object MemberDetailDestination : NavigationDestination {
     override val route = "member_detail"
-    override val title = ""
+//    override val title = ""
 }
 
 @Composable

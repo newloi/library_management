@@ -68,7 +68,6 @@ import com.example.librarymanagement.ui.theme.Title
 
 object BooksDestination : NavigationDestination {
     override val route = "books"
-    override val title = ""
 }
 
 /**
@@ -82,31 +81,32 @@ fun BooksScreen(
     navigateToBorrowRequestsScreen: () -> Unit,
     navigateToSettingScreen: () -> Unit,
     navigateToEditBook: () -> Unit,
-    navigateToBookDetailScreen: () -> Unit,
-//    bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    books: List<Book> = listOf(
-        Book(
-            id = 0,
-            name = "Cau truc du lieu va giai thuat",
-            author = "Nguyen Tuan Dung",
-            publisher = "BKHN",
-            year = 2024,
-            type = "IT",
-            quantities = 2
-        ),
-        Book(
-            id = 0,
-            name = "Cau truc du lieu va giai thuat",
-            author = "Nguyen Tuan Dung",
-            publisher = "BKHN",
-            year = 2024,
-            type = "IT",
-            quantities = 2
-        )
-    ),
+    navigateToBookDetailScreen: (Int) -> Unit,
+    bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+//    books: List<Book> = listOf(
+//        Book(
+//            id = 0,
+//            name = "Cau truc du lieu va giai thuat",
+//            author = "Nguyen Tuan Dung",
+//            publisher = "BKHN",
+//            year = 2024,
+//            type = "IT",
+//            quantities = 2
+//        ),
+//        Book(
+//            id = 0,
+//            name = "Cau truc du lieu va giai thuat",
+//            author = "Nguyen Tuan Dung",
+//            publisher = "BKHN",
+//            year = 2024,
+//            type = "IT",
+//            quantities = 2
+//        )
+//    ),
     modifier: Modifier = Modifier
 ) {
-//    val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
+    val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
+    val books = bookScreenUiState.books
 
     Scaffold(
         topBar = {
@@ -136,26 +136,30 @@ fun BooksScreen(
             )
         }
     ) { innerPadding ->
-        Box(modifier = modifier.padding(innerPadding).fillMaxSize()) {
+        Box(modifier = modifier
+            .padding(innerPadding)
+            .fillMaxSize()) {
             if(books.isNotEmpty()) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
                 ) {
-                    items(books) { book ->
+                    items(items = books, key = {it.id}) { book ->
                         BookInfo(
-                            navigateToBookDetailScreen = navigateToBookDetailScreen,
                             navigateToEditBook = navigateToEditBook,
-                            book = book
+                            book = book,
+                            modifier = Modifier.clickable { navigateToBookDetailScreen(book.id) }
                         )
                     }
                 }
             } else {
                 Text(
                     text = "Kho sách trống!",
-                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxSize().padding(top = 16.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 16.dp)
                 )
             }
         }
@@ -168,7 +172,6 @@ fun BooksScreen(
 @Composable
 private fun BookInfo(
     book: Book,
-    navigateToBookDetailScreen: () -> Unit,
     navigateToEditBook: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -178,7 +181,7 @@ private fun BookInfo(
         modifier = modifier
             .fillMaxWidth()
             .height(124.dp)
-            .clickable { navigateToBookDetailScreen() },
+        ,
         elevation = CardDefaults.cardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White

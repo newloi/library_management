@@ -16,9 +16,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.librarymanagement.ui.HomeBottomAppBar
 import com.example.librarymanagement.ui.borrow.BorrowRequestDetailDestination
 import com.example.librarymanagement.ui.borrow.BorrowRequestDetailScreen
@@ -26,6 +28,8 @@ import com.example.librarymanagement.ui.book.AddNewBookDestination
 import com.example.librarymanagement.ui.book.AddNewBookScreen
 import com.example.librarymanagement.ui.book.BookDetailDestination
 import com.example.librarymanagement.ui.book.BookDetailScreen
+import com.example.librarymanagement.ui.book.BookEditDestination
+import com.example.librarymanagement.ui.book.BookEditScreen
 import com.example.librarymanagement.ui.book.BooksScreen
 import com.example.librarymanagement.ui.book.BooksDestination
 import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
@@ -64,18 +68,24 @@ fun AppNavHost(
                     navigateToMembersScreen = { navController.navigate(MembersDestination.route) },
                     navigateToBorrowRequestsScreen = { navController.navigate(BorrowRequestsDestination.route) },
                     navigateToSettingScreen = {},
-                    navigateToEditBook = {},
-                    navigateToBookDetailScreen = { navController.navigate(BookDetailDestination.route) },
+                    navigateToEditBook = { navController.navigate(BookEditDestination.route) },
+                    navigateToBookDetailScreen = { navController.navigate("${BookDetailDestination.route}/${it}") },
                 )
             }
             composable(route = AddNewBookDestination.route) {
                 AddNewBookScreen(
+//                    navigateDone = { navController.popBackStack() },
                     navigateBack = { navController.navigateUp() }
                 )
             }
-            composable(route = BookDetailDestination.route) {
+            composable(
+                route = BookDetailDestination.routeWithArgs,
+                arguments = listOf(navArgument(BookDetailDestination.bookIdArg) {
+                    type = NavType.IntType
+                })
+            ) {
                 BookDetailScreen(
-                    navigateToEditBook = { /*navController.navigate()*/ },
+                    navigateToEditBook = { navController.navigate(BookEditDestination.route) },
                     navigateBack = { navController.navigateUp() }
                 )
             }
@@ -111,6 +121,11 @@ fun AppNavHost(
                     navigateToAddNewMember = { navController.navigate(AddNewMemberDestination.route) },
                     navigateToSettingScreen = {},
                     navigateToMemberDetail = { navController.navigate(MemberDetailDestination.route) }
+                )
+            }
+            composable(route = BookEditDestination.route) {
+                BookEditScreen(
+                    navigateBack = { navController.navigateUp() },
                 )
             }
         }

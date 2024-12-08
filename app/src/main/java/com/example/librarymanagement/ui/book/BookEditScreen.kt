@@ -29,18 +29,35 @@ import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.InfoAbout
+import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.MainColor
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+object BookEditDestination : NavigationDestination {
+    override val route = "book_edit"
+}
+
 @Composable
 fun BookEditScreen(
-    @DrawableRes bookImage: Int,
-    book: Book,
+    @DrawableRes bookImage: Int = R.drawable.lamda_image,
+    navigateBack: () -> Unit,
+    book: Book = Book(
+        name = "Cau truc du lieu va giai thuat",
+        author = "Nguyen Tuan Dung",
+        publisher = "NXB Back Khoa",
+        year = 2024,
+        type = "IT",
+        quantities = 3
+    ),
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { AddAppBar(title = "Sach 00001") },
+        topBar = {
+            AddAppBar(
+                navigateBack = navigateBack,
+                title = "Sach 00001"
+            )
+        },
         floatingActionButton = {
             Button(
                 onClick = {},
@@ -137,6 +154,7 @@ fun BookEditBodyPreview() {
     LibraryManagementTheme {
         BookEditScreen(
             bookImage = R.drawable.lamda_image,
+            navigateBack = {},
             book = Book(
                 name = "Cau truc du lieu va giai thuat",
                 author = "Nguyen Tuan Dung",

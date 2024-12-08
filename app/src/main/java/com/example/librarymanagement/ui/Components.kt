@@ -68,6 +68,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -77,6 +78,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.librarymanagement.R
+import com.example.librarymanagement.data.Book
+import com.example.librarymanagement.ui.book.BookDetail
 import com.example.librarymanagement.ui.book.BooksDestination
 import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
 import com.example.librarymanagement.ui.member.MembersDestination
@@ -441,11 +444,14 @@ fun InfoAbout(
 
 @Composable
 fun AddInfo(
+    onValueChange: (BookDetail) -> Unit = {},
+    value: String,
+    bookDetail: BookDetail,
     modifier: Modifier = Modifier,
     label: String
 ) {
     val focusManager = LocalFocusManager.current
-    var text by remember { mutableStateOf("") }
+//    var text by remember { mutableStateOf("") }
     OutlinedTextField(
         label = {
             Text(
@@ -453,14 +459,14 @@ fun AddInfo(
                 style = MaterialTheme.typography.labelMedium
             )
         },
-        value = text,
+        value = value,
         textStyle = TextStyle(
             fontFamily = Roboto,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             color = Color.Black
         ),
-        onValueChange = {newText -> text = newText},
+        onValueChange = { onValueChange(bookDetail.copy()) },
         singleLine = true,
         shape = RoundedCornerShape(10.dp),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
@@ -725,11 +731,11 @@ fun FilterByDateBar(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        InputDate(placeholder = "Ngày")
+        InputDate(placeholder = "DD")
         Text(text = "/", style = MaterialTheme.typography.bodyMedium)
-        InputDate(placeholder = "Tháng")
+        InputDate(placeholder = "MM")
         Text(text = "/", style = MaterialTheme.typography.bodyMedium)
-        InputDate(placeholder = "Năm")
+        InputDate(placeholder = "YYYY")
         IconButton(
             onClick = {}
         ) {
@@ -755,7 +761,9 @@ private fun InputDate(
         placeholder = {
             Text(
                 text = placeholder,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -765,7 +773,7 @@ private fun InputDate(
             focusedPlaceholderColor = MainColor,
             unfocusedPlaceholderColor = Color.Gray
         ),
-        modifier = modifier.width(75.dp)
+        modifier = modifier.width(72.dp)
     )
 }
 
@@ -978,8 +986,8 @@ fun InfoAboutTable(
 //}
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun ComponentPreview() {
-//    HomeBottomAppBar()
-//}
+@Preview(showBackground = true)
+@Composable
+fun ComponentPreview() {
+    FilterByDateBar()
+}
