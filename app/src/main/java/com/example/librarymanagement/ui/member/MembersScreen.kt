@@ -1,12 +1,15 @@
 package com.example.librarymanagement.ui.member
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,8 +43,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Member
 import com.example.librarymanagement.ui.AddButton
@@ -70,7 +75,26 @@ fun MembersScreen(
     navigateToAddNewMember: () -> Unit,
     navigateToBooksScreen: () -> Unit,
     navigateToBorrowRequestsScreen: () -> Unit,
-    members: List<Member> = listOf(),
+    navigateToSettingScreen: () -> Unit,
+    navigateToMemberDetail: () -> Unit,
+    members: List<Member> = listOf(
+        Member(
+            id = 0,
+            name = "Phan Minh Vuong",
+            gender = "Female",
+            dateOfBirth = "27/11/2024",
+            address = "DHBKHN",
+            registrationDate = "27/11/2024"
+        ),
+        Member(
+            id = 0,
+            name = "Phan Minh Vuong",
+            gender = "Female",
+            dateOfBirth = "27/11/2024",
+            address = "DHBKHN",
+            registrationDate = "27/11/2024"
+        )
+    ),
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -93,28 +117,44 @@ fun MembersScreen(
         floatingActionButton = { AddButton(onClick = navigateToAddNewMember) },
         bottomBar = {
             HomeBottomAppBar(
+                currentTabIndex = 1,
                 navigateToBooksScreen = navigateToBooksScreen,
                 navigateToBorrowRequestsScreen = navigateToBorrowRequestsScreen,
+                navigateToSettingScreen = navigateToSettingScreen,
                 modifier = Modifier.shadow(1.dp)
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = modifier.padding(innerPadding),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(members) { member ->
-                MemberInfo(member = member)
+        Box(modifier = modifier.padding(innerPadding).fillMaxSize()) {
+            if(members.isNotEmpty()){
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    items(members) { member ->
+                        MemberInfo(
+                            navigateToMemberDetail = navigateToMemberDetail,
+                            member = member
+                        )
+                    }
+                }
+            } else {
+                Text(
+                    text = "Kho sách trống!",
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxSize().padding(top = 16.dp)
+                )
             }
         }
     }
 }
 
 /**
- * The bieu dien cho cuon sach [Member] o tab Sach
+ * The bieu dien cho thanh vien [Member] o tab Member
  */
 @Composable
 private fun MemberInfo(
+    navigateToMemberDetail: () -> Unit,
     member: Member,
     modifier: Modifier = Modifier
 ) {
@@ -122,7 +162,8 @@ private fun MemberInfo(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(84.dp),
+            .height(84.dp)
+            .clickable { navigateToMemberDetail() },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -136,7 +177,9 @@ private fun MemberInfo(
                 Image(
                     painter = painterResource(R.drawable.lamda_people),
                     contentDescription = member.name,
-                    modifier = Modifier.size(65.dp).clip(CircleShape),
+                    modifier = Modifier
+                        .size(65.dp)
+                        .clip(CircleShape),
 
                 )
                 Spacer(modifier = Modifier.width(12.dp))
@@ -255,96 +298,96 @@ fun DialogMemberPreview() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewMember() {
-    LibraryManagementTheme {
-        MembersScreen(
-            navigateToBorrowRequestsScreen = {},
-            navigateToAddNewMember = {},
-            navigateToBooksScreen = {},
-            members = listOf(
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                ),
-                Member(
-                    id = 0,
-                    name = "Phan Minh Vuong",
-                    gender = "Female",
-                    dateOfBirth = "27/11/2024",
-                    address = "DHBKHN",
-                    registrationDate = "27/11/2024"
-                )
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewMember() {
+//    LibraryManagementTheme {
+//        MembersScreen(
+//            navigateToBorrowRequestsScreen = {},
+//            navigateToAddNewMember = {},
+//            navigateToBooksScreen = {},
+//            members = listOf(
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                ),
+//                Member(
+//                    id = 0,
+//                    name = "Phan Minh Vuong",
+//                    gender = "Female",
+//                    dateOfBirth = "27/11/2024",
+//                    address = "DHBKHN",
+//                    registrationDate = "27/11/2024"
+//                )
+//            )
+//        )
+//    }
+//}

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
@@ -34,10 +36,10 @@ object BookDetailDestination : NavigationDestination {
     override val title = ""
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BookDetailScreen(
-    @DrawableRes bookImage: Int = 0,
+//    @DrawableRes bookImage: Int = 0,
     book: Book = Book(name = "Cau truc du lieu va giai thuat",
         author = "Nguyen Tuan Dung",
         publisher = "NXB Back Khoa",
@@ -57,7 +59,7 @@ fun BookDetailScreen(
         }
     ) { innerPadding ->
         BookDetail(
-            bookImage = bookImage,
+//            bookImage = bookImage,
             book = book,
             modifier = modifier.padding(innerPadding)
         )
@@ -66,64 +68,88 @@ fun BookDetailScreen(
 
 @Composable
 private fun BookDetail(
-    @DrawableRes bookImage: Int,
+//    @DrawableRes bookImage: Int,
     book: Book,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
-            .padding(32.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+            .fillMaxSize()
+            .padding(32.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Ảnh",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.titleLarge
-        )
-        Image(
-            painter = painterResource(bookImage),
-            contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterHorizontally).size(117.dp, 140.dp)
-        )
-        Text(
-            text = "Thông tin sách",
-            style = MaterialTheme.typography.titleLarge
-        )
-        InfoAbout(
-            label = "Tên sách",
-            value = book.name,
-            modifier = Modifier.fillMaxWidth()
-        )
-        InfoAbout(
-            label = "Tác giả",
-            value = book.author,
-            modifier = Modifier.fillMaxWidth()
-        )
-        InfoAbout(
-            label = "Nhà xuất bản",
-            value = book.publisher,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Row(modifier = Modifier) {
-            InfoAbout(
-                label = "Năm xuất bản",
-                value = book.year.toString(),
-                modifier = Modifier.width(120.dp)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            InfoAbout(
-                label = "Thể loại",
-                value = book.type,
-                modifier = Modifier.width(200.dp)
+        item {
+            Text(
+                text = "Ảnh",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
         }
-        InfoAbout(
-            label = "Số lượng",
-            value = book.quantities.toString(),
-            modifier = Modifier.width(120.dp)
-        )
+        item {
+            Image(
+                painter = painterResource(R.drawable.lamda_image),
+                contentDescription = "Hình ảnh minh họa của sách",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(117.dp, 140.dp)
+            )
+        }
+        item {
+            Text(
+                text = "Thông tin sách",
+                style = MaterialTheme.typography.titleLarge,
+//                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        }
+        item {
+            InfoAbout(
+                label = "Tên sách",
+                value = book.name,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            InfoAbout(
+                label = "Tác giả",
+                value = book.author,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            InfoAbout(
+                label = "Nhà xuất bản",
+                value = book.publisher,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                InfoAbout(
+                    label = "Năm xuất bản",
+                    value = book.year.toString(),
+                    modifier = Modifier.width(120.dp)
+                )
+                InfoAbout(
+                    label = "Thể loại",
+                    value = book.type,
+                    modifier = Modifier.width(200.dp)
+                )
+            }
+        }
+        item {
+            InfoAbout(
+                label = "Số lượng",
+                value = book.quantities.toString(),
+                modifier = Modifier.width(120.dp)
+            )
+        }
     }
+
 }
 
 
@@ -133,7 +159,7 @@ private fun BookDetail(
 fun BookDetailBodyPreview() {
     LibraryManagementTheme {
         BookDetailScreen(
-            bookImage = R.drawable.lamda_image,
+//            bookImage = R.drawable.lamda_image,
             navigateToEditBook = {},
             navigateBack = {}
         )

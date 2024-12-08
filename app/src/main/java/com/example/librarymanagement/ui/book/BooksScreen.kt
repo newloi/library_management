@@ -1,14 +1,17 @@
 package com.example.librarymanagement.ui.book
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -70,16 +74,39 @@ object BooksDestination : NavigationDestination {
 /**
  * Man hinh home o tab Sach, hien thi danh sach [books] dang co
  */
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BooksScreen(
     navigateToAddNewBook: () -> Unit,
     navigateToMembersScreen: () -> Unit,
     navigateToBorrowRequestsScreen: () -> Unit,
+    navigateToSettingScreen: () -> Unit,
     navigateToEditBook: () -> Unit,
     navigateToBookDetailScreen: () -> Unit,
-    bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+//    bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    books: List<Book> = listOf(
+        Book(
+            id = 0,
+            name = "Cau truc du lieu va giai thuat",
+            author = "Nguyen Tuan Dung",
+            publisher = "BKHN",
+            year = 2024,
+            type = "IT",
+            quantities = 2
+        ),
+        Book(
+            id = 0,
+            name = "Cau truc du lieu va giai thuat",
+            author = "Nguyen Tuan Dung",
+            publisher = "BKHN",
+            year = 2024,
+            type = "IT",
+            quantities = 2
+        )
+    ),
+    modifier: Modifier = Modifier
 ) {
-    val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
+//    val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -101,31 +128,36 @@ fun BooksScreen(
         floatingActionButton = { AddButton(onClick = navigateToAddNewBook) },
         bottomBar = {
             HomeBottomAppBar(
+                currentTabIndex = 0,
                 navigateToMembersScreen = navigateToMembersScreen,
                 navigateToBorrowRequestsScreen = navigateToBorrowRequestsScreen,
+                navigateToSettingScreen = navigateToSettingScreen,
                 modifier = Modifier.shadow(1.dp)
             )
         }
     ) { innerPadding ->
-        if(bookScreenUiState.books.isEmpty()) {
-            LazyColumn(
-                modifier = Modifier.padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
-            ) {
-                items(bookScreenUiState.books) { book ->
-                    BookInfo(
-                        navigateToBookDetailScreen = navigateToBookDetailScreen,
-                        navigateToEditBook = navigateToEditBook,
-                        book = book
-                    )
+        Box(modifier = modifier.padding(innerPadding).fillMaxSize()) {
+            if(books.isNotEmpty()) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                ) {
+                    items(books) { book ->
+                        BookInfo(
+                            navigateToBookDetailScreen = navigateToBookDetailScreen,
+                            navigateToEditBook = navigateToEditBook,
+                            book = book
+                        )
+                    }
                 }
+            } else {
+                Text(
+                    text = "Kho sách trống!",
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxSize().padding(top = 16.dp)
+                )
             }
-        } else {
-            Text(
-                text = "Kho sách trống!",
-                fontSize = 32.sp
-            )
         }
     }
 }
@@ -286,12 +318,14 @@ fun DialogConfirmDeleteBook(
 //    }
 //}
 
-//@Preview(showBackground = true)
+//@Preview(showBackground = true, showSystemUi = true)
 //@Composable
 //fun Preview() {
 //    LibraryManagementTheme {
 //        BooksScreen(
-//            navigateToAddNewBook = {}
+//            navigateToAddNewBook = {},
+//            navigateToBookDetailScreen = {},
+//            navigateToEditBook = {}
 //        )
 //    }
 //}

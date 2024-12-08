@@ -39,9 +39,16 @@ object AddNewBookDestination : NavigationDestination {
 }
 
 @Composable
-fun AddNewBookScreen() {
+fun AddNewBookScreen(
+    navigateBack: () -> Unit
+) {
     Scaffold(
-        topBar = { AddAppBar(title = "Thêm sách") }
+        topBar = {
+            AddAppBar(
+                navigateBack = navigateBack,
+                title = "Thêm sách"
+            )
+        }
     ) { innerPadding ->
         AddNewBook(modifier = Modifier.padding(innerPadding))
     }

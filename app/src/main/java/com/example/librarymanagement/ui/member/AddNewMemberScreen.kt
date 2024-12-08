@@ -38,9 +38,16 @@ object AddNewMemberDestination : NavigationDestination {
 }
 
 @Composable
-fun AddNewMemberScreen() {
+fun AddNewMemberScreen(
+    navigateBack: () -> Unit
+) {
     Scaffold(
-        topBar = { AddAppBar(title = "Thêm thành viên") }
+        topBar = {
+            AddAppBar(
+                navigateBack = navigateBack,
+                title = "Thêm thành viên"
+            )
+        }
     ) { innerPadding ->
         AddNewMember(modifier = Modifier.padding(innerPadding))
     }
@@ -125,8 +132,8 @@ private fun AddNewMember(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AddNewMemberScreenPreview() {
-    LibraryManagementTheme { AddNewMemberScreen() }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun AddNewMemberScreenPreview() {
+//    LibraryManagementTheme { AddNewMemberScreen() }
+//}

@@ -60,6 +60,7 @@ fun BorrowRequestsScreen(
     navigateToAddNewBorrowRequest: () -> Unit,
     navigateToBooksScreen: () -> Unit,
     navigateToMembersScreen: () -> Unit,
+    navigateToSettingScreen: () -> Unit,
     borrowRequests: List<BorrowRequest> = listOf()
 ) {
     Scaffold(
@@ -85,8 +86,10 @@ fun BorrowRequestsScreen(
             Column {
                 BorrowStateBottomBar()
                 HomeBottomAppBar(
+                    currentTabIndex = 2,
                     navigateToBooksScreen = navigateToBooksScreen,
-                    navigateToMembersScreen = navigateToMembersScreen
+                    navigateToMembersScreen = navigateToMembersScreen,
+                    navigateToSettingScreen = navigateToSettingScreen
                 )
             }
         }
