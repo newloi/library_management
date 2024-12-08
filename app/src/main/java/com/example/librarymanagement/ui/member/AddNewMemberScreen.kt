@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -61,13 +62,14 @@ private fun AddNewMember(
     modifier: Modifier = Modifier
 ) {
 //    val focusManager = LocalFocusManager.current
+//    val interactionSource = remember { MutableInteractionSource() }
 //    Column(
 //        modifier = modifier
 //            .fillMaxSize()
 //            .padding(32.dp)
 //            .clickable(
 //                indication = null,
-//                interactionSource = MutableInteractionSource()
+//                interactionSource = interactionSource
 //            ){ focusManager.clearFocus() },
 //        verticalArrangement = Arrangement.spacedBy(20.dp)
 //    ) {
@@ -123,7 +125,7 @@ private fun AddNewMember(
 //        AddInfo(label = "Họ và tên", modifier = Modifier.fillMaxWidth())
 //        Row {
 //            DropList(label = "Giới tính", items = listOf("Nam", "Nữ", "Khác"), modifier = Modifier.width(108.dp))
-//            Spacer(modifier = Modifier.width(16.dp))
+//            Spacer(modifier = Modifier.weight(1f))
 //            AddInfo(label = "Ngày sinh", modifier = Modifier.width(200.dp))
 //        }
 //        AddInfo(label = "Địa chỉ", modifier = Modifier.fillMaxWidth())
