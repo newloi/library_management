@@ -26,5 +26,5 @@ interface BookDao {
     fun getAllBooks(): Flow<List<Book>>
 
     @Query("SELECT * FROM books WHERE name LIKE '%'||:searchText||'%' OR id = CAST(:searchText AS INTEGER)")
-    fun search(searchText: String): Flow<List<Book>>
+    fun searchBooks(searchText: String): Flow<List<Book>>
 }

@@ -281,6 +281,8 @@ private fun DialogConfirmDeleteMember(
     ConfirmDialog(
         title = "Xóa thành viên",
         content = stringResource(R.string.delete_member_warning, nameOfMember),
+        onConfirm = {},
+        onCancel = {},
         cancelLabel = "Không",
         confirmLabel = "Xóa",
         cancelColor = Cancel,
@@ -290,13 +292,13 @@ private fun DialogConfirmDeleteMember(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DialogMemberPreview() {
-    LibraryManagementTheme {
-        DialogConfirmDeleteMember(nameOfMember = "Cau truc du lieu va giai thuat")
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DialogMemberPreview() {
+//    LibraryManagementTheme {
+//        DialogConfirmDeleteMember(nameOfMember = "Cau truc du lieu va giai thuat")
+//    }
+//}
 
 //@Preview(showBackground = true)
 //@Composable

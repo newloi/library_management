@@ -23,12 +23,16 @@ class BookDetailViewModel(
                 BookDetailUiState(currentBook = it)
             }
             .stateIn(
-                scope =viewModelScope,
+                scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = BookDetailUiState()
             )
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
+    }
+
+    suspend fun deleteBook() {
+        bookRepository.deleteBook(uiState.value.currentBook)
     }
 }
 

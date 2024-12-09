@@ -36,6 +36,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,11 +60,13 @@ import com.example.librarymanagement.ui.FilterBar
 import com.example.librarymanagement.ui.HomeBottomAppBar
 import com.example.librarymanagement.ui.SearchTopBar
 import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmDelete
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.Title
+import kotlinx.coroutines.launch
 
 /** Thiết kế màn hình hiển thị list sách */
 
@@ -82,6 +86,7 @@ fun BooksScreen(
     navigateToSettingScreen: () -> Unit,
     navigateToEditBook: (Int) -> Unit,
     navigateToBookDetailScreen: (Int) -> Unit,
+    navigateDone: () -> Unit,
     bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 //    books: List<Book> = listOf(
 //        Book(
@@ -107,12 +112,19 @@ fun BooksScreen(
 ) {
     val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
     val books = bookScreenUiState.books
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 56.dp)) {
                 SearchTopBar(
-                    search = {},
+                    search = { searchText ->
+                        coroutineScope.launch {
+                            bookScreenViewModel.searchBooks(searchText)
+                        }
+                    },
                     placeholder = "Nhập tên hoặc mã sách",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -147,6 +159,12 @@ fun BooksScreen(
                     items(items = books, key = {it.id}) { book ->
                         BookInfo(
                             navigateToEditBook = { navigateToEditBook(book.id) },
+                            onConfirm = {
+                                coroutineScope.launch {
+                                    bookScreenViewModel.deleteBook(book)
+                                    navigateDone()
+                                }
+                            },
                             book = book,
                             modifier = Modifier.clickable { navigateToBookDetailScreen(book.id) }
                         )
@@ -172,11 +190,13 @@ fun BooksScreen(
 @Composable
 private fun BookInfo(
     book: Book,
+    onConfirm: () -> Unit,
     navigateToEditBook: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -290,28 +310,23 @@ private fun BookInfo(
             }
         }
     }
-    if(showDialog) DialogConfirmDeleteBook(nameOfBook = book.name)
+    if(showDialog) {
+        ConfirmDelete(
+            title = "Xóa sách",
+            content = stringResource(R.string.delete_book_warning, book.name),
+            onConfirm = {
+                onConfirm()
+                showDialog = false
+            },
+            onCancel = { showDialog = false }
+        )
+    }
 }
 
 /**
  * Hop thoai hien ra khi nhan vao dau ba cham cua the sach [nameOfBook]
  */
-@Composable
-fun DialogConfirmDeleteBook(
-    nameOfBook: String,
-    modifier: Modifier = Modifier
-) {
-    ConfirmDialog(
-        title = "Xóa sách",
-        content = stringResource(R.string.delete_book_warning, nameOfBook),
-        cancelLabel = "Không",
-        confirmLabel = "Xóa",
-        cancelColor = Cancel,
-        confirmColor = Delete,
-        alpha = 0.66f,
-        modifier = modifier
-    )
-}
+
 
 //@Preview(showBackground = true)
 //@Composable
@@ -321,14 +336,19 @@ fun DialogConfirmDeleteBook(
 //    }
 //}
 
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun Preview() {
-//    LibraryManagementTheme {
-//        BooksScreen(
-//            navigateToAddNewBook = {},
-//            navigateToBookDetailScreen = {},
-//            navigateToEditBook = {}
-//        )
-//    }
-//}
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun Preview() {
+    LibraryManagementTheme {
+        BooksScreen(
+            navigateToAddNewBook = {},
+            navigateToBookDetailScreen = {},
+            navigateToEditBook = {},
+            navigateDone = {},
+            navigateToBorrowRequestsScreen = {},
+            navigateToMembersScreen = {},
+            navigateToSettingScreen = {},
+
+        )
+    }
+}

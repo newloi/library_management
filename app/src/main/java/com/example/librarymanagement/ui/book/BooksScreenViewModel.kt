@@ -12,24 +12,28 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class BooksScreenViewModel(bookRepository: BookRepository) : ViewModel() {
-//    val _booksScreenUiState = MutableStateFlow(BooksScreenUiState())
-    val booksScreenUiState: StateFlow<BooksScreenUiState> =
+class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewModel() {
+    var booksScreenUiState: StateFlow<BooksScreenUiState> =
         bookRepository.getAllBooksStream().map { BooksScreenUiState(books = it) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = BooksScreenUiState()
             )
+        private set
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    fun search(searchText: String) {
+    suspend fun deleteBook(book: Book) {
+        bookRepository.deleteBook(book)
+    }
+
+    suspend fun searchBooks(searchText: String) {
 //        viewModelScope.launch {
-//            booksScreenUiState =
-//            bookRepository.getAllBooksStream().map { BooksScreenUiState(books = it) }
+            booksScreenUiState =
+                bookRepository.searchBooksStream(searchText).map { BooksScreenUiState(books = it) } as StateFlow<BooksScreenUiState>
 //        }
     }
 }

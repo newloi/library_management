@@ -8,12 +8,12 @@
     <string name="so_luong">"Số lượng: %d"</string>
     <string name="delete_book_warning">Bạn có chắc muốn xóa sách \"%s\" không?</string>
     <string name="delete_member_warning">Bạn có chắc muốn xóa thành viên \"%s\" không?</string>
-    <string name="ma_so">Mã số: %d</string>
+    <string name="ma_so">Mã số: %06d</string>
     <string name="ngay_dang_ki">Ngày đăng ký: %s</string>
     <string name="ngay_muon">Ngày mượn: %s</string>
-    <string name="id">ID: %d</string>
-    <string name="sach">Sách %d</string>
-    <string name="don_muon">Đơn mượn %d</string>
-    <string name="thanh_vien">Thành viên %d</string>
+    <string name="id">ID: %06d</string>
+    <string name="sach">Sách %06d</string>
+    <string name="don_muon">Đơn %06d</string>
+    <string name="thanh_vien">Thành viên %06d</string>
 
 </resources>

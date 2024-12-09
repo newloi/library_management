@@ -83,52 +83,46 @@ import com.example.librarymanagement.ui.book.BookDetail
 import com.example.librarymanagement.ui.book.BooksDestination
 import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
 import com.example.librarymanagement.ui.member.MembersDestination
+import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
 import com.example.librarymanagement.ui.theme.MoreDarkGray
 import com.example.librarymanagement.ui.theme.Roboto
 import kotlinx.coroutines.selects.select
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
     search: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier
 ) {
-        var searchText by remember{ mutableStateOf("") }
-        var active by remember { mutableStateOf(false) }
+    var searchText by rememberSaveable { mutableStateOf("") }
 
-        SearchBar(
-            query = searchText,
-            onQueryChange = { searchText = it }, //Cap nhat noi dung tim kiem
-            onSearch = { search(searchText) },
-            active = active,
-            onActiveChange = { active = it },
-            placeholder = { Text(text = placeholder) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Tìm kiếm"
-                )
-            },
-            trailingIcon = {
-                if(active) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Hủy tìm kiếm",
-                        modifier = Modifier.clickable {
-                            if(searchText.isNotEmpty()) {
-                                searchText = ""
-                            } else active = false
-                        }
-                    )
-                }
-            },
-            modifier = modifier
-        ) {
-            //Lich su tim kiem
-        }
+    OutlinedTextField(
+        value = searchText,
+        placeholder = {
+            Text(
+                text = placeholder,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )
+        },
+        onValueChange = {
+            searchText = it
+            search(it)
+        },
+        trailingIcon = {
+            Icon(
+                painter = painterResource(R.drawable.search),
+                contentDescription = "Tìm kiếm"
+            )
+        },
+        shape = RoundedCornerShape(99.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .height(50.dp)
+            .fillMaxWidth()
+    )
 }
 
 @Composable
@@ -213,6 +207,7 @@ fun FilterBar(modifier: Modifier = Modifier) {
 fun InfoAppBar(
     title: String,
     navigateToEdit: () -> Unit,
+    onDelete: () -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -272,7 +267,7 @@ fun InfoAppBar(
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
-                        /* Xoa */
+                        onDelete()
                     },
                     text = {
                         Text(
@@ -667,6 +662,8 @@ fun GenderDropList(
 fun ConfirmDialog(
     title: String,
     content: String,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
     cancelLabel: String,
     confirmLabel: String,
     cancelColor: Color,
@@ -687,10 +684,10 @@ fun ConfirmDialog(
                 style = MaterialTheme.typography.bodyMedium
             )
         },
-        onDismissRequest = {  },
+        onDismissRequest = onCancel,
         confirmButton = {
             Button(
-                onClick = { },
+                onClick = onConfirm,
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = confirmColor),
                 modifier = Modifier
@@ -705,7 +702,7 @@ fun ConfirmDialog(
         },
         dismissButton = {
             Button(
-                onClick = { },
+                onClick = onCancel,
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = cancelColor),
                 modifier = Modifier.size(100.dp, 44.dp)
@@ -850,6 +847,47 @@ fun InfoAboutTable(
         )
 }
 
+@Composable
+fun ConfirmDelete(
+    title: String,
+    content: String,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ConfirmDialog(
+        title = title,
+        content = content,
+        onConfirm = onConfirm,
+        onCancel = onCancel,
+        cancelLabel = "Không",
+        confirmLabel = "Xóa",
+        cancelColor = Cancel,
+        confirmColor = Delete,
+        alpha = 0.66f,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ConfirmCancel(
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ConfirmDialog(
+        title = "Hủy thay đổi",
+        content = "Các dữ liệu đã hủy sẽ không được lưu. Xác nhận hủy?",
+        cancelLabel = "Ở lại",
+        confirmLabel = "Hủy",
+        cancelColor = Cancel,
+        confirmColor = MainColor,
+        onConfirm = onConfirm,
+        onCancel = onCancel,
+        modifier = modifier
+    )
+}
+
 //@SuppressLint("RestrictedApi")
 //@Composable
 //fun HomeBottomAppBar(
@@ -986,8 +1024,11 @@ fun InfoAboutTable(
 //}
 
 
-@Preview(showBackground = true)
-@Composable
-fun ComponentPreview() {
-    FilterByDateBar()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ComponentPreview() {
+//    SearchTopBar(
+//        placeholder = "Tiim kiem",
+//
+//    )
+//}

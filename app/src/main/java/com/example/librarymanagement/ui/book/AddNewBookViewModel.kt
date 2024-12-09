@@ -28,6 +28,10 @@ class AddNewBookViewModel(private val bookRepository: BookRepository) : ViewMode
             bookRepository.insertBook(bookUiState.bookDetail.toBook())
         }
     }
+
+    fun showDialog() {
+        bookUiState = bookUiState.copy(isShowDialog = !bookUiState.isShowDialog)
+    }
 }
 
 data class BookDetail(
@@ -42,7 +46,8 @@ data class BookDetail(
 
 data class BookUiState(
     val isBookValid: Boolean = false,
-    val bookDetail: BookDetail = BookDetail()
+    val bookDetail: BookDetail = BookDetail(),
+    val isShowDialog: Boolean = false
 )
 
 fun BookDetail.toBook():Book = Book(
@@ -67,5 +72,5 @@ fun Book.toBookDetail(): BookDetail = BookDetail(
 
 fun Book.toBookUiState(isBookValid: Boolean = false): BookUiState = BookUiState(
     bookDetail = this.toBookDetail(),
-    isBookValid =isBookValid
+    isBookValid = isBookValid
 )

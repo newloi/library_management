@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,7 +29,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,6 +36,7 @@ import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmCancel
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
@@ -69,7 +68,7 @@ fun BookEditScreen(
     Scaffold(
         topBar = {
             AddAppBar(
-                navigateBack = navigateBack,
+                navigateBack = bookEditViewModel::showDialog,
                 title = stringResource(R.string.sach, bookEditViewModel.bookUiState.bookDetail.id)
             )
         },
@@ -105,6 +104,15 @@ fun BookEditScreen(
             enable = bookEditViewModel.bookUiState.isBookValid,
             modifier = Modifier.padding(innerPadding)
         )
+        if(bookEditViewModel.bookUiState.isShowDialog) {
+            ConfirmCancel(
+                onConfirm = {
+                    bookEditViewModel.showDialog()
+                    navigateBack()
+                },
+                onCancel = bookEditViewModel::showDialog
+            )
+        }
     }
 }
 
@@ -116,84 +124,68 @@ private fun BookEdit(
 ) {
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
-    LazyColumn(
+    Column(
         modifier = modifier
             .padding(32.dp)
             .fillMaxSize()
             .clickable(
                 indication = null,
                 interactionSource = interactionSource
-            ){ focusManager.clearFocus() },
+            ) { focusManager.clearFocus() },
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        item{
-            Text(
-                text = "Ảnh",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-        }
-        item{
-            Image(
-                painter = painterResource(bookImage),
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth().size(117.dp, 140.dp)
-            )
-        }
-        item{
-            Text(
-                text = "Thông tin sách",
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-        item{
+        Text(
+            text = "Ảnh",
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Image(
+            painter = painterResource(bookImage),
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .size(117.dp, 140.dp)
+        )
+        Text(
+            text = "Thông tin sách",
+            style = MaterialTheme.typography.titleLarge
+        )
+        InfoAbout(
+            label = "Tên sách",
+            value = book.name,
+            canEdit = true
+        )
+        InfoAbout(
+            label = "Tác giả",
+            value = book.author,
+            canEdit = true
+        )
+        InfoAbout(
+            label = "Nhà xuất bản",
+            value = book.publisher,
+            canEdit = true
+        )
+        Row(modifier = Modifier) {
             InfoAbout(
-                label = "Tên sách",
-                value = book.name,
-                canEdit = true
-            )
-        }
-        item{
-            InfoAbout(
-                label = "Tác giả",
-                value = book.author,
-                canEdit = true
-            )
-        }
-        item{
-            InfoAbout(
-                label = "Nhà xuất bản",
-                value = book.publisher,
-                canEdit = true
-            )
-        }
-        item{
-            Row(modifier = Modifier) {
-                InfoAbout(
-                    label = "Năm xuất bản",
-                    value = book.year.toString(),
-                    modifier = Modifier.width(120.dp),
-                    canEdit = true
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                InfoAbout(
-                    label = "Thể loại",
-                    value = book.type,
-                    modifier = Modifier.width(200.dp),
-                    canEdit = true
-                )
-            }
-        }
-        item{
-            InfoAbout(
-                label = "Số lượng",
-                value = book.quantities.toString(),
+                label = "Năm xuất bản",
+                value = book.year.toString(),
                 modifier = Modifier.width(120.dp),
                 canEdit = true
             )
+            Spacer(modifier = Modifier.weight(1f))
+            InfoAbout(
+                label = "Thể loại",
+                value = book.type,
+                modifier = Modifier.width(200.dp),
+                canEdit = true
+            )
         }
-
+        InfoAbout(
+            label = "Số lượng",
+            value = book.quantities.toString(),
+            modifier = Modifier.width(120.dp),
+            canEdit = true
+        )
     }
 }
 
