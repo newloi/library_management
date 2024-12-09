@@ -4,21 +4,10 @@
     android:viewportWidth="35"
     android:viewportHeight="35">
   <path
-      android:pathData="M6,7C6,5.895 6.895,5 8,5H16.75C16.888,5 17,5.112 17,5.25V13.889C17,14.993 17.895,15.889 19,15.889H27.75C27.888,15.889 28,16.001 28,16.139V31C28,32.105 27.105,33 26,33H8C6.895,33 6,32.105 6,31V7Z"
-      android:fillColor="#83BCF6"/>
-  <path
       android:pathData="M18,14V5.604C18,5.381 18.269,5.269 18.427,5.427L27.573,14.573C27.731,14.731 27.619,15 27.396,15H19C18.448,15 18,14.552 18,14Z"
       android:fillColor="#2F94F9"/>
   <path
-      android:strokeWidth="1"
-      android:pathData="M11,20L22.6,20"
-      android:fillColor="#00000000"
-      android:strokeColor="#2F94F9"
-      android:strokeLineCap="round"/>
-  <path
-      android:strokeWidth="1"
-      android:pathData="M11,25L17.6,25"
-      android:fillColor="#00000000"
-      android:strokeColor="#2F94F9"
-      android:strokeLineCap="round"/>
+      android:pathData="M6,7C6,5.895 6.895,5 8,5H16.75C16.888,5 17,5.112 17,5.25V13.889C17,14.993 17.895,15.889 19,15.889H27.75C27.888,15.889 28,16.001 28,16.139V31C28,32.105 27.105,33 26,33H8C6.895,33 6,32.105 6,31V7ZM10.5,20C10.5,19.724 10.724,19.5 11,19.5H22.6C22.876,19.5 23.1,19.724 23.1,20C23.1,20.276 22.876,20.5 22.6,20.5H11C10.724,20.5 10.5,20.276 10.5,20ZM11,25.5C10.724,25.5 10.5,25.276 10.5,25C10.5,24.724 10.724,24.5 11,24.5H17.6C17.876,24.5 18.1,24.724 18.1,25C18.1,25.276 17.876,25.5 17.6,25.5H11Z"
+      android:fillColor="#83BCF6"
+      android:fillType="evenOdd"/>
 </vector>
