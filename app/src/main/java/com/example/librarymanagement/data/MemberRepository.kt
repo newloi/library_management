@@ -1,4 +1,4 @@
 package com.example.librarymanagement.data
 
-class MemberRepository {
+class MemberRepository(private val memberDao: MemberDao) {
 }
