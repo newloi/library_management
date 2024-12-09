@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,15 +34,19 @@ import com.example.librarymanagement.ui.theme.MainColor
 @Composable
 fun RegisterScreen (modifier: Modifier = Modifier){
     Surface(color = LoginBackground, modifier = modifier.fillMaxSize() ) {
+        Column (modifier = Modifier.fillMaxSize().padding(40.dp)){
+            Image(
+                painter = painterResource(R.drawable.ic_launcher_foreground),
+                contentDescription = "logo",
+                modifier = Modifier.size(240.dp).align(Alignment.CenterHorizontally)
+            )
+        }
+
         Column(
             modifier = Modifier.padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                painter = painterResource(R.drawable.logo),
-                contentDescription = "logo"
-            )
 
             Spacer(modifier = Modifier.padding(10.dp))
 
