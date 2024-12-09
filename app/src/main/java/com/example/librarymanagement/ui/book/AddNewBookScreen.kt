@@ -45,6 +45,7 @@ import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmCancel
 import com.example.librarymanagement.ui.ConfirmDialog
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Cancel
@@ -59,7 +60,7 @@ object AddNewBookDestination : NavigationDestination {
 
 @Composable
 fun AddNewBookScreen(
-//    navigateDone: () -> Unit,
+    navigateDone: () -> Unit,
     navigateBack: () -> Unit,
     addNewBookViewModel: AddNewBookViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -68,7 +69,7 @@ fun AddNewBookScreen(
     Scaffold(
         topBar = {
             AddAppBar(
-                navigateBack = navigateBack,
+                navigateBack = addNewBookViewModel::showDialog,
                 title = "Thêm sách"
             )
         }
@@ -79,12 +80,21 @@ fun AddNewBookScreen(
             onSaveClick = {
                 coroutineScope.launch {
                     addNewBookViewModel.saveItem()
-                    navigateBack()
+                    navigateDone()
                 }
             },
             enable = addNewBookViewModel.bookUiState.isBookValid,
             modifier = Modifier.padding(innerPadding)
         )
+        if(addNewBookViewModel.bookUiState.isShowDialog) {
+            ConfirmCancel(
+                onConfirm = {
+                    addNewBookViewModel.showDialog()
+                    navigateBack()
+                },
+                onCancel = addNewBookViewModel::showDialog
+            )
+        }
     }
 }
 
@@ -99,6 +109,7 @@ fun AddNewBook(
 ) {
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -106,10 +117,12 @@ fun AddNewBook(
             .clickable(
                 indication = null,
                 interactionSource = interactionSource
-            ){ focusManager.clearFocus() },
+            ) { focusManager.clearFocus() },
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth().height(180.dp)) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)) {
             Column {
                 Text(
                     text = "Nhập ảnh",
@@ -125,7 +138,9 @@ fun AddNewBook(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.weight(1f).fillMaxHeight()
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
             ) {
                 Button(
                     onClick = {},
@@ -158,7 +173,12 @@ fun AddNewBook(
             text = "Nhập thông tin sách",
             style = MaterialTheme.typography.titleLarge
         )
-        AddInfo(onValueChange = { onBookChange(bookDetail.copy(name = it)) }, value = bookDetail.name, label = "Tên sách", modifier = Modifier.fillMaxWidth())
+        AddInfo(
+            onValueChange = { onBookChange(bookDetail.copy(name = it)) },
+            value = bookDetail.name,
+            label = "Tên sách",
+            modifier = Modifier.fillMaxWidth()
+        )
 //        OutlinedTextField(
 //            label = {
 //                Text(
@@ -182,136 +202,163 @@ fun AddNewBook(
 //            ),
 //            modifier = Modifier.height(60.dp).fillMaxWidth()
 //        )
-//        AddInfo(onValueChange = onBookChange, bookDetail = bookUiState.bookDetail, label = "Tác giả", modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(
-            label = {
-                Text(
-                    text = "Tác giả",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            },
-            value = bookDetail.author,
-            textStyle = TextStyle(
-                fontFamily = Roboto,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                color = Color.Black
-            ),
+        AddInfo(
             onValueChange = { onBookChange(bookDetail.copy(author = it)) },
-            singleLine = true,
-            shape = RoundedCornerShape(10.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
-            keyboardActions = KeyboardActions(
-                onDone = {focusManager.clearFocus()}
-            ),
-            modifier = Modifier.height(60.dp).fillMaxWidth()
+            value = bookDetail.author,
+            label = "Tác giả",
+            modifier = Modifier.fillMaxWidth()
         )
-//        AddInfo(onValueChange = onBookChange, bookDetail = bookUiState.bookDetail, label = "Nhà xuất bản", modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(
-            label = {
-                Text(
-                    text = "Nhà xuất bản",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            },
-            value = bookDetail.publisher,
-            textStyle = TextStyle(
-                fontFamily = Roboto,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                color = Color.Black
-            ),
+//        OutlinedTextField(
+//            label = {
+//                Text(
+//                    text = "Tác giả",
+//                    style = MaterialTheme.typography.labelMedium
+//                )
+//            },
+//            value = bookDetail.author,
+//            textStyle = TextStyle(
+//                fontFamily = Roboto,
+//                fontWeight = FontWeight.Normal,
+//                fontSize = 16.sp,
+//                color = Color.Black
+//            ),
+//            onValueChange = { onBookChange(bookDetail.copy(author = it)) },
+//            singleLine = true,
+//            shape = RoundedCornerShape(10.dp),
+//            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+//            keyboardActions = KeyboardActions(
+//                onDone = {focusManager.clearFocus()}
+//            ),
+//            modifier = Modifier.height(60.dp).fillMaxWidth()
+//        )
+        AddInfo(
             onValueChange = { onBookChange(bookDetail.copy(publisher = it)) },
-            singleLine = true,
-            shape = RoundedCornerShape(10.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
-            keyboardActions = KeyboardActions(
-                onDone = {focusManager.clearFocus()}
-            ),
-            modifier = Modifier.height(60.dp).fillMaxWidth()
+            value = bookDetail.publisher,
+            label = "Nhà xuất bản",
+            modifier = Modifier.fillMaxWidth()
         )
+//        OutlinedTextField(
+//            label = {
+//                Text(
+//                    text = "Nhà xuất bản",
+//                    style = MaterialTheme.typography.labelMedium
+//                )
+//            },
+//            value = bookDetail.publisher,
+//            textStyle = TextStyle(
+//                fontFamily = Roboto,
+//                fontWeight = FontWeight.Normal,
+//                fontSize = 16.sp,
+//                color = Color.Black
+//            ),
+//            onValueChange = { onBookChange(bookDetail.copy(publisher = it)) },
+//            singleLine = true,
+//            shape = RoundedCornerShape(10.dp),
+//            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+//            keyboardActions = KeyboardActions(
+//                onDone = {focusManager.clearFocus()}
+//            ),
+//            modifier = Modifier.height(60.dp).fillMaxWidth()
+//        )
         Row {
-//            AddInfo(onValueChange = onBookChange, bookDetail = bookUiState.bookDetail, label = "Năm xuất bản", modifier = Modifier.width(120.dp))
-            OutlinedTextField(
-                label = {
-                    Text(
-                        text = "Năm xuất bản",
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                },
-                value = bookDetail.year,
-                textStyle = TextStyle(
-                    fontFamily = Roboto,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    color = Color.Black
-                ),
+            AddInfo(
                 onValueChange = { onBookChange(bookDetail.copy(year = it)) },
-                singleLine = true,
-                shape = RoundedCornerShape(10.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
-                keyboardActions = KeyboardActions(
-                    onDone = {focusManager.clearFocus()}
-                ),
-                modifier = Modifier.height(60.dp).width(120.dp)
+                value = bookDetail.year,
+                label = "Năm xuất bản",
+                modifier = Modifier.width(120.dp)
             )
+//            OutlinedTextField(
+//                label = {
+//                    Text(
+//                        text = "Năm xuất bản",
+//                        style = MaterialTheme.typography.labelMedium
+//                    )
+//                },
+//                value = bookDetail.year,
+//                textStyle = TextStyle(
+//                    fontFamily = Roboto,
+//                    fontWeight = FontWeight.Normal,
+//                    fontSize = 16.sp,
+//                    color = Color.Black
+//                ),
+//                onValueChange = { onBookChange(bookDetail.copy(year = it)) },
+//                singleLine = true,
+//                shape = RoundedCornerShape(10.dp),
+//                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+//                keyboardActions = KeyboardActions(
+//                    onDone = {focusManager.clearFocus()}
+//                ),
+//                modifier = Modifier.height(60.dp).width(120.dp)
+//            )
             Spacer(modifier = Modifier.width(16.dp))
-//            AddInfo(onValueChange = onBookChange, bookDetail = bookUiState.bookDetail, label = "Thể loại", modifier = Modifier.width(200.dp))
-            OutlinedTextField(
-                label = {
-                    Text(
-                        text = "Thể loại",
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                },
-                value = bookDetail.type,
-                textStyle = TextStyle(
-                    fontFamily = Roboto,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    color = Color.Black
-                ),
+            AddInfo(
                 onValueChange = { onBookChange(bookDetail.copy(type = it)) },
-                singleLine = true,
-                shape = RoundedCornerShape(10.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
-                keyboardActions = KeyboardActions(
-                    onDone = {focusManager.clearFocus()}
-                ),
-                modifier = Modifier.height(60.dp).width(200.dp)
+                value = bookDetail.type,
+                label = "Thể loại",
+                modifier = Modifier.width(200.dp)
             )
+//            OutlinedTextField(
+//                label = {
+//                    Text(
+//                        text = "Thể loại",
+//                        style = MaterialTheme.typography.labelMedium
+//                    )
+//                },
+//                value = bookDetail.type,
+//                textStyle = TextStyle(
+//                    fontFamily = Roboto,
+//                    fontWeight = FontWeight.Normal,
+//                    fontSize = 16.sp,
+//                    color = Color.Black
+//                ),
+//                onValueChange = { onBookChange(bookDetail.copy(type = it)) },
+//                singleLine = true,
+//                shape = RoundedCornerShape(10.dp),
+//                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+//                keyboardActions = KeyboardActions(
+//                    onDone = {focusManager.clearFocus()}
+//                ),
+//                modifier = Modifier.height(60.dp).width(200.dp)
+//            )
         }
-//        AddInfo(onValueChange = onBookChange, bookDetail = bookUiState.bookDetail, label = "Số lượng", modifier = Modifier.width(120.dp))
-        OutlinedTextField(
-            label = {
-                Text(
-                    text = "Số lượng",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            },
-            value = bookDetail.quantities,
-            textStyle = TextStyle(
-                fontFamily = Roboto,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                color = Color.Black
-            ),
+        AddInfo(
             onValueChange = { onBookChange(bookDetail.copy(quantities = it)) },
-            singleLine = true,
-            shape = RoundedCornerShape(10.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
-            keyboardActions = KeyboardActions(
-                onDone = {focusManager.clearFocus()}
-            ),
-            modifier = Modifier.height(60.dp)
+            value = bookDetail.quantities,
+            label = "Số lượng",
+            modifier = Modifier.width(120.dp)
         )
+//        OutlinedTextField(
+//            label = {
+//                Text(
+//                    text = "Số lượng",
+//                    style = MaterialTheme.typography.labelMedium
+//                )
+//            },
+//            value = bookDetail.quantities,
+//            textStyle = TextStyle(
+//                fontFamily = Roboto,
+//                fontWeight = FontWeight.Normal,
+//                fontSize = 16.sp,
+//                color = Color.Black
+//            ),
+//            onValueChange = { onBookChange(bookDetail.copy(quantities = it)) },
+//            singleLine = true,
+//            shape = RoundedCornerShape(10.dp),
+//            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+//            keyboardActions = KeyboardActions(
+//                onDone = {focusManager.clearFocus()}
+//            ),
+//            modifier = Modifier.height(60.dp)
+//        )
         Button(
             onClick = onSaveClick,
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MainColor),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
             enabled = enable,
-            modifier = Modifier.align(Alignment.End).size(100.dp, 40.dp)
+            modifier = Modifier
+                .align(Alignment.End)
+                .size(100.dp, 40.dp)
         ) {
             Text(
                 text = "Xong",
@@ -321,24 +368,13 @@ fun AddNewBook(
     }
 }
 
-@Composable
-fun ConfirmCancel(modifier: Modifier = Modifier) {
-    ConfirmDialog(
-        title = "Hủy thay đổi",
-        content = "Các dữ liệu đã hủy sẽ không được lưu. Xác nhận hủy?",
-        cancelLabel = "Giữ lại",
-        confirmLabel = "Hủy",
-        cancelColor = Cancel,
-        confirmColor = MainColor,
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun AddNewBookScreenPreview() {
-    LibraryManagementTheme { AddNewBookScreen(
-//        navigateDone = {},
-        navigateBack = {})
-    }
-}
+
+//@Preview(showBackground = true)
+//@Composable
+//fun AddNewBookScreenPreview() {
+//    LibraryManagementTheme { AddNewBookScreen(
+////        navigateDone = {},
+//        navigateBack = {})
+//    }
+//}

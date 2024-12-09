@@ -36,6 +36,7 @@ import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmCancel
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
@@ -67,7 +68,7 @@ fun BookEditScreen(
     Scaffold(
         topBar = {
             AddAppBar(
-                navigateBack = navigateBack,
+                navigateBack = bookEditViewModel::showDialog,
                 title = stringResource(R.string.sach, bookEditViewModel.bookUiState.bookDetail.id)
             )
         },
@@ -103,6 +104,15 @@ fun BookEditScreen(
             enable = bookEditViewModel.bookUiState.isBookValid,
             modifier = Modifier.padding(innerPadding)
         )
+        if(bookEditViewModel.bookUiState.isShowDialog) {
+            ConfirmCancel(
+                onConfirm = {
+                    bookEditViewModel.showDialog()
+                    navigateBack()
+                },
+                onCancel = bookEditViewModel::showDialog
+            )
+        }
     }
 }
 
@@ -121,7 +131,7 @@ private fun BookEdit(
             .clickable(
                 indication = null,
                 interactionSource = interactionSource
-            ){ focusManager.clearFocus() },
+            ) { focusManager.clearFocus() },
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
@@ -132,7 +142,9 @@ private fun BookEdit(
         Image(
             painter = painterResource(bookImage),
             contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterHorizontally).size(117.dp, 140.dp)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .size(117.dp, 140.dp)
         )
         Text(
             text = "Thông tin sách",

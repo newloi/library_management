@@ -37,7 +37,12 @@ import com.example.librarymanagement.data.BorrowRequest
 fun BorrowRequestDetailScreen(borrowRequest : BorrowRequest) {
     Scaffold(
        topBar = {
-           InfoAppBar(title = stringResource( R.string.don_muon, borrowRequest.id))
+           InfoAppBar(
+               navigateBack = {},
+               navigateToEdit = {},
+               onDelete = {},
+               title = stringResource( R.string.don_muon, borrowRequest.id)
+           )
        }
     ) { innerPadding ->
         BorrowRequestDetail(borrowRequest = borrowRequest, modifier = Modifier.padding(innerPadding))

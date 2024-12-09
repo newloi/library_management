@@ -70,11 +70,12 @@ fun AppNavHost(
                     navigateToSettingScreen = {},
                     navigateToEditBook = { navController.navigate("${BookEditDestination.route}/${it}") },
                     navigateToBookDetailScreen = { navController.navigate("${BookDetailDestination.route}/${it}") },
+                    navigateDone = { navController.popBackStack() }
                 )
             }
             composable(route = AddNewBookDestination.route) {
                 AddNewBookScreen(
-//                    navigateDone = { navController.popBackStack() },
+                    navigateDone = { navController.popBackStack() },
                     navigateBack = { navController.navigateUp() }
                 )
             }
@@ -85,8 +86,9 @@ fun AppNavHost(
                 })
             ) {
                 BookDetailScreen(
-                    navigateToEditBook = { navController.navigate(BookEditDestination.route) },
-                    navigateBack = { navController.navigateUp() }
+                    navigateToEditBook = { navController.navigate("${BookEditDestination.route}/${it}") },
+                    navigateBack = { navController.navigateUp() },
+                    navigateDone = { navController.popBackStack() }
                 )
             }
             composable(route = BorrowRequestDetailDestination.route) {

@@ -45,6 +45,7 @@ fun BorrowRequestDetailScreen(
            InfoAppBar(
                navigateToEdit = navigateToEditBorrowRequest,
                navigateBack = navigateBack,
+               onDelete = {},
                title = stringResource( R.string.don_muon, borrowRequest.id)
            )
        }
@@ -148,18 +149,18 @@ fun BorrowRequestList(borrowRequests: List<BorrowRequest>) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Gray)
+                .background(Color.LightGray)
                 .border(1.dp, color = Color.Black),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             InfoAboutTable(
                 value = "ID",
-                modifier=Modifier.weight(1f).border(width = 1.dp, color = Black)
+                modifier=Modifier.weight(1f).border(width = 0.2.dp, color = Black)
             )
 
             InfoAboutTable(
                 value = "Ten sach",
-                modifier=Modifier.weight(1f).border(width = 1.dp, color = Black)
+                modifier=Modifier.weight(2f).border(width = 0.2.dp, color = Black)
             )
 
 
@@ -185,23 +186,24 @@ fun BookRow(borrowRequest: BorrowRequest) {
     ) {
         InfoAboutTable(
             value = borrowRequest.id.toString(),
-            modifier=Modifier.weight(1f).border(width = 1.dp, color = Black)
+            modifier=Modifier.weight(1f).border(width = 0.2.dp, color = Black)
         )
 
         InfoAboutTable(
             value = borrowRequest.bookName,
-            modifier=Modifier.weight(1f).border(width = 1.dp, color = Black)
+            modifier=Modifier.weight(2f).border(width = 0.2.dp, color = Black)
         )
-
-
-
     }
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun BorrowRequestDetailPreview(){
-//    BorrowRequestDetailScreen(borrowRequest = BorrowRequest(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả"))
-//}
+@Preview(showBackground = true)
+@Composable
+fun BorrowRequestDetailPreview(){
+    BorrowRequestDetailScreen(
+        navigateBack = {},
+        navigateToEditBorrowRequest = {},
+        borrowRequest = BorrowRequest(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
+    )
+}
 

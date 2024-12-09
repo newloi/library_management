@@ -54,6 +54,7 @@ fun MemberDetailScreen(
             InfoAppBar(
                 navigateToEdit = navigateToEditMember,
                 navigateBack = navigateBack,
+                onDelete = {},
                 title = stringResource(R.string.thanh_vien, member.id)
             )
         }

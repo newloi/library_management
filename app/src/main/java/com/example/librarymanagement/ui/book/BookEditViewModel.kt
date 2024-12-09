@@ -46,4 +46,8 @@ class BookEditViewModel(
             bookRepository.updateBook(bookUiState.bookDetail.toBook())
         }
     }
+
+    fun showDialog() {
+        bookUiState = bookUiState.copy(isShowDialog = !bookUiState.isShowDialog)
+    }
 }

@@ -19,6 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,10 +35,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmDelete
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAppBar
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
+import kotlinx.coroutines.launch
 
 object BookDetailDestination : NavigationDestination {
     override val route = "book_detail"
@@ -51,18 +58,22 @@ fun BookDetailScreen(
 //        year = 2024,
 //        type = "IT",
 //        quantities = 3),
-    navigateToEditBook: () -> Unit,
+    navigateToEditBook: (Int) -> Unit,
     navigateBack: () -> Unit,
+    navigateDone: () -> Unit,
     bookDetailViewModel: BookDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
     val bookDetailUiState by bookDetailViewModel.uiState.collectAsState()
+    var isShowDialog by rememberSaveable { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             InfoAppBar(
-                navigateToEdit = navigateToEditBook,
+                navigateToEdit = { navigateToEditBook(bookDetailUiState.currentBook.id) },
                 navigateBack = navigateBack,
+                onDelete = { isShowDialog = true },
                 title = stringResource(R.string.sach, bookDetailUiState.currentBook.id))
         }
     ) { innerPadding ->
@@ -71,6 +82,20 @@ fun BookDetailScreen(
             book = bookDetailUiState.currentBook,
             modifier = modifier.padding(innerPadding)
         )
+        if(isShowDialog) {
+            ConfirmDelete(
+                title = "Xóa sách",
+                content = stringResource(R.string.delete_book_warning, bookDetailUiState.currentBook.name),
+                onConfirm = {
+                    coroutineScope.launch {
+                        bookDetailViewModel.deleteBook()
+                        isShowDialog = false
+                        navigateDone()
+                    }
+                },
+                onCancel = { isShowDialog = false }
+            )
+        }
     }
 }
 
@@ -162,14 +187,14 @@ private fun BookDetail(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun BookDetailBodyPreview() {
-    LibraryManagementTheme {
-        BookDetailScreen(
-//            bookImage = R.drawable.lamda_image,
-            navigateToEditBook = {},
-            navigateBack = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BookDetailBodyPreview() {
+//    LibraryManagementTheme {
+//        BookDetailScreen(
+////            bookImage = R.drawable.lamda_image,
+//            navigateToEditBook = {},
+//            navigateBack = {}
+//        )
+//    }
+//}
