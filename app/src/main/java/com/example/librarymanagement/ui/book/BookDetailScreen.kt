@@ -44,13 +44,13 @@ object BookDetailDestination : NavigationDestination {
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BookDetailScreen(
-//    @DrawableRes bookImage: Int = 0,
-    book: Book = Book(name = "Cau truc du lieu va giai thuat",
-        author = "Nguyen Tuan Dung",
-        publisher = "NXB Back Khoa",
-        year = 2024,
-        type = "IT",
-        quantities = 3),
+    @DrawableRes bookImage: Int = 0,
+//    book: Book = Book(name = "Cau truc du lieu va giai thuat",
+//        author = "Nguyen Tuan Dung",
+//        publisher = "NXB Back Khoa",
+//        year = 2024,
+//        type = "IT",
+//        quantities = 3),
     navigateToEditBook: () -> Unit,
     navigateBack: () -> Unit,
     bookDetailViewModel: BookDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
@@ -63,7 +63,7 @@ fun BookDetailScreen(
             InfoAppBar(
                 navigateToEdit = navigateToEditBook,
                 navigateBack = navigateBack,
-                title = stringResource(R.string.sach, book.id))
+                title = stringResource(R.string.sach, bookDetailUiState.currentBook.id))
         }
     ) { innerPadding ->
         BookDetail(

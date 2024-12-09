@@ -80,7 +80,7 @@ fun BooksScreen(
     navigateToMembersScreen: () -> Unit,
     navigateToBorrowRequestsScreen: () -> Unit,
     navigateToSettingScreen: () -> Unit,
-    navigateToEditBook: () -> Unit,
+    navigateToEditBook: (Int) -> Unit,
     navigateToBookDetailScreen: (Int) -> Unit,
     bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 //    books: List<Book> = listOf(
@@ -146,7 +146,7 @@ fun BooksScreen(
                 ) {
                     items(items = books, key = {it.id}) { book ->
                         BookInfo(
-                            navigateToEditBook = navigateToEditBook,
+                            navigateToEditBook = { navigateToEditBook(book.id) },
                             book = book,
                             modifier = Modifier.clickable { navigateToBookDetailScreen(book.id) }
                         )

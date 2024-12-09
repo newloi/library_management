@@ -444,9 +444,9 @@ fun InfoAbout(
 
 @Composable
 fun AddInfo(
-    onValueChange: (BookDetail) -> Unit = {},
+    onValueChange: (String) -> Unit = {},
     value: String,
-    bookDetail: BookDetail,
+//    bookDetail: BookDetail,
     modifier: Modifier = Modifier,
     label: String
 ) {
@@ -466,7 +466,7 @@ fun AddInfo(
             fontSize = 16.sp,
             color = Color.Black
         ),
-        onValueChange = { onValueChange(bookDetail.copy()) },
+        onValueChange = { onValueChange(it) },
         singleLine = true,
         shape = RoundedCornerShape(10.dp),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),

@@ -68,7 +68,7 @@ fun AppNavHost(
                     navigateToMembersScreen = { navController.navigate(MembersDestination.route) },
                     navigateToBorrowRequestsScreen = { navController.navigate(BorrowRequestsDestination.route) },
                     navigateToSettingScreen = {},
-                    navigateToEditBook = { navController.navigate(BookEditDestination.route) },
+                    navigateToEditBook = { navController.navigate("${BookEditDestination.route}/${it}") },
                     navigateToBookDetailScreen = { navController.navigate("${BookDetailDestination.route}/${it}") },
                 )
             }
@@ -123,7 +123,12 @@ fun AppNavHost(
                     navigateToMemberDetail = { navController.navigate(MemberDetailDestination.route) }
                 )
             }
-            composable(route = BookEditDestination.route) {
+            composable(
+                route = BookEditDestination.routeWithArgs,
+                arguments = listOf(navArgument(BookEditDestination.bookIdArg) {
+                    type = NavType.IntType
+                })
+            ) {
                 BookEditScreen(
                     navigateBack = { navController.navigateUp() },
                 )

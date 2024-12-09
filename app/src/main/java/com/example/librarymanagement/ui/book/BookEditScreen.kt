@@ -22,65 +22,86 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.AddAppBar
+import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.MainColor
+import kotlinx.coroutines.launch
 
 object BookEditDestination : NavigationDestination {
     override val route = "book_edit"
+    const val bookIdArg = "bookId"
+    val routeWithArgs = "$route/{$bookIdArg}"
 }
 
 @Composable
 fun BookEditScreen(
     @DrawableRes bookImage: Int = R.drawable.lamda_image,
     navigateBack: () -> Unit,
-    book: Book = Book(
-        name = "Cau truc du lieu va giai thuat",
-        author = "Nguyen Tuan Dung",
-        publisher = "NXB Back Khoa",
-        year = 2024,
-        type = "IT",
-        quantities = 3
-    ),
-    modifier: Modifier = Modifier
+    bookEditViewModel: BookEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
+//    book: Book = Book(
+//        name = "Cau truc du lieu va giai thuat",
+//        author = "Nguyen Tuan Dung",
+//        publisher = "NXB Back Khoa",
+//        year = 2024,
+//        type = "IT",
+//        quantities = 3
+//    ),
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             AddAppBar(
                 navigateBack = navigateBack,
-                title = "Sach 00001"
+                title = stringResource(R.string.sach, bookEditViewModel.bookUiState.bookDetail.id)
             )
         },
-        floatingActionButton = {
-            Button(
-                onClick = {},
-                shape = RoundedCornerShape(16.dp),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-                modifier = Modifier.size(100.dp, 40.dp)
-            ) {
-                Text(
-                    text = "Xong",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            }
-        }
+//        floatingActionButton = {
+//            Button(
+//                onClick = {
+//                    coroutineScope.launch {
+//                        bookEditViewModel.updateBook()
+//                        navigateBack()
+//                    }
+//                },
+//                shape = RoundedCornerShape(16.dp),
+//                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+//                colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+//                modifier = Modifier.size(100.dp, 40.dp)
+//            ) {
+//                Text(
+//                    text = "Xong",
+//                    style = MaterialTheme.typography.labelMedium
+//                )
+//            }
+//        }
     ) { innerPadding ->
-        BookEdit(
-            bookImage = bookImage,
-            book = book,
-            modifier = modifier.padding(innerPadding)
+        AddNewBook(
+            onBookChange = bookEditViewModel::updateUiState,
+            bookDetail = bookEditViewModel.bookUiState.bookDetail,
+            onSaveClick = {
+                coroutineScope.launch {
+                    bookEditViewModel.updateBook()
+                    navigateBack()
+                }
+            },
+            enable = bookEditViewModel.bookUiState.isBookValid,
+            modifier = Modifier.padding(innerPadding)
         )
     }
 }
@@ -158,21 +179,21 @@ private fun BookEdit(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun BookEditBodyPreview() {
-    LibraryManagementTheme {
-        BookEditScreen(
-            bookImage = R.drawable.lamda_image,
-            navigateBack = {},
-            book = Book(
-                name = "Cau truc du lieu va giai thuat",
-                author = "Nguyen Tuan Dung",
-                publisher = "NXB Back Khoa",
-                year = 2024,
-                type = "IT",
-                quantities = 3
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BookEditBodyPreview() {
+//    LibraryManagementTheme {
+//        BookEditScreen(
+//            bookImage = R.drawable.lamda_image,
+//            navigateBack = {},
+//            book = Book(
+//                name = "Cau truc du lieu va giai thuat",
+//                author = "Nguyen Tuan Dung",
+//                publisher = "NXB Back Khoa",
+//                year = 2024,
+//                type = "IT",
+//                quantities = 3
+//            )
+//        )
+//    }
+//}

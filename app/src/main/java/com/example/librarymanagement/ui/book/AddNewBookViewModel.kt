@@ -18,8 +18,8 @@ class AddNewBookViewModel(private val bookRepository: BookRepository) : ViewMode
     private fun validatInput(uiState: BookDetail = bookUiState.bookDetail): Boolean {
         return with(uiState) {
             name.isNotBlank() && author.isNotBlank() &&
-                    publisher.isNotBlank() && year.toString().isNotBlank() &&
-                    type.isNotBlank() && quantities.toString().isNotBlank()
+                    publisher.isNotBlank() && year.isNotBlank() &&
+                    type.isNotBlank() && quantities.isNotBlank()
         }
     }
 

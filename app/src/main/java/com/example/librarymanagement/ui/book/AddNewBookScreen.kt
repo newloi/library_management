@@ -25,6 +25,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +61,7 @@ object AddNewBookDestination : NavigationDestination {
 fun AddNewBookScreen(
 //    navigateDone: () -> Unit,
     navigateBack: () -> Unit,
-    viewModel: AddNewBookViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    addNewBookViewModel: AddNewBookViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -73,15 +74,15 @@ fun AddNewBookScreen(
         }
     ) { innerPadding ->
         AddNewBook(
-            onBookChange = viewModel::updateUiState,
-            bookDetail = viewModel.bookUiState.bookDetail,
+            onBookChange = addNewBookViewModel::updateUiState,
+            bookDetail = addNewBookViewModel.bookUiState.bookDetail,
             onSaveClick = {
                 coroutineScope.launch {
-                    viewModel.saveItem()
+                    addNewBookViewModel.saveItem()
                     navigateBack()
                 }
             },
-            enable = viewModel.bookUiState.isBookValid,
+            enable = addNewBookViewModel.bookUiState.isBookValid,
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -89,7 +90,7 @@ fun AddNewBookScreen(
 
 @SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
-private fun AddNewBook(
+fun AddNewBook(
     onBookChange: (BookDetail) -> Unit,
     bookDetail: BookDetail,
     onSaveClick: () -> Unit,
@@ -157,30 +158,30 @@ private fun AddNewBook(
             text = "Nhập thông tin sách",
             style = MaterialTheme.typography.titleLarge
         )
-//        AddInfo(onValueChange = onBookChange, bookDetail = bookUiState.bookDetail, label = "Tên sách", modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(
-            label = {
-                Text(
-                    text = "Tên sách",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            },
-            value = bookDetail.name,
-            textStyle = TextStyle(
-                fontFamily = Roboto,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                color = Color.Black
-            ),
-            onValueChange = { onBookChange(bookDetail.copy(name = it)) },
-            singleLine = true,
-            shape = RoundedCornerShape(10.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
-            keyboardActions = KeyboardActions(
-                onDone = {focusManager.clearFocus()}
-            ),
-            modifier = Modifier.height(60.dp).fillMaxWidth()
-        )
+        AddInfo(onValueChange = { onBookChange(bookDetail.copy(name = it)) }, value = bookDetail.name, label = "Tên sách", modifier = Modifier.fillMaxWidth())
+//        OutlinedTextField(
+//            label = {
+//                Text(
+//                    text = "Tên sách",
+//                    style = MaterialTheme.typography.labelMedium
+//                )
+//            },
+//            value = bookDetail.name,
+//            textStyle = TextStyle(
+//                fontFamily = Roboto,
+//                fontWeight = FontWeight.Normal,
+//                fontSize = 16.sp,
+//                color = Color.Black
+//            ),
+//            onValueChange = { onBookChange(bookDetail.copy(name = it)) },
+//            singleLine = true,
+//            shape = RoundedCornerShape(10.dp),
+//            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+//            keyboardActions = KeyboardActions(
+//                onDone = {focusManager.clearFocus()}
+//            ),
+//            modifier = Modifier.height(60.dp).fillMaxWidth()
+//        )
 //        AddInfo(onValueChange = onBookChange, bookDetail = bookUiState.bookDetail, label = "Tác giả", modifier = Modifier.fillMaxWidth())
         OutlinedTextField(
             label = {
