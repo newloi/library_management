@@ -117,6 +117,7 @@ fun SearchTopBar(
                 contentDescription = "Tìm kiếm"
             )
         },
+        singleLine = true,
         shape = RoundedCornerShape(99.dp),
         modifier = modifier
             .padding(horizontal = 16.dp)
