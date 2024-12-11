@@ -133,7 +133,9 @@ fun BooksScreen(
                         .fillMaxWidth()
                         .padding(top = 12.dp)
                 )
-                FilterBar()
+                FilterBar(
+                    onToggleSortOrder = bookScreenViewModel::toggleSortOrder
+                )
                 Divider(modifier = Modifier.shadow(4.dp))
             }
         },

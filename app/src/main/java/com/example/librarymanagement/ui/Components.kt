@@ -73,6 +73,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -127,9 +128,12 @@ fun SearchTopBar(
 }
 
 @Composable
-fun FilterBar(modifier: Modifier = Modifier) {
-    var isIncreasing by remember { mutableStateOf(true) }
-    var isExpanded by remember { mutableStateOf(false) }
+fun FilterBar(
+    onToggleSortOrder: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isIncreasing by rememberSaveable { mutableStateOf(true) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -138,7 +142,10 @@ fun FilterBar(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
-            onClick = { isIncreasing = !isIncreasing },
+            onClick = {
+                isIncreasing = !isIncreasing
+                onToggleSortOrder()
+            },
             modifier = Modifier.width(50.dp)
         ) {
             Row(

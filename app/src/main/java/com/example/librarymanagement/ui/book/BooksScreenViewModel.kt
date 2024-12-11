@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewModel() {
@@ -21,6 +22,8 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
     val booksScreenUiState: StateFlow<BooksScreenUiState> = _booksScreenUiState
 
     private var currentSearchJob: Job? = null // Để quản lý tìm kiếm
+    private var isSortIncreasing: Boolean = true
+
 
 //    companion object {
 //        private const val TIMEOUT_MILLIS = 5_000L
@@ -34,7 +37,16 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
     private fun loadAllBooks() {
         viewModelScope.launch {
             bookRepository.getAllBooksStream()
-                .map { BooksScreenUiState(books = it) }
+                .map { books ->
+                    val currentBooks = books
+                    BooksScreenUiState(
+                        books = if(isSortIncreasing) {
+                                    currentBooks.sortedBy { it.name }
+                                } else {
+                                    currentBooks.sortedByDescending { it.name }
+                                }
+                    )
+                }
                 .collect {
                     _booksScreenUiState.value = it
                 }
@@ -58,7 +70,8 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
     }
 
     fun toggleSortOrder() {
-        
+        isSortIncreasing = !isSortIncreasing
+        loadAllBooks()
     }
 
     suspend fun deleteBook(book: Book) {
@@ -71,5 +84,4 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
 
 data class BooksScreenUiState(
     val books: List<Book> = listOf(),
-    val isSortIncreasing: Boolean = true
 )

@@ -110,7 +110,9 @@ fun MembersScreen(
                         .fillMaxWidth()
                         .padding(top = 12.dp)
                 )
-                FilterBar()
+                FilterBar(
+                    onToggleSortOrder = {}
+                )
                 Divider(modifier = Modifier.shadow(4.dp))
             }
         },
