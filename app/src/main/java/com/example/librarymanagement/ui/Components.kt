@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -98,7 +101,7 @@ fun SearchTopBar(
     modifier: Modifier = Modifier
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
-
+    var focusManager = LocalFocusManager.current
     OutlinedTextField(
         value = searchText,
         placeholder = {
@@ -108,18 +111,43 @@ fun SearchTopBar(
                 color = Color.Gray
             )
         },
+
+        trailingIcon = {
+            Row(verticalAlignment = Alignment.CenterVertically){
+                if(searchText.isNotEmpty()){
+                    Icon(
+                        Icons.Rounded.Clear,
+                        contentDescription = "Xóa",
+                        tint = Color.Gray,
+                        modifier = Modifier
+                            .clickable(){
+                                searchText = ""
+                                search("")
+                            }
+                            .border(
+                                width = 0.5.dp,
+                                color = Color.Gray,
+                                shape = CircleShape
+                            )
+                            .size(20.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(R.drawable.search),
+                    contentDescription = "Tìm kiếm"
+                )
+            }
+        },
         onValueChange = {
             searchText = it
             search(it)
         },
-        trailingIcon = {
-            Icon(
-                painter = painterResource(R.drawable.search),
-                contentDescription = "Tìm kiếm"
-            )
-        },
         singleLine = true,
         shape = RoundedCornerShape(99.dp),
+        keyboardActions = KeyboardActions(
+            onDone = {focusManager.clearFocus()}
+        ),
         modifier = modifier
             .padding(horizontal = 16.dp)
             .height(50.dp)

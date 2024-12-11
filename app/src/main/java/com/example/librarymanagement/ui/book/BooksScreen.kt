@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
@@ -127,7 +129,8 @@ fun BooksScreen(
             }
         }
     val coroutineScope = rememberCoroutineScope()
-
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
     Scaffold(
         topBar = {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 56.dp)) {
@@ -165,7 +168,11 @@ fun BooksScreen(
                 navigateToSettingScreen = navigateToSettingScreen,
                 modifier = Modifier.shadow(1.dp)
             )
-        }
+        },
+        modifier = Modifier.clickable(
+            indication = null,
+            interactionSource = interactionSource
+        ){ focusManager.clearFocus() }
     ) { innerPadding ->
         Box(modifier = modifier
             .padding(innerPadding)
