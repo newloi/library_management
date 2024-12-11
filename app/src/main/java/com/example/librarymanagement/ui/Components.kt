@@ -129,10 +129,13 @@ fun SearchTopBar(
 
 @Composable
 fun FilterBar(
+    isIncreasing: Boolean,
     onToggleSortOrder: () -> Unit,
+    onSortByName: () -> Unit,
+    onSortByType: () -> Unit,
+    onSortByQuantities: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isIncreasing by rememberSaveable { mutableStateOf(true) }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = modifier
@@ -143,7 +146,6 @@ fun FilterBar(
     ) {
         IconButton(
             onClick = {
-                isIncreasing = !isIncreasing
                 onToggleSortOrder()
             },
             modifier = Modifier.width(50.dp)
@@ -179,7 +181,23 @@ fun FilterBar(
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
-                        /* Sap xep theo the loai */
+                        onSortByName()
+                    },
+                    text = {
+                        Text(
+                            text = "Xếp theo tên",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    },
+                    modifier = Modifier.height(40.dp)
+                )
+                Divider(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(0.5.dp))
+                DropdownMenuItem(
+                    onClick = {
+                        isExpanded = false
+                        onSortByType()
                     },
                     text = {
                         Text(
@@ -195,7 +213,7 @@ fun FilterBar(
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
-                        /* Sap xep theo so luong */
+                        onSortByQuantities()
                     },
                     text = {
                         Text(

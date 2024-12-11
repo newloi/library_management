@@ -111,7 +111,22 @@ fun BooksScreen(
     modifier: Modifier = Modifier
 ) {
     val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
-    val books = bookScreenUiState.books
+    val books =
+        if(bookScreenUiState.isSortIncreasing) {
+            when(bookScreenUiState.sortBy) {
+                0 -> bookScreenUiState.books.sortedBy { it.name }
+                1 -> bookScreenUiState.books.sortedBy { it.type }
+                2 -> bookScreenUiState.books.sortedBy { it.quantities }
+                else -> bookScreenUiState.books.sortedBy { it.name }
+            }
+        } else {
+            when(bookScreenUiState.sortBy) {
+                0 -> bookScreenUiState.books.sortedByDescending { it.name }
+                1 -> bookScreenUiState.books.sortedByDescending { it.type }
+                2 -> bookScreenUiState.books.sortedByDescending { it.quantities }
+                else -> bookScreenUiState.books.sortedByDescending { it.name }
+            }
+        }
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -134,6 +149,10 @@ fun BooksScreen(
                         .padding(top = 12.dp)
                 )
                 FilterBar(
+                    isIncreasing = bookScreenUiState.isSortIncreasing,
+                    onSortByName = { bookScreenViewModel.setSortBy(0) },
+                    onSortByType = { bookScreenViewModel.setSortBy(1) },
+                    onSortByQuantities = { bookScreenViewModel.setSortBy(2) },
                     onToggleSortOrder = bookScreenViewModel::toggleSortOrder
                 )
                 Divider(modifier = Modifier.shadow(4.dp))

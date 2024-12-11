@@ -22,7 +22,7 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
     val booksScreenUiState: StateFlow<BooksScreenUiState> = _booksScreenUiState
 
     private var currentSearchJob: Job? = null // Để quản lý tìm kiếm
-    private var isSortIncreasing: Boolean = true
+//    private var isSortIncreasing: Boolean = true
 
 
 //    companion object {
@@ -40,11 +40,13 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
                 .map { books ->
                     val currentBooks = books
                     BooksScreenUiState(
-                        books = if(isSortIncreasing) {
+                        books = if(_booksScreenUiState.value.isSortIncreasing) {
                                     currentBooks.sortedBy { it.name }
                                 } else {
                                     currentBooks.sortedByDescending { it.name }
-                                }
+                                },
+                        isSortIncreasing = _booksScreenUiState.value.isSortIncreasing,
+                        sortBy = _booksScreenUiState.value.sortBy
                     )
                 }
                 .collect {
@@ -61,7 +63,18 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
                 loadAllBooks()
             } else {
                 bookRepository.searchBooksStream(searchText)
-                    .map { BooksScreenUiState(books = it) }
+                    .map {books ->
+                        val currentBooks = books
+                        BooksScreenUiState(
+                            books = if(_booksScreenUiState.value.isSortIncreasing) {
+                                        currentBooks.sortedBy { it.name }
+                                    } else {
+                                        currentBooks.sortedByDescending { it.name }
+                                    },
+                            isSortIncreasing = _booksScreenUiState.value.isSortIncreasing,
+                            sortBy = _booksScreenUiState.value.sortBy
+                        )
+                    }
                     .collect {
                         _booksScreenUiState.value = it
                     }
@@ -70,8 +83,21 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
     }
 
     fun toggleSortOrder() {
-        isSortIncreasing = !isSortIncreasing
-        loadAllBooks()
+//        isSortIncreasing = !isSortIncreasing
+//        loadAllBooks()
+        _booksScreenUiState.update { currentState ->
+            currentState.copy(
+                isSortIncreasing = !currentState.isSortIncreasing
+            )
+        }
+    }
+
+    fun setSortBy(sortBy: Int) {
+        _booksScreenUiState.update { currentState ->
+            currentState.copy(
+                sortBy = sortBy
+            )
+        }
     }
 
     suspend fun deleteBook(book: Book) {
@@ -84,4 +110,6 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
 
 data class BooksScreenUiState(
     val books: List<Book> = listOf(),
+    val isSortIncreasing: Boolean = true,
+    val sortBy: Int = 0
 )

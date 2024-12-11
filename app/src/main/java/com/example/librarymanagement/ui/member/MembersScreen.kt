@@ -111,6 +111,10 @@ fun MembersScreen(
                         .padding(top = 12.dp)
                 )
                 FilterBar(
+                    isIncreasing = true,
+                    onSortByName = {},
+                    onSortByType = {},
+                    onSortByQuantities = {},
                     onToggleSortOrder = {}
                 )
                 Divider(modifier = Modifier.shadow(4.dp))
