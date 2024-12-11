@@ -16,6 +16,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,49 +29,80 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Member
+import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmDelete
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAppBar
+import com.example.librarymanagement.ui.book.BookDetail
+import com.example.librarymanagement.ui.book.BookDetailViewModel
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
+import kotlinx.coroutines.launch
 
 object MemberDetailDestination : NavigationDestination {
     override val route = "member_detail"
-//    override val title = ""
+    const val memberIdArg = "memberId"
+    val routeWithArgs = "$route/{$memberIdArg}"
 }
 
 @Composable
 fun MemberDetailScreen(
-    @DrawableRes memberImage: Int =  R.drawable.book,
-    member: Member =  Member(
-                name = "Lưu Ngọc Lợi",
-                gender = "Nam",
-                dateOfBirth = "24/05/2004",
-                address = "Hưng Yên",
-                registrationDate = "22/11/2024"
-            ),
-    navigateToEditMember: () -> Unit,
+//    @DrawableRes memberImage: Int =  R.drawable.book,
+//    member: Member =  Member(
+//                name = "Lưu Ngọc Lợi",
+//                gender = "Nam",
+//                dateOfBirth = "24/05/2004",
+//                address = "Hưng Yên",
+//                registrationDate = "22/11/2024"
+//            ),
+    navigateToEditMember: (Int) -> Unit,
     navigateBack: () -> Unit,
+    navigateDone: () -> Unit,
+    memberDetailViewModel: MemberDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
+    val memberDetailUiState by memberDetailViewModel.uiState.collectAsState()
+    var isShowDialog by rememberSaveable { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             InfoAppBar(
-                navigateToEdit = navigateToEditMember,
+                navigateToEdit = { navigateToEditMember(memberDetailUiState.currentMember.id) },
                 navigateBack = navigateBack,
-                onDelete = {},
-                title = stringResource(R.string.thanh_vien, member.id)
+                onDelete = { isShowDialog = true },
+                title = stringResource(R.string.thanh_vien, memberDetailUiState.currentMember.id)
             )
         }
     ) { innerPadding ->
-        MemberDetail(memberImage = memberImage, member = member, modifier.padding(innerPadding))
+        MemberDetail(
+//            bookImage = bookImage,
+            member = memberDetailUiState.currentMember,
+            modifier = modifier.padding(innerPadding)
+        )
+        if(isShowDialog) {
+            ConfirmDelete(
+                title = "Xóa thành viên",
+                content = stringResource(R.string.delete_member_warning, memberDetailUiState.currentMember.name),
+                onDelete = {
+                    coroutineScope.launch {
+                        memberDetailViewModel.deleteMember()
+                        isShowDialog = false
+                        navigateDone()
+                    }
+                },
+                onCancel = { isShowDialog = false }
+            )
+        }
     }
 }
 
 @Composable
 private fun MemberDetail(
-    @DrawableRes memberImage: Int,
+//    @DrawableRes memberImage: Int,
     member: Member,
     modifier: Modifier = Modifier
 ) {
@@ -85,7 +122,7 @@ private fun MemberDetail(
         }
         item {
             Image(
-                painter = painterResource(memberImage),
+                painter = painterResource(R.drawable.lamda_people),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -140,21 +177,21 @@ private fun MemberDetail(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MemberDetailPreview() {
-    LibraryManagementTheme {
-        MemberDetailScreen(
-            memberImage = R.drawable.book,
-            member = Member(
-                name = "Lưu Ngọc Lợi",
-                gender = "Nam",
-                dateOfBirth = "24/05/2004",
-                address = "Hưng Yên",
-                registrationDate = "22/11/2024"
-            ),
-            navigateBack = {},
-            navigateToEditMember = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MemberDetailPreview() {
+//    LibraryManagementTheme {
+//        MemberDetailScreen(
+//            memberImage = R.drawable.book,
+//            member = Member(
+//                name = "Lưu Ngọc Lợi",
+//                gender = "Nam",
+//                dateOfBirth = "24/05/2004",
+//                address = "Hưng Yên",
+//                registrationDate = "22/11/2024"
+//            ),
+//            navigateBack = {},
+//            navigateToEditMember = {}
+//        )
+//    }
+//}

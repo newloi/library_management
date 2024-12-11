@@ -51,7 +51,7 @@ object BookDetailDestination : NavigationDestination {
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BookDetailScreen(
-    @DrawableRes bookImage: Int = 0,
+//    @DrawableRes bookImage: Int = 0,
 //    book: Book = Book(name = "Cau truc du lieu va giai thuat",
 //        author = "Nguyen Tuan Dung",
 //        publisher = "NXB Back Khoa",
@@ -86,7 +86,7 @@ fun BookDetailScreen(
             ConfirmDelete(
                 title = "Xóa sách",
                 content = stringResource(R.string.delete_book_warning, bookDetailUiState.currentBook.name),
-                onConfirm = {
+                onDelete = {
                     coroutineScope.launch {
                         bookDetailViewModel.deleteBook()
                         isShowDialog = false
@@ -110,7 +110,6 @@ private fun BookDetail(
             .fillMaxSize()
             .padding(32.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
             Text(

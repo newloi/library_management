@@ -31,9 +31,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,9 +50,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Member
 import com.example.librarymanagement.ui.AddButton
+import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmDelete
 import com.example.librarymanagement.ui.ConfirmDialog
 import com.example.librarymanagement.ui.FilterBar
 import com.example.librarymanagement.ui.HomeBottomAppBar
@@ -59,12 +65,12 @@ import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.Title
+import kotlinx.coroutines.launch
 
 /** Thiết kế màn hình hiển thị list thanh vien */
 
 object MembersDestination : NavigationDestination {
     override val route = "members"
-//    override val title = ""
 }
 
 /**
@@ -76,32 +82,57 @@ fun MembersScreen(
     navigateToBooksScreen: () -> Unit,
     navigateToBorrowRequestsScreen: () -> Unit,
     navigateToSettingScreen: () -> Unit,
-    navigateToMemberDetail: () -> Unit,
-    members: List<Member> = listOf(
-        Member(
-            id = 0,
-            name = "Phan Minh Vuong",
-            gender = "Female",
-            dateOfBirth = "27/11/2024",
-            address = "DHBKHN",
-            registrationDate = "27/11/2024"
-        ),
-        Member(
-            id = 0,
-            name = "Phan Minh Vuong",
-            gender = "Female",
-            dateOfBirth = "27/11/2024",
-            address = "DHBKHN",
-            registrationDate = "27/11/2024"
-        )
-    ),
+    navigateToEditMember: (Int) -> Unit,
+    navigateToMemberDetailScreen: (Int) -> Unit,
+    membersScreenViewModel: MembersScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+//    members: List<Member> = listOf(
+//        Member(
+//            id = 0,
+//            name = "Phan Minh Vuong",
+//            gender = "Female",
+//            dateOfBirth = "27/11/2024",
+//            address = "DHBKHN",
+//            registrationDate = "27/11/2024"
+//        ),
+//        Member(
+//            id = 0,
+//            name = "Phan Minh Vuong",
+//            gender = "Female",
+//            dateOfBirth = "27/11/2024",
+//            address = "DHBKHN",
+//            registrationDate = "27/11/2024"
+//        )
+//    ),
     modifier: Modifier = Modifier
 ) {
+    val membersScreenUiState by membersScreenViewModel.membersScreenUiState.collectAsState()
+    val members =
+        if(membersScreenUiState.isSortIncreasing) {
+            when(membersScreenUiState.sortBy) {
+                0 -> membersScreenUiState.members.sortedBy { it.name }
+                1 -> membersScreenUiState.members.sortedBy { it.id }
+                2 -> membersScreenUiState.members.sortedBy { it.registrationDate }
+                else -> membersScreenUiState.members.sortedBy { it.name }
+            }
+        } else {
+            when(membersScreenUiState.sortBy) {
+                0 -> membersScreenUiState.members.sortedByDescending { it.name }
+                1 -> membersScreenUiState.members.sortedByDescending { it.id }
+                2 -> membersScreenUiState.members.sortedByDescending { it.registrationDate }
+                else -> membersScreenUiState.members.sortedByDescending { it.name }
+            }
+        }
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(top = 56.dp)) {
                 SearchTopBar(
-                    search = {},
+                    search = { searchText ->
+                        coroutineScope.launch {
+                            membersScreenViewModel.searchMembers(searchText)
+                        }
+                    },
                     placeholder = "Nhập tên hoặc mã thành viên",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -111,11 +142,12 @@ fun MembersScreen(
                         .padding(top = 12.dp)
                 )
                 FilterBar(
-                    isIncreasing = true,
-                    onSortByName = {},
-                    onSortByType = {},
-                    onSortByQuantities = {},
-                    onToggleSortOrder = {}
+                    isIncreasing = membersScreenUiState.isSortIncreasing,
+                    onSortByOpt0 = { membersScreenViewModel.setSortBy(0) },
+                    onSortByOpt1 = { membersScreenViewModel.setSortBy(1) },
+                    onSortByOpt2 = { membersScreenViewModel.setSortBy(2) },
+                    sortOptions = listOf("Xếp theo tên", "Xếp theo mã số", "Xếp theo ngày đăng kí"),
+                    onToggleSortOrder = membersScreenViewModel::toggleSortOrder
                 )
                 Divider(modifier = Modifier.shadow(4.dp))
             }
@@ -138,8 +170,15 @@ fun MembersScreen(
                 ) {
                     items(members) { member ->
                         MemberInfo(
-                            navigateToMemberDetail = navigateToMemberDetail,
-                            member = member
+                            navigateToEditMember = { navigateToEditMember(member.id) },
+                            onDelete = {
+                                coroutineScope.launch {
+                                    membersScreenViewModel.deleteMember(member)
+                                }
+                            },
+                            member = member,
+                            modifier = Modifier.clickable { navigateToMemberDetailScreen(member.id) }
+
                         )
                     }
                 }
@@ -160,16 +199,18 @@ fun MembersScreen(
  */
 @Composable
 private fun MemberInfo(
-    navigateToMemberDetail: () -> Unit,
     member: Member,
+    onDelete: () -> Unit,
+    navigateToEditMember: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(84.dp)
-            .clickable { navigateToMemberDetail() },
+            .height(84.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -226,7 +267,7 @@ private fun MemberInfo(
                     DropdownMenuItem(
                         onClick = {
                             isExpanded = false
-                            /* Sua thong tin */
+                            navigateToEditMember()
                         },
                         text = {
                             Text(
@@ -251,7 +292,7 @@ private fun MemberInfo(
                     DropdownMenuItem(
                         onClick = {
                             isExpanded = false
-                            /* Xoa */
+                            showDialog = true
                         },
                         text = {
                             Text(
@@ -274,29 +315,40 @@ private fun MemberInfo(
             }
         }
     }
+    if(showDialog) {
+        ConfirmDelete(
+            title = "Xóa thành viên",
+            content = stringResource(R.string.delete_member_warning, member.name),
+            onDelete = {
+                onDelete()
+                showDialog = false
+            },
+            onCancel = { showDialog = false }
+        )
+    }
 }
 
 /**
  * Hop thoai hien ra khi xoa
  */
-@Composable
-private fun DialogConfirmDeleteMember(
-    nameOfMember: String,
-    modifier: Modifier = Modifier
-) {
-    ConfirmDialog(
-        title = "Xóa thành viên",
-        content = stringResource(R.string.delete_member_warning, nameOfMember),
-        onConfirm = {},
-        onCancel = {},
-        cancelLabel = "Không",
-        confirmLabel = "Xóa",
-        cancelColor = Cancel,
-        confirmColor = Delete,
-        alpha = 0.66f,
-        modifier = modifier
-    )
-}
+//@Composable
+//private fun DialogConfirmDeleteMember(
+//    nameOfMember: String,
+//    modifier: Modifier = Modifier
+//) {
+//    ConfirmDialog(
+//        title = "Xóa thành viên",
+//        content = stringResource(R.string.delete_member_warning, nameOfMember),
+//        onConfirm = {},
+//        onCancel = {},
+//        cancelLabel = "Không",
+//        confirmLabel = "Xóa",
+//        cancelColor = Cancel,
+//        confirmColor = Delete,
+//        alpha = 0.66f,
+//        modifier = modifier
+//    )
+//}
 
 //@Preview(showBackground = true)
 //@Composable

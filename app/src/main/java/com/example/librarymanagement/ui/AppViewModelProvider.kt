@@ -10,6 +10,11 @@ import com.example.librarymanagement.ui.book.AddNewBookViewModel
 import com.example.librarymanagement.ui.book.BookDetailViewModel
 import com.example.librarymanagement.ui.book.BookEditViewModel
 import com.example.librarymanagement.ui.book.BooksScreenViewModel
+import com.example.librarymanagement.ui.member.AddNewMemberViewModel
+import com.example.librarymanagement.ui.member.MemberDetailViewModel
+import com.example.librarymanagement.ui.member.MemberEditViewModel
+import com.example.librarymanagement.ui.member.MembersScreenViewModel
+
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -30,6 +35,25 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 libraryManagementApplication().container.bookRepository
             )
+        }
+        initializer {
+            AddNewMemberViewModel( libraryManagementApplication().container.memberRepository )
+        }
+        initializer {
+            MemberDetailViewModel(
+                this.createSavedStateHandle(),
+                libraryManagementApplication().container.memberRepository
+            )
+        }
+        initializer {
+            MemberEditViewModel(
+                this.createSavedStateHandle(),
+                libraryManagementApplication().container.memberRepository
+            )
+        }
+        initializer {
+            MembersScreenViewModel( libraryManagementApplication().container.memberRepository )
+
         }
     }
 }

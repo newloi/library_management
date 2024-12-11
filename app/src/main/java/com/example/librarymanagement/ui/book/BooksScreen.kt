@@ -86,7 +86,6 @@ fun BooksScreen(
     navigateToSettingScreen: () -> Unit,
     navigateToEditBook: (Int) -> Unit,
     navigateToBookDetailScreen: (Int) -> Unit,
-    navigateDone: () -> Unit,
     bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 //    books: List<Book> = listOf(
 //        Book(
@@ -131,9 +130,7 @@ fun BooksScreen(
 
     Scaffold(
         topBar = {
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 56.dp)) {
+            Column(modifier = Modifier.fillMaxWidth().padding(top = 56.dp)) {
                 SearchTopBar(
                     search = { searchText ->
                         coroutineScope.launch {
@@ -150,9 +147,10 @@ fun BooksScreen(
                 )
                 FilterBar(
                     isIncreasing = bookScreenUiState.isSortIncreasing,
-                    onSortByName = { bookScreenViewModel.setSortBy(0) },
-                    onSortByType = { bookScreenViewModel.setSortBy(1) },
-                    onSortByQuantities = { bookScreenViewModel.setSortBy(2) },
+                    onSortByOpt0 = { bookScreenViewModel.setSortBy(0) },
+                    onSortByOpt1 = { bookScreenViewModel.setSortBy(1) },
+                    onSortByOpt2 = { bookScreenViewModel.setSortBy(2) },
+                    sortOptions = listOf("Xếp theo tên", "Xếp theo thể loại", "Xếp theo số lượng"),
                     onToggleSortOrder = bookScreenViewModel::toggleSortOrder
                 )
                 Divider(modifier = Modifier.shadow(4.dp))
@@ -180,10 +178,9 @@ fun BooksScreen(
                     items(items = books, key = {it.id}) { book ->
                         BookInfo(
                             navigateToEditBook = { navigateToEditBook(book.id) },
-                            onConfirm = {
+                            onDelete = {
                                 coroutineScope.launch {
                                     bookScreenViewModel.deleteBook(book)
-                                    navigateDone()
                                 }
                             },
                             book = book,
@@ -211,7 +208,7 @@ fun BooksScreen(
 @Composable
 private fun BookInfo(
     book: Book,
-    onConfirm: () -> Unit,
+    onDelete: () -> Unit,
     navigateToEditBook: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -335,8 +332,8 @@ private fun BookInfo(
         ConfirmDelete(
             title = "Xóa sách",
             content = stringResource(R.string.delete_book_warning, book.name),
-            onConfirm = {
-                onConfirm()
+            onDelete = {
+                onDelete()
                 showDialog = false
             },
             onCancel = { showDialog = false }
@@ -365,7 +362,6 @@ fun Preview() {
             navigateToAddNewBook = {},
             navigateToBookDetailScreen = {},
             navigateToEditBook = {},
-            navigateDone = {},
             navigateToBorrowRequestsScreen = {},
             navigateToMembersScreen = {},
             navigateToSettingScreen = {},

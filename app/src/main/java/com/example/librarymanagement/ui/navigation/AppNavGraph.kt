@@ -38,6 +38,8 @@ import com.example.librarymanagement.ui.member.AddNewMemberDestination
 import com.example.librarymanagement.ui.member.AddNewMemberScreen
 import com.example.librarymanagement.ui.member.MemberDetailDestination
 import com.example.librarymanagement.ui.member.MemberDetailScreen
+import com.example.librarymanagement.ui.member.MemberEditDestination
+import com.example.librarymanagement.ui.member.MemberEditScreen
 import com.example.librarymanagement.ui.member.MembersDestination
 import com.example.librarymanagement.ui.member.MembersScreen
 
@@ -70,7 +72,6 @@ fun AppNavHost(
                     navigateToSettingScreen = {},
                     navigateToEditBook = { navController.navigate("${BookEditDestination.route}/${it}") },
                     navigateToBookDetailScreen = { navController.navigate("${BookDetailDestination.route}/${it}") },
-                    navigateDone = { navController.popBackStack() }
                 )
             }
             composable(route = AddNewBookDestination.route) {
@@ -91,6 +92,17 @@ fun AppNavHost(
                     navigateDone = { navController.popBackStack() }
                 )
             }
+            composable(
+                route = BookEditDestination.routeWithArgs,
+                arguments = listOf(navArgument(BookEditDestination.bookIdArg) {
+                    type = NavType.IntType
+                })
+            ) {
+                BookEditScreen(
+                    navigateBack = { navController.navigateUp() },
+                )
+            }
+
             composable(route = BorrowRequestDetailDestination.route) {
                 BorrowRequestDetailScreen(
                     navigateToEditBorrowRequest = {},
@@ -105,37 +117,45 @@ fun AppNavHost(
                     navigateToSettingScreen = {}
                 )
             }
+
             composable(route = AddNewMemberDestination.route) {
                 AddNewMemberScreen(
+                    navigateDone = { navController.popBackStack() },
                     navigateBack = { navController.navigateUp() }
                 )
             }
-            composable(route = MemberDetailDestination.route) {
+            composable(
+                route = MemberDetailDestination.routeWithArgs,
+                arguments = listOf(navArgument(MemberDetailDestination.memberIdArg) {
+                    type = NavType.IntType
+                })
+            ){
                 MemberDetailScreen(
-                    navigateToEditMember = { navController.navigate(MemberDetailDestination.route) },
-                    navigateBack = { navController.navigateUp() }
+                    navigateToEditMember = { navController.navigate("${MemberEditDestination.route}/${it}") },
+                    navigateBack = { navController.navigateUp() },
+                    navigateDone = { navController.popBackStack() }
                 )
             }
             composable(route = MembersDestination.route) {
                 MembersScreen(
+                    navigateToAddNewMember = { navController.navigate(AddNewMemberDestination.route) },
                     navigateToBooksScreen = { navController.navigate(BooksDestination.route) },
                     navigateToBorrowRequestsScreen = { navController.navigate(BorrowRequestsDestination.route) },
-                    navigateToAddNewMember = { navController.navigate(AddNewMemberDestination.route) },
                     navigateToSettingScreen = {},
-                    navigateToMemberDetail = { navController.navigate(MemberDetailDestination.route) }
+                    navigateToEditMember = { navController.navigate("${MemberEditDestination.route}/${it}") },
+                    navigateToMemberDetailScreen = { navController.navigate("${MemberDetailDestination.route}/${it}") },
                 )
             }
             composable(
-                route = BookEditDestination.routeWithArgs,
-                arguments = listOf(navArgument(BookEditDestination.bookIdArg) {
+                route = MemberEditDestination.routeWithArgs,
+                arguments = listOf(navArgument(MemberDetailDestination.memberIdArg) {
                     type = NavType.IntType
+
                 })
             ) {
-                BookEditScreen(
+                MemberEditScreen(
                     navigateBack = { navController.navigateUp() },
                 )
-            }
         }
-//    }
-
+    }
 }

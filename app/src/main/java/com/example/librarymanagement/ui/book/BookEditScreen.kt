@@ -106,7 +106,7 @@ fun BookEditScreen(
         )
         if(bookEditViewModel.bookUiState.isShowDialog) {
             ConfirmCancel(
-                onConfirm = {
+                onDelete = {
                     bookEditViewModel.showDialog()
                     navigateBack()
                 },

@@ -79,7 +79,7 @@ fun AddNewBookScreen(
             bookDetail = addNewBookViewModel.bookUiState.bookDetail,
             onSaveClick = {
                 coroutineScope.launch {
-                    addNewBookViewModel.saveItem()
+                    addNewBookViewModel.saveBook()
                     navigateDone()
                 }
             },
@@ -88,7 +88,7 @@ fun AddNewBookScreen(
         )
         if(addNewBookViewModel.bookUiState.isShowDialog) {
             ConfirmCancel(
-                onConfirm = {
+                onDelete = {
                     addNewBookViewModel.showDialog()
                     navigateBack()
                 },

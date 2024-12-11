@@ -131,9 +131,10 @@ fun SearchTopBar(
 fun FilterBar(
     isIncreasing: Boolean,
     onToggleSortOrder: () -> Unit,
-    onSortByName: () -> Unit,
-    onSortByType: () -> Unit,
-    onSortByQuantities: () -> Unit,
+    onSortByOpt0: () -> Unit,
+    onSortByOpt1: () -> Unit,
+    onSortByOpt2: () -> Unit,
+    sortOptions: List<String>,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -181,11 +182,11 @@ fun FilterBar(
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
-                        onSortByName()
+                        onSortByOpt0()
                     },
                     text = {
                         Text(
-                            text = "Xếp theo tên",
+                            text = sortOptions[0],
                             style = MaterialTheme.typography.labelMedium
                         )
                     },
@@ -197,11 +198,11 @@ fun FilterBar(
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
-                        onSortByType()
+                        onSortByOpt1()
                     },
                     text = {
                         Text(
-                            text = "Xếp theo thể loại",
+                            text = sortOptions[1],
                             style = MaterialTheme.typography.labelMedium
                         )
                     },
@@ -213,11 +214,11 @@ fun FilterBar(
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
-                        onSortByQuantities()
+                        onSortByOpt2()
                     },
                     text = {
                         Text(
-                            text = "Xếp theo số lượng",
+                            text = sortOptions[2],
                             style = MaterialTheme.typography.labelMedium
                         )
                     },
@@ -332,8 +333,8 @@ fun HomeBottomAppBar(
 //        indicator = {},
         modifier = modifier
             .fillMaxWidth()
-            .height(84.dp),
-        verticalAlignment = Alignment.Bottom
+            .height(80.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         TabIcon(
             selected = (currentTabIndex == 0),
@@ -398,7 +399,7 @@ private fun TabIcon(
                 painter = if(selected) painterResource(selectedIcon)
                 else painterResource(unSelectedIcon),
                 contentDescription = label,
-                modifier = Modifier.size(35.dp)
+                modifier = Modifier.size(28.dp)
             )
         },
         selectedContentColor = MainColor,
@@ -562,12 +563,13 @@ fun TextFieldAbout(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropList(
+    onValueChange: (String) -> Unit,
     label: String,
-    items: List<Any>,
+    items: List<String>,
     modifier: Modifier = Modifier
 ) {
-    var selected by remember { mutableStateOf("") }
-    var isExpanded by remember { mutableStateOf(false) }
+    var selected by rememberSaveable { mutableStateOf("") }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { isExpanded = !isExpanded },
@@ -603,11 +605,12 @@ fun DropList(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = item.toString()
+                            text = item
                         )
                     },
                     onClick = {
-                        selected = item.toString()
+                        selected = item
+                        onValueChange(selected)
                         isExpanded = false
                     },
                     modifier = Modifier.height(32.dp)
@@ -688,7 +691,7 @@ fun GenderDropList(
 fun ConfirmDialog(
     title: String,
     content: String,
-    onConfirm: () -> Unit,
+    onDelete: () -> Unit,
     onCancel: () -> Unit,
     cancelLabel: String,
     confirmLabel: String,
@@ -713,7 +716,7 @@ fun ConfirmDialog(
         onDismissRequest = onCancel,
         confirmButton = {
             Button(
-                onClick = onConfirm,
+                onClick = onDelete,
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = confirmColor),
                 modifier = Modifier
@@ -877,14 +880,14 @@ fun InfoAboutTable(
 fun ConfirmDelete(
     title: String,
     content: String,
-    onConfirm: () -> Unit,
+    onDelete: () -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ConfirmDialog(
         title = title,
         content = content,
-        onConfirm = onConfirm,
+        onDelete = onDelete,
         onCancel = onCancel,
         cancelLabel = "Không",
         confirmLabel = "Xóa",
@@ -897,7 +900,7 @@ fun ConfirmDelete(
 
 @Composable
 fun ConfirmCancel(
-    onConfirm: () -> Unit,
+    onDelete: () -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -908,7 +911,7 @@ fun ConfirmCancel(
         confirmLabel = "Hủy",
         cancelColor = Cancel,
         confirmColor = MainColor,
-        onConfirm = onConfirm,
+        onDelete = onDelete,
         onCancel = onCancel,
         modifier = modifier
     )

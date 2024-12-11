@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -29,48 +30,75 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.Member
 import com.example.librarymanagement.ui.AddAppBar
+import com.example.librarymanagement.ui.AppViewModelProvider
+import com.example.librarymanagement.ui.ConfirmCancel
 import com.example.librarymanagement.ui.GenderDropList
 import com.example.librarymanagement.ui.InfoAbout
-import com.example.librarymanagement.ui.InfoAppBar
+import com.example.librarymanagement.ui.book.AddNewBook
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.MainColor
+import kotlinx.coroutines.launch
 
 object MemberEditDestination : NavigationDestination{
     override val route = "member_edit"
-//    override val title = ""
+    const val memberIdArg = "memberId"
+    val routeWithArgs = "${route}/{$memberIdArg}"
 }
 @Composable
 fun MemberEditScreen(
-    @DrawableRes memberImage: Int =  R.drawable.book,
-    member: Member,
-    modifier: Modifier = Modifier,
-    //navigateToEditMember: () -> Unit,
-    //navigateBack: () -> Unit
+    @DrawableRes memberImage: Int =  R.drawable.lamda_people,
+    navigateBack: () -> Unit,
+    memberEditViewModel: MemberEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
-        topBar = { AddAppBar(title = "Thanh vien 00001", navigateBack = {}) },
-        floatingActionButton = {
-            Button(
-                onClick = {},
-                shape = RoundedCornerShape(16.dp),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-                modifier = Modifier.size(100.dp, 40.dp)
-            ) {
-                Text(
-                    text = "Xong",
-                    style = MaterialTheme.typography.labelMedium
-                )
-            }
+        topBar = {
+            AddAppBar(
+                title = stringResource(R.string.thanh_vien, memberEditViewModel.memberUiState.memberDetail.id),
+                navigateBack = memberEditViewModel::showDialog
+            )
         }
+//        floatingActionButton = {
+//            Button(
+//                onClick = {},
+//                shape = RoundedCornerShape(16.dp),
+//                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+//                colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+//                modifier = Modifier.size(100.dp, 40.dp)
+//            ) {
+//                Text(
+//                    text = "Xong",
+//                    style = MaterialTheme.typography.labelMedium
+//                )
+//            }
+//        }
     ) { innerPadding ->
-        MemberEdit(
-            memberImage = memberImage,
-            member = member,
-            modifier.padding(innerPadding))
+        AddNewMember(
+            onMemberChange = memberEditViewModel::updateUiState,
+            memberDetail = memberEditViewModel.memberUiState.memberDetail,
+            onSaveClick = {
+                coroutineScope.launch {
+                    memberEditViewModel.updateMember()
+                    navigateBack()
+                }
+            },
+            enable = memberEditViewModel.memberUiState.isMemberValid,
+            modifier = Modifier.padding(innerPadding)
+        )
+        if(memberEditViewModel.memberUiState.isShowDialog) {
+            ConfirmCancel(
+                onDelete = {
+                    memberEditViewModel.showDialog()
+                    navigateBack()
+                },
+                onCancel = memberEditViewModel::showDialog
+            )
+        }
     }
 }
 
@@ -137,19 +165,19 @@ private fun MemberEdit(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MemberEditPreview(){
-    val member1: Member = Member(
-        id = 0,
-        name = "Lưu Ngọc Lợi",
-        gender = "Nam",
-        dateOfBirth = "24/05/2004",
-        address = "Hưng Yên",
-        registrationDate = "22/11/2024"
-    )
-    LibraryManagementTheme {
-        MemberEditScreen(memberImage = R.drawable.lamda_image, member = member1)
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MemberEditPreview(){
+//    val member1: Member = Member(
+//        id = 0,
+//        name = "Lưu Ngọc Lợi",
+//        gender = "Nam",
+//        dateOfBirth = "24/05/2004",
+//        address = "Hưng Yên",
+//        registrationDate = "22/11/2024"
+//    )
+//    LibraryManagementTheme {
+//        MemberEditScreen(memberImage = R.drawable.lamda_image, member = member1)
+//    }
+//
+//}

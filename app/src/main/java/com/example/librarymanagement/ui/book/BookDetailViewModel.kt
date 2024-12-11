@@ -27,6 +27,7 @@ class BookDetailViewModel(
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = BookDetailUiState()
             )
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }

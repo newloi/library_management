@@ -12,10 +12,10 @@ class AddNewBookViewModel(private val bookRepository: BookRepository) : ViewMode
         private set
 
     fun updateUiState(bookDetail: BookDetail) {
-        bookUiState = BookUiState(bookDetail = bookDetail, isBookValid = validatInput(bookDetail))
+        bookUiState = BookUiState(bookDetail = bookDetail, isBookValid = validateInput(bookDetail))
     }
 
-    private fun validatInput(uiState: BookDetail = bookUiState.bookDetail): Boolean {
+    private fun validateInput(uiState: BookDetail = bookUiState.bookDetail): Boolean {
         return with(uiState) {
             name.isNotBlank() && author.isNotBlank() &&
                     publisher.isNotBlank() && year.isNotBlank() &&
@@ -23,8 +23,8 @@ class AddNewBookViewModel(private val bookRepository: BookRepository) : ViewMode
         }
     }
 
-    suspend fun saveItem(){
-        if(validatInput()) {
+    suspend fun saveBook(){
+        if(validateInput()) {
             bookRepository.insertBook(bookUiState.bookDetail.toBook())
         }
     }
