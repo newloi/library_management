@@ -113,31 +113,31 @@ fun SearchTopBar(
         },
 
         trailingIcon = {
-            Row(verticalAlignment = Alignment.CenterVertically){
-                if(searchText.isNotEmpty()){
-                    Icon(
-                        Icons.Rounded.Clear,
-                        contentDescription = "Xóa",
-                        tint = Color.Gray,
-                        modifier = Modifier
-                            .clickable(){
-                                searchText = ""
-                                search("")
-                            }
-                            .border(
-                                width = 0.5.dp,
-                                color = Color.Gray,
-                                shape = CircleShape
-                            )
-                            .size(20.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.width(4.dp))
+            if(searchText.isNotEmpty()){
+                Icon(
+                    Icons.Rounded.Clear,
+                    contentDescription = "Xóa",
+                    tint = Color.Gray,
+                    modifier = Modifier
+                        .clickable(){
+                            searchText = ""
+                            search("")
+                        }
+                        .border(
+                            width = 0.5.dp,
+                            color = Color.Gray,
+                            shape = CircleShape
+                        )
+                        .size(20.dp)
+                )
+            }
+            else{
                 Icon(
                     painter = painterResource(R.drawable.search),
                     contentDescription = "Tìm kiếm"
                 )
             }
+
         },
         onValueChange = {
             searchText = it
