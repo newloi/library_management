@@ -35,6 +35,7 @@ import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.ConfirmCancel
+import com.example.librarymanagement.ui.DatePickerWithLabel
 import com.example.librarymanagement.ui.DropList
 import com.example.librarymanagement.ui.book.AddNewBook
 import com.example.librarymanagement.ui.book.BookDetail
@@ -168,12 +169,10 @@ fun AddNewMember(
                 label = "Giới tính",
                 items = listOf("Nam", "Nữ", "Khác"),
                 modifier = Modifier.width(108.dp))
-            Spacer(modifier = Modifier.weight(1f))
-            AddInfo(
-                onValueChange = { onMemberChange(memberDetail.copy(dateOfBirth = it)) },
-                value = memberDetail.dateOfBirth,
-                label = "Ngày sinh",
-                modifier = Modifier.width(200.dp)
+            Spacer(modifier = Modifier.width(16.dp))
+            DatePickerWithLabel(
+                "Ngày sinh",
+                onValueChange = { onMemberChange(memberDetail.copy(dateOfBirth = it)) }
             )
         }
         AddInfo(
@@ -182,11 +181,9 @@ fun AddNewMember(
             label = "Địa chỉ",
             modifier = Modifier.fillMaxWidth()
         )
-        AddInfo(
-            onValueChange = { onMemberChange(memberDetail.copy(registrationDate = it)) },
-            value = memberDetail.registrationDate,
-            label = "Ngày đăng kí",
-            modifier = Modifier.fillMaxWidth()
+        DatePickerWithLabel(
+            "Ngày đăng kí",
+            onValueChange = { onMemberChange(memberDetail.copy(registrationDate = it)) }
         )
         Button(
             onClick = onSaveClick,
