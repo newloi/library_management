@@ -2,6 +2,7 @@ package com.example.librarymanagement.ui.member
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -66,6 +68,8 @@ import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.Title
 import kotlinx.coroutines.launch
+import java.text.Collator
+import java.util.Locale
 
 /** Thiết kế màn hình hiển thị list thanh vien */
 
@@ -106,24 +110,26 @@ fun MembersScreen(
     modifier: Modifier = Modifier
 ) {
     val membersScreenUiState by membersScreenViewModel.membersScreenUiState.collectAsState()
+    val vietnameseCollator = Collator.getInstance(Locale("vi", "VN"))
     val members =
         if(membersScreenUiState.isSortIncreasing) {
             when(membersScreenUiState.sortBy) {
-                0 -> membersScreenUiState.members.sortedBy { it.name }
+                0 -> membersScreenUiState.members.sortedWith(compareBy(vietnameseCollator) { it.name })
                 1 -> membersScreenUiState.members.sortedBy { it.id }
                 2 -> membersScreenUiState.members.sortedBy { it.registrationDate }
-                else -> membersScreenUiState.members.sortedBy { it.name }
+                else -> membersScreenUiState.members.sortedWith(compareBy(vietnameseCollator) { it.name })
             }
         } else {
             when(membersScreenUiState.sortBy) {
-                0 -> membersScreenUiState.members.sortedByDescending { it.name }
+                0 -> membersScreenUiState.members.sortedWith(compareByDescending(vietnameseCollator) { it.name })
                 1 -> membersScreenUiState.members.sortedByDescending { it.id }
                 2 -> membersScreenUiState.members.sortedByDescending { it.registrationDate }
-                else -> membersScreenUiState.members.sortedByDescending { it.name }
+                else -> membersScreenUiState.members.sortedWith(compareByDescending(vietnameseCollator) { it.name })
             }
         }
     val coroutineScope = rememberCoroutineScope()
-
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
     Scaffold(
         topBar = {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 56.dp)) {
@@ -161,7 +167,11 @@ fun MembersScreen(
                 navigateToSettingScreen = navigateToSettingScreen,
                 modifier = Modifier.shadow(1.dp)
             )
-        }
+        },
+        modifier = Modifier.clickable(
+            indication = null,
+            interactionSource = interactionSource
+        ){ focusManager.clearFocus() }
     ) { innerPadding ->
         Box(modifier = modifier.padding(innerPadding).fillMaxSize()) {
             if(members.isNotEmpty()){

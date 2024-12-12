@@ -69,10 +69,7 @@ fun BorrowRequestsScreen(
 ) {
     Scaffold(
         topBar = {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .shadow(2.dp)) {
-                Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(top = 56.dp)) {
                     SearchTopBar(
                         search = {},
                         placeholder = "Nhập mã đơn hoặc tên thành viên",
@@ -84,7 +81,7 @@ fun BorrowRequestsScreen(
                             .padding(top = 12.dp)
                     )
                     FilterByDateBar()
-                }
+                    Divider(modifier = Modifier.shadow(4.dp))
             }
         },
         floatingActionButton = { AddButton(onClick = navigateToAddNewBorrowRequest) },

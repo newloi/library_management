@@ -150,7 +150,7 @@ fun SearchTopBar(
         ),
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .height(50.dp)
+            .height(52.dp)
             .fillMaxWidth()
     )
 }
