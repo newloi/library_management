@@ -259,6 +259,10 @@ private fun BookInfo(
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
+                        text = "Thể loại: " + book.type,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
                         text = buildAnnotatedString {
                             withStyle(style = MaterialTheme.typography.bodySmall.toSpanStyle()) {
                                 append("Số lượng: ")
