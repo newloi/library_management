@@ -69,6 +69,8 @@ import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.Title
 import kotlinx.coroutines.launch
+import java.text.Collator
+import java.util.Locale
 
 /** Thiết kế màn hình hiển thị list sách */
 
@@ -112,20 +114,21 @@ fun BooksScreen(
     modifier: Modifier = Modifier
 ) {
     val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
+    val vietnameseCollator = Collator.getInstance(Locale("vi", "VN"))
     val books =
         if(bookScreenUiState.isSortIncreasing) {
             when(bookScreenUiState.sortBy) {
-                0 -> bookScreenUiState.books.sortedBy { it.name }
+                0 -> bookScreenUiState.books.sortedWith(compareBy(vietnameseCollator) { it.name })
                 1 -> bookScreenUiState.books.sortedBy { it.type }
                 2 -> bookScreenUiState.books.sortedBy { it.quantities }
-                else -> bookScreenUiState.books.sortedBy { it.name }
+                else -> bookScreenUiState.books.sortedWith(compareBy(vietnameseCollator) { it.name })
             }
         } else {
             when(bookScreenUiState.sortBy) {
-                0 -> bookScreenUiState.books.sortedByDescending { it.name }
+                0 -> bookScreenUiState.books.sortedWith(compareByDescending(vietnameseCollator) { it.name })
                 1 -> bookScreenUiState.books.sortedByDescending { it.type }
                 2 -> bookScreenUiState.books.sortedByDescending { it.quantities }
-                else -> bookScreenUiState.books.sortedByDescending { it.name }
+                else -> bookScreenUiState.books.sortedWith(compareByDescending(vietnameseCollator) { it.name })
             }
         }
     val coroutineScope = rememberCoroutineScope()
@@ -197,7 +200,7 @@ fun BooksScreen(
                 }
             } else {
                 Text(
-                    text = "Kho sách trống!",
+                    text = "Không có sách nào!",
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
