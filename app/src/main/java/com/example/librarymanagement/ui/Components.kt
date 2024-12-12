@@ -1,6 +1,5 @@
 package com.example.librarymanagement.ui
 
-import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,12 +18,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
@@ -45,7 +41,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -54,9 +49,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -72,27 +65,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.Book
-import com.example.librarymanagement.ui.book.BookDetail
-import com.example.librarymanagement.ui.book.BooksDestination
-import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
-import com.example.librarymanagement.ui.member.MembersDestination
+//import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
 import com.example.librarymanagement.ui.theme.MoreDarkGray
 import com.example.librarymanagement.ui.theme.Roboto
-import kotlinx.coroutines.selects.select
 
 @Composable
 fun SearchTopBar(
@@ -388,14 +370,14 @@ fun HomeBottomAppBar(
             label = "Đơn mượn",
             modifier = Modifier.weight(1f)
         )
-        TabIcon(
-            selected = (currentTabIndex == 3),
-            navigateToAnother = navigateToSettingScreen,
-            selectedIcon = R.drawable.setting_line_light_colored,
-            unSelectedIcon = R.drawable.setting_line_light,
-            label = "Cài đặt",
-            modifier = Modifier.weight(1f)
-        )
+//        TabIcon(
+//            selected = (currentTabIndex == 3),
+//            navigateToAnother = navigateToSettingScreen,
+//            selectedIcon = R.drawable.setting_line_light_colored,
+//            unSelectedIcon = R.drawable.setting_line_light,
+//            label = "Cài đặt",
+//            modifier = Modifier.weight(1f)
+//        )
     }
 }
 

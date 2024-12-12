@@ -40,9 +40,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.BorrowRequest
+import com.example.librarymanagement.data.borrow.BorrowRequestDetail
 import com.example.librarymanagement.ui.AddButton
 import com.example.librarymanagement.ui.BorrowStateBottomBar
 import com.example.librarymanagement.ui.FilterByDateBar
@@ -64,7 +63,7 @@ fun BorrowRequestsScreen(
     navigateToBooksScreen: () -> Unit,
     navigateToMembersScreen: () -> Unit,
     navigateToSettingScreen: () -> Unit,
-    borrowRequests: List<BorrowRequest> = listOf(),
+    borrowRequests: List<BorrowRequestDetail> = listOf(),
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -120,7 +119,7 @@ fun BorrowRequestsScreen(
 
 @Composable
 private fun BorrowRequest(
-    borrowRequest: BorrowRequest,
+    borrowRequest: BorrowRequestDetail,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -145,7 +144,7 @@ private fun BorrowRequest(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(R.string.id, borrowRequest.id),
+                    text = stringResource(R.string.id, borrowRequest.borrowId),
                     style = MaterialTheme.typography.titleMedium,
                     color = Title
                 )
@@ -246,81 +245,35 @@ private fun BorrowRequest(
     }
 }
 
-//@Preview
-//@Composable
-//fun BorrowRequestsPreview() {
-//    BorrowRequestsScreen(
-//        borrowRequests = listOf(
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//            BorrowRequest(
-//                id = 1,
-//                memberName = "Nguyen Van A",
-//                bookName = "Cau truc du lieu va giai thuat",
-//                borrowDate = "01/12/2024",
-//                bookCount = 3," 25/06/2004"," 25/07/2004","Đã trả"
-//            ),
-//        )
-//    )
-//}
+@Preview
+@Composable
+fun BorrowRequestsPreview() {
+    BorrowRequestsScreen(
+        navigateToAddNewBorrowRequest = {},
+        navigateToBooksScreen = {},
+        navigateToSettingScreen = {},
+        navigateToMembersScreen = {},
+        borrowRequests = listOf(
+            BorrowRequestDetail(
+                borrowId = 1,
+                memberName = "Nguyen Van A",
+                bookName = "Cau truc du lieu va giai thuat",
+                borrowDate = "01/12/2024",
+                bookCount = 3,
+                exceptDate = " 25/06/2004",
+                returnDate = " 25/07/2004",
+                state = "Đã trả"
+            ),
+            BorrowRequestDetail(
+                borrowId = 1,
+                memberName = "Nguyen Van A",
+                bookName = "Cau truc du lieu va giai thuat",
+                borrowDate = "01/12/2024",
+                bookCount = 3,
+                exceptDate = " 25/06/2004",
+                returnDate = " 25/07/2004",
+                state = "Đã trả"
+            )
+        )
+    )
+}

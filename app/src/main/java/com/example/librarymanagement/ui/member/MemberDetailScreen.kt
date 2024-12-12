@@ -1,11 +1,8 @@
 package com.example.librarymanagement.ui.member
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,24 +19,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.Member
+import com.example.librarymanagement.data.member.Member
 import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.ConfirmDelete
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAppBar
-import com.example.librarymanagement.ui.book.BookDetail
-import com.example.librarymanagement.ui.book.BookDetailViewModel
 import com.example.librarymanagement.ui.navigation.NavigationDestination
-import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import kotlinx.coroutines.launch
 
 object MemberDetailDestination : NavigationDestination {

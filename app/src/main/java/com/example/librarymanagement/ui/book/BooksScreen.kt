@@ -52,12 +52,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.Book
+import com.example.librarymanagement.data.book.Book
 import com.example.librarymanagement.ui.AddButton
-import com.example.librarymanagement.ui.ConfirmDialog
 import com.example.librarymanagement.ui.FilterBar
 import com.example.librarymanagement.ui.HomeBottomAppBar
 import com.example.librarymanagement.ui.SearchTopBar

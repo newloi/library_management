@@ -3,8 +3,8 @@ package com.example.librarymanagement.ui.book
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.librarymanagement.data.Book
-import com.example.librarymanagement.data.BookRepository
+import com.example.librarymanagement.data.book.Book
+import com.example.librarymanagement.data.book.BookRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull

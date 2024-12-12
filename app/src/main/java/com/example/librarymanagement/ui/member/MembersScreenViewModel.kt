@@ -2,8 +2,8 @@ package com.example.librarymanagement.ui.member
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.librarymanagement.data.Member
-import com.example.librarymanagement.data.MemberRepository
+import com.example.librarymanagement.data.member.Member
+import com.example.librarymanagement.data.member.MemberRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.librarymanagement.data.Book
-import com.example.librarymanagement.data.BookRepository
+import com.example.librarymanagement.data.book.Book
+import com.example.librarymanagement.data.book.BookRepository
 
 class AddNewBookViewModel(private val bookRepository: BookRepository) : ViewModel() {
     var bookUiState by mutableStateOf(BookUiState())
@@ -50,7 +50,7 @@ data class BookUiState(
     val isShowDialog: Boolean = false
 )
 
-fun BookDetail.toBook():Book = Book(
+fun BookDetail.toBook(): Book = Book(
     id = id,
     name = name,
     author = author,

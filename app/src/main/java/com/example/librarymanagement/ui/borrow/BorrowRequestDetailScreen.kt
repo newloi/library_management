@@ -20,10 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.BorrowRequest
+import com.example.librarymanagement.data.borrow.BorrowRequestDetail
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAboutTable
 import com.example.librarymanagement.ui.InfoAppBar
@@ -38,7 +37,7 @@ object BorrowRequestDetailDestination : NavigationDestination {
 fun BorrowRequestDetailScreen(
     navigateToEditBorrowRequest: () -> Unit,
     navigateBack: () -> Unit,
-    borrowRequest : BorrowRequest = BorrowRequest(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
+    borrowRequest : BorrowRequestDetail
 ) {
     Scaffold(
        topBar = {
@@ -46,7 +45,7 @@ fun BorrowRequestDetailScreen(
                navigateToEdit = navigateToEditBorrowRequest,
                navigateBack = navigateBack,
                onDelete = {},
-               title = stringResource( R.string.don_muon, borrowRequest.id)
+               title = stringResource( R.string.don_muon, borrowRequest.borrowId)
            )
        }
     ) { innerPadding ->
@@ -56,7 +55,7 @@ fun BorrowRequestDetailScreen(
 }
 
 @Composable
-fun BorrowRequestDetail(borrowRequest: BorrowRequest, modifier: Modifier = Modifier ){
+fun BorrowRequestDetail(borrowRequest: BorrowRequestDetail, modifier: Modifier = Modifier ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -72,7 +71,7 @@ fun BorrowRequestDetail(borrowRequest: BorrowRequest, modifier: Modifier = Modif
         )
 
         InfoAbout(
-            label = "Họ và tên người nhận",
+            label = "Họ và tên người mượn",
             value = borrowRequest.memberName,
             modifier= Modifier
                 .fillMaxWidth()
@@ -81,7 +80,7 @@ fun BorrowRequestDetail(borrowRequest: BorrowRequest, modifier: Modifier = Modif
        Row(modifier = Modifier.padding(bottom=10.dp)){
            InfoAbout(
                label = "Mã người mượn",
-               value = borrowRequest.id.toString(),
+               value = borrowRequest.borrowId.toString(),
                modifier=Modifier.weight(1f)
            )
 
@@ -128,18 +127,18 @@ fun BorrowRequestDetail(borrowRequest: BorrowRequest, modifier: Modifier = Modif
             modifier = Modifier.align(Alignment.Start)
         )
 
-        val borrowRequests = listOf(
-            BorrowRequest(100000,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả"),
-            BorrowRequest(100001,"Tai","Boku no pico"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả"),
-            BorrowRequest(100002,"Tai","Yamete kudasai"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
-        )
+//        val borrowRequests = listOf(
+////            BorrowRequest(100000,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả"),
+////            BorrowRequest(100001,"Tai","Boku no pico"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả"),
+////            BorrowRequest(100002,"Tai","Yamete kudasai"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
+//        )
 
-        BorrowRequestList(borrowRequests)
+        BorrowRequestList(listOf())
     }
 
 }
 @Composable
-fun BorrowRequestList(borrowRequests: List<BorrowRequest>) {
+fun BorrowRequestList(borrowRequests: List<BorrowRequestDetail>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -177,7 +176,7 @@ fun BorrowRequestList(borrowRequests: List<BorrowRequest>) {
 }
 
 @Composable
-fun BookRow(borrowRequest: BorrowRequest) {
+fun BookRow(borrowRequest: BorrowRequestDetail) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -185,7 +184,7 @@ fun BookRow(borrowRequest: BorrowRequest) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         InfoAboutTable(
-            value = borrowRequest.id.toString(),
+            value = borrowRequest.borrowId.toString(),
             modifier=Modifier.weight(1f).border(width = 0.2.dp, color = Black)
         )
 
@@ -197,13 +196,13 @@ fun BookRow(borrowRequest: BorrowRequest) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun BorrowRequestDetailPreview(){
-    BorrowRequestDetailScreen(
-        navigateBack = {},
-        navigateToEditBorrowRequest = {},
-        borrowRequest = BorrowRequest(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BorrowRequestDetailPreview(){
+//    BorrowRequestDetailScreen(
+//        navigateBack = {},
+//        navigateToEditBorrowRequest = {},
+//        borrowRequest = BorrowRequest(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
+//    )
+//}
 

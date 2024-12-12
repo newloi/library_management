@@ -16,12 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,29 +26,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastCbrt
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.Book
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.ConfirmCancel
-import com.example.librarymanagement.ui.ConfirmDialog
 import com.example.librarymanagement.ui.navigation.NavigationDestination
-import com.example.librarymanagement.ui.theme.Cancel
-import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.MainColor
-import com.example.librarymanagement.ui.theme.Roboto
 import kotlinx.coroutines.launch
 
 object AddNewBookDestination : NavigationDestination {

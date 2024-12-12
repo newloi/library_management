@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.librarymanagement.data.Member
-import com.example.librarymanagement.data.MemberRepository
+import com.example.librarymanagement.data.member.Member
+import com.example.librarymanagement.data.member.MemberRepository
 
 class AddNewMemberViewModel(private val memberRepository: MemberRepository) : ViewModel() {
     var memberUiState by mutableStateOf(MemberUiState())

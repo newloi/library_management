@@ -1,17 +1,13 @@
 package com.example.librarymanagement.ui.book
 
-import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.librarymanagement.data.Book
-import com.example.librarymanagement.data.BookRepository
+import com.example.librarymanagement.data.book.Book
+import com.example.librarymanagement.data.book.BookRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 

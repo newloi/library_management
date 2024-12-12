@@ -1,4 +1,4 @@
-package com.example.librarymanagement.data
+package com.example.librarymanagement.data.book
 
 import kotlinx.coroutines.flow.Flow
 
