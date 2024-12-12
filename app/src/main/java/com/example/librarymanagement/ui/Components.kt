@@ -101,7 +101,7 @@ fun SearchTopBar(
                     contentDescription = "Xóa",
                     tint = Color.Gray,
                     modifier = Modifier
-                        .clickable(){
+                        .clickable() {
                             searchText = ""
                             search("")
                         }
@@ -446,6 +446,7 @@ fun AddButton(
 fun InfoAbout(
     label: String,
     value: String,
+    onValueChange: (String) -> Unit = {},
     canEdit: Boolean = false,
     modifier:Modifier = Modifier
 ) {
@@ -464,7 +465,7 @@ fun InfoAbout(
                 color = Color.Black
             ),
             singleLine = true,
-            onValueChange = {},
+            onValueChange = { onValueChange(it) },
             enabled = canEdit,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
@@ -476,7 +477,7 @@ fun InfoAbout(
 
 @Composable
 fun AddInfo(
-    onValueChange: (String) -> Unit = {},
+    onValueChange: (String) -> Unit,
     value: String,
 //    bookDetail: BookDetail,
     modifier: Modifier = Modifier,
@@ -609,7 +610,7 @@ fun DropList(
         ExposedDropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false },
-            modifier = Modifier.height(200.dp)
+//            modifier = Modifier.height(200.dp)
         ) {
             items.forEach { item ->
                 DropdownMenuItem(

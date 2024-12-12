@@ -2,6 +2,7 @@ package com.example.librarymanagement.data.borrow
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import com.example.librarymanagement.data.book.Book
 
 
@@ -21,6 +22,10 @@ import com.example.librarymanagement.data.book.Book
             childColumns = ["bookId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["bookId"]),
+        Index(value = ["borrowId"])
     ]
 )
 /**

@@ -107,78 +107,78 @@ fun BookEditScreen(
     }
 }
 
-@Composable
-private fun BookEdit(
-    @DrawableRes bookImage: Int,
-    book: Book,
-    modifier: Modifier = Modifier
-) {
-    val focusManager = LocalFocusManager.current
-    val interactionSource = remember { MutableInteractionSource() }
-    Column(
-        modifier = modifier
-            .padding(32.dp)
-            .fillMaxSize()
-            .clickable(
-                indication = null,
-                interactionSource = interactionSource
-            ) { focusManager.clearFocus() },
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        Text(
-            text = "Ảnh",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.titleLarge
-        )
-        Image(
-            painter = painterResource(bookImage),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .size(117.dp, 140.dp)
-        )
-        Text(
-            text = "Thông tin sách",
-            style = MaterialTheme.typography.titleLarge
-        )
-        InfoAbout(
-            label = "Tên sách",
-            value = book.name,
-            canEdit = true
-        )
-        InfoAbout(
-            label = "Tác giả",
-            value = book.author,
-            canEdit = true
-        )
-        InfoAbout(
-            label = "Nhà xuất bản",
-            value = book.publisher,
-            canEdit = true
-        )
-        Row(modifier = Modifier) {
-            InfoAbout(
-                label = "Năm xuất bản",
-                value = book.year.toString(),
-                modifier = Modifier.width(120.dp),
-                canEdit = true
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            InfoAbout(
-                label = "Thể loại",
-                value = book.type,
-                modifier = Modifier.width(200.dp),
-                canEdit = true
-            )
-        }
-        InfoAbout(
-            label = "Số lượng",
-            value = book.quantities.toString(),
-            modifier = Modifier.width(120.dp),
-            canEdit = true
-        )
-    }
-}
+//@Composable
+//private fun BookEdit(
+//    @DrawableRes bookImage: Int,
+//    book: Book,
+//    modifier: Modifier = Modifier
+//) {
+//    val focusManager = LocalFocusManager.current
+//    val interactionSource = remember { MutableInteractionSource() }
+//    Column(
+//        modifier = modifier
+//            .padding(32.dp)
+//            .fillMaxSize()
+//            .clickable(
+//                indication = null,
+//                interactionSource = interactionSource
+//            ) { focusManager.clearFocus() },
+//        verticalArrangement = Arrangement.spacedBy(20.dp)
+//    ) {
+//        Text(
+//            text = "Ảnh",
+//            modifier = Modifier.align(Alignment.CenterHorizontally),
+//            style = MaterialTheme.typography.titleLarge
+//        )
+//        Image(
+//            painter = painterResource(bookImage),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .align(Alignment.CenterHorizontally)
+//                .size(117.dp, 140.dp)
+//        )
+//        Text(
+//            text = "Thông tin sách",
+//            style = MaterialTheme.typography.titleLarge
+//        )
+//        InfoAbout(
+//            label = "Tên sách",
+//            value = book.name,
+//            canEdit = true
+//        )
+//        InfoAbout(
+//            label = "Tác giả",
+//            value = book.author,
+//            canEdit = true
+//        )
+//        InfoAbout(
+//            label = "Nhà xuất bản",
+//            value = book.publisher,
+//            canEdit = true
+//        )
+//        Row(modifier = Modifier) {
+//            InfoAbout(
+//                label = "Năm xuất bản",
+//                value = book.year.toString(),
+//                modifier = Modifier.width(120.dp),
+//                canEdit = true
+//            )
+//            Spacer(modifier = Modifier.weight(1f))
+//            InfoAbout(
+//                label = "Thể loại",
+//                value = book.type,
+//                modifier = Modifier.width(200.dp),
+//                canEdit = true
+//            )
+//        }
+//        InfoAbout(
+//            label = "Số lượng",
+//            value = book.quantities.toString(),
+//            modifier = Modifier.width(120.dp),
+//            canEdit = true
+//        )
+//    }
+//}
 
 
 

@@ -35,6 +35,7 @@ import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.ConfirmCancel
+import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.MainColor
 import kotlinx.coroutines.launch

@@ -54,7 +54,6 @@ import com.example.librarymanagement.ui.theme.Title
 
 object BorrowRequestsDestination : NavigationDestination {
     override val route = "borrow_requests"
-//    override val title = ""
 }
 
 @Composable

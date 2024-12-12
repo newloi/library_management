@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.borrow.BorrowRequestDetail
@@ -30,14 +31,22 @@ import com.example.librarymanagement.ui.navigation.NavigationDestination
 
 object BorrowRequestDetailDestination : NavigationDestination {
     override val route = "borrow_request_detail"
-//    override val title = ""
 }
 
 @Composable
 fun BorrowRequestDetailScreen(
     navigateToEditBorrowRequest: () -> Unit,
     navigateBack: () -> Unit,
-    borrowRequest : BorrowRequestDetail
+    borrowRequest : BorrowRequestDetail = BorrowRequestDetail(
+        borrowId = 1,
+        bookName = "Quyen nay de test",
+        memberName = "LNL",
+        bookCount = 2,
+        borrowDate = "01/01/2023",
+        exceptDate = "01/01/2023",
+        returnDate = "01/01/2024",
+        state = "Da tra"
+    )
 ) {
     Scaffold(
        topBar = {
@@ -50,7 +59,6 @@ fun BorrowRequestDetailScreen(
        }
     ) { innerPadding ->
         BorrowRequestDetail(borrowRequest = borrowRequest, modifier = Modifier.padding(innerPadding))
-
     }
 }
 
@@ -196,13 +204,13 @@ fun BookRow(borrowRequest: BorrowRequestDetail) {
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun BorrowRequestDetailPreview(){
-//    BorrowRequestDetailScreen(
-//        navigateBack = {},
-//        navigateToEditBorrowRequest = {},
-//        borrowRequest = BorrowRequest(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
-//    )
-//}
+@Preview(showBackground = true)
+@Composable
+fun BorrowRequestDetailPreview(){
+    BorrowRequestDetailScreen(
+        navigateBack = {},
+        navigateToEditBorrowRequest = {},
+        borrowRequest = BorrowRequestDetail(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
+    )
+}
 

@@ -14,7 +14,7 @@ import com.example.librarymanagement.data.borrow.BorrowRequestDetailDao
 import com.example.librarymanagement.data.member.Member
 import com.example.librarymanagement.data.member.MemberDao
 
-@Database(entities = [Book::class, Member::class, Borrow::class, BorrowRequest::class], version = 1, exportSchema = false)
+@Database(entities = [Book::class, Member::class, Borrow::class, BorrowRequest::class], version = 2, exportSchema = false)
 abstract class LibraryDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
     abstract fun memberDao(): MemberDao

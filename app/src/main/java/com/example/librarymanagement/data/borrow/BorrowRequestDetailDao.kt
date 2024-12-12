@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface BorrowRequestDetailDao {
     @Query("""
         SELECT 
-            borrowRequests.id AS borrowRequestId,
+            borrowRequests.id AS borrowId,
             books.name AS bookName,
             members.name AS memberName,
             bookCount,
