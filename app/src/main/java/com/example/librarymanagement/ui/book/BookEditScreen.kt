@@ -31,6 +31,8 @@ import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.ConfirmCancel
 import com.example.librarymanagement.ui.InfoAbout
+import com.example.librarymanagement.ui.borrow.AddNewBorrowRequest
+import com.example.librarymanagement.ui.borrow.BorrowEditViewModel
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
@@ -45,14 +47,6 @@ fun BookEditScreen(
     @DrawableRes bookImage: Int = R.drawable.lamda_image,
     navigateBack: () -> Unit,
     bookEditViewModel: BookEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
-//    book: Book = Book(
-//        name = "Cau truc du lieu va giai thuat",
-//        author = "Nguyen Tuan Dung",
-//        publisher = "NXB Back Khoa",
-//        year = 2024,
-//        type = "IT",
-//        quantities = 3
-//    ),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -60,7 +54,7 @@ fun BookEditScreen(
         topBar = {
             AddAppBar(
                 navigateBack = bookEditViewModel::showDialog,
-                title = stringResource(R.string.sach, bookEditViewModel.bookUiState.bookDetail.id)
+                title = stringResource(R.string.don_muon, bookEditViewModel.bookUiState.bookDetail.id)
             )
         },
 //        floatingActionButton = {
@@ -106,6 +100,7 @@ fun BookEditScreen(
         }
     }
 }
+
 
 //@Composable
 //private fun BookEdit(

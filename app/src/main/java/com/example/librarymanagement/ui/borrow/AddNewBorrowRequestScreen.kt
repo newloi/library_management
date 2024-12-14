@@ -38,12 +38,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
+import com.example.librarymanagement.data.book.Book
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.DropList
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAppBar
+import com.example.librarymanagement.ui.book.BookDetail
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
