@@ -45,5 +45,6 @@ data class MemberDetailUiState(
         dateOfBirth = "",
         address = "",
         registrationDate = "",
+        imageUri = ""
     )
 )

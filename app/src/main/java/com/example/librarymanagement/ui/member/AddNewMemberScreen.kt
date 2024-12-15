@@ -1,5 +1,8 @@
 package com.example.librarymanagement.ui.member
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,15 +24,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.ActivityNavigatorExtras
+import coil3.Bitmap
+import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.example.librarymanagement.R
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
@@ -96,8 +107,33 @@ fun AddNewMember(
     enable: Boolean = true,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
+
+    // Trạng thái để lưu bitmap từ camera hoặc URI từ thư viện
+    val imageUri = rememberSaveable { mutableStateOf(memberDetail.imageUri ?: "") }
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    // Bộ chọn ảnh từ thư viện
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            imageUri.value = it.toString()
+            bitmap.value = null // Reset bitmap nếu chọn từ thư viện
+        }
+    }
+    // Chụp ảnh từ camera
+    val camLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview()
+    ) {
+        if(it != null){
+            bitmap.value = it
+            imageUri.value = "" // Reset URI nếu chụp từ camera
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -115,11 +151,27 @@ fun AddNewMember(
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                Image(
-                    painter = painterResource(R.drawable.camera),
-                    contentDescription = null,
-                    modifier = Modifier.size(117.dp, 140.dp)
-                )
+                if(bitmap.value != null){
+                    Image(
+                        bitmap = bitmap.value!!.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.size(117.dp, 140.dp)
+                    )
+                }
+                else if(imageUri.value.isNotEmpty()){
+                    AsyncImage(
+                        model = imageUri.value,
+                        contentDescription = null,
+                        modifier = Modifier.size(117.dp, 140.dp)
+                    )
+                }
+                else{
+                    Image(
+                        painter = painterResource(R.drawable.camera),
+                        contentDescription = null,
+                        modifier = Modifier.size(117.dp, 140.dp)
+                    )
+                }
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -127,7 +179,7 @@ fun AddNewMember(
                 modifier = Modifier.weight(1f).fillMaxHeight()
             ) {
                 Button(
-                    onClick = {},
+                    onClick = { camLauncher.launch(null) },
                     shape = RoundedCornerShape(16.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
@@ -140,7 +192,9 @@ fun AddNewMember(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = {},
+                    onClick = {
+                        launcher.launch("image/*")
+                    },
                     shape = RoundedCornerShape(16.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
@@ -171,7 +225,8 @@ fun AddNewMember(
                 modifier = Modifier.width(108.dp))
             Spacer(modifier = Modifier.width(16.dp))
             DatePickerWithLabel(
-                "Ngày sinh",
+                label = "Ngày sinh",
+                value = memberDetail.dateOfBirth,
                 onValueChange = { onMemberChange(memberDetail.copy(dateOfBirth = it)) }
             )
         }
@@ -182,11 +237,29 @@ fun AddNewMember(
             modifier = Modifier.fillMaxWidth()
         )
         DatePickerWithLabel(
-            "Ngày đăng kí",
+            label = "Ngày đăng kí",
+            value = memberDetail.registrationDate,
             onValueChange = { onMemberChange(memberDetail.copy(registrationDate = it)) }
         )
         Button(
-            onClick = onSaveClick,
+            onClick = {
+                if (bitmap.value != null) {
+                    val savedUri = saveBitmapToInternalStorage(
+                        context,
+                        bitmap.value!!,
+                        "member_${System.currentTimeMillis()}.jpg"
+                    )
+                    onMemberChange(memberDetail.copy(imageUri = savedUri.toString()))
+                } else if (imageUri.value.isNotEmpty()) {
+                    val savedUri = saveImageToInternalStorage(
+                        context,
+                        Uri.parse(imageUri.value),
+                        "member_${System.currentTimeMillis()}.jpg"
+                    )
+                    onMemberChange(memberDetail.copy(imageUri = savedUri.toString()))
+                }
+                onSaveClick()
+            },
             enabled = enable,
             shape = RoundedCornerShape(16.dp),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),

@@ -40,7 +40,8 @@ data class MemberDetail(
     val gender: String = "",
     val dateOfBirth: String = "",
     val address: String = "",
-    val registrationDate: String = ""
+    val registrationDate: String = "",
+    val imageUri: String = ""
 )
 
 data class MemberUiState(
@@ -55,7 +56,8 @@ fun MemberDetail.toMember(): Member = Member(
     gender = gender,
     dateOfBirth = dateOfBirth,
     address = address,
-    registrationDate = registrationDate
+    registrationDate = registrationDate,
+    imageUri = imageUri
 )
 
 fun Member.toMemberDetail(): MemberDetail = MemberDetail(
@@ -64,7 +66,8 @@ fun Member.toMemberDetail(): MemberDetail = MemberDetail(
     gender = gender,
     dateOfBirth = dateOfBirth,
     address = address,
-    registrationDate = registrationDate
+    registrationDate = registrationDate,
+    imageUri = imageUri
 )
 
 fun Member.toMemberUiState(isMemberValid: Boolean = false): MemberUiState = MemberUiState(

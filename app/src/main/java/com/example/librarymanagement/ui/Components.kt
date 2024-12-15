@@ -945,6 +945,7 @@ fun ConfirmCancel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerWithLabel(
+    value: String,
     label: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -957,7 +958,7 @@ fun DatePickerWithLabel(
     val datePickerState = rememberDatePickerState()
 
     OutlinedTextField(
-        value = selectedDate ?: "",
+        value = value,
         onValueChange = {},
         label = {
             Text(
@@ -1165,9 +1166,9 @@ fun DatePickerWithLabel(
 //    )
 //}
 
-
-@Preview(showBackground = true)
-@Composable
-fun ComponentPreview() {
-    DatePickerWithLabel("chon ngay", onValueChange = {}, modifier = Modifier)
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun ComponentPreview() {
+//    DatePickerWithLabel("chon ngay", onValueChange = {}, modifier = Modifier)
+//}

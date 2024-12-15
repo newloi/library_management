@@ -11,5 +11,6 @@ data class Member(
     val gender: String,
     val dateOfBirth: String,
     val address: String,
-    val registrationDate: String
+    val registrationDate: String,
+    val imageUri: String
 )
