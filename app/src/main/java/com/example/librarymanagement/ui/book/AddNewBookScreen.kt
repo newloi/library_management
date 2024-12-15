@@ -48,37 +48,37 @@ object AddNewBookDestination : NavigationDestination {
 fun AddNewBookScreen(
     navigateDone: () -> Unit,
     navigateBack: () -> Unit,
-    addNewBookViewModel: AddNewBookViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: AddNewBookViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             AddAppBar(
-                navigateBack = addNewBookViewModel::showDialog,
+                navigateBack = viewModel::showDialog,
                 title = "Thêm sách"
             )
         }
     ) { innerPadding ->
         AddNewBook(
-            onBookChange = addNewBookViewModel::updateUiState,
-            bookDetail = addNewBookViewModel.bookUiState.bookDetail,
+            onBookChange = viewModel::updateUiState,
+            bookDetail = viewModel.bookUiState.bookDetail,
             onSaveClick = {
                 coroutineScope.launch {
-                    addNewBookViewModel.saveBook()
+                    viewModel.saveBook()
                     navigateDone()
                 }
             },
-            enable = addNewBookViewModel.bookUiState.isBookValid,
+            enable = viewModel.bookUiState.isBookValid,
             modifier = Modifier.padding(innerPadding)
         )
-        if(addNewBookViewModel.bookUiState.isShowDialog) {
+        if(viewModel.bookUiState.isShowDialog) {
             ConfirmCancel(
                 onDelete = {
-                    addNewBookViewModel.showDialog()
+                    viewModel.showDialog()
                     navigateBack()
                 },
-                onCancel = addNewBookViewModel::showDialog
+                onCancel = viewModel::showDialog
             )
         }
     }

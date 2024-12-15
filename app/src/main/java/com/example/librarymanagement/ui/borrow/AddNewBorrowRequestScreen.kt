@@ -1,5 +1,4 @@
 package com.example.librarymanagement.ui.borrow
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -38,26 +37,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.librarymanagement.R
-import com.example.librarymanagement.data.book.Book
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.DropList
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAppBar
-import com.example.librarymanagement.ui.book.BookDetail
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
-
 object AddNewBorrowRequestDestination : NavigationDestination {
     override val route: String = "add_new_borrow_request"
 }
-
 @Composable
 fun AddNewBorrowRequestScreen(
-
 ) {
     Scaffold(
         topBar = {
@@ -70,7 +64,6 @@ fun AddNewBorrowRequestScreen(
         AddNewBorrowRequest(modifier = Modifier.padding(innerPadding))
     }
 }
-
 @Composable
 fun AddNewBorrowRequest(
     modifier: Modifier = Modifier
@@ -89,7 +82,6 @@ fun AddNewBorrowRequest(
                 .align(Alignment.Start)
                 .padding(bottom = 20.dp)
         )
-
         AddInfo(
             label = "Họ và tên người mượn",
             value = "",
@@ -105,7 +97,6 @@ fun AddNewBorrowRequest(
                 onValueChange = {},
                 modifier = Modifier.weight(1f)
             )
-
             Spacer(modifier = Modifier.width(40.dp))
             AddInfo(
                 label = "Số sách mượn",
@@ -121,7 +112,6 @@ fun AddNewBorrowRequest(
                 onValueChange = {},
                 modifier = Modifier.weight(1f)
             )
-
             Spacer(modifier = Modifier.width(40.dp))
             AddInfo(
                 label = "Ngày trả dự kiến",
@@ -130,7 +120,6 @@ fun AddNewBorrowRequest(
                 modifier = Modifier.weight(1f)
             )
         }
-
 //        Row(modifier = Modifier.padding(bottom = 30.dp)) {
 //            AddInfo(
 //                label = "Ngày trả",
@@ -155,14 +144,12 @@ fun AddNewBorrowRequest(
         ListBooks()
     }
 }
-
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun ListBooks(
     modifier: Modifier = Modifier
 ) {
     var bookIds by remember { mutableStateOf(listOf("")) }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -212,7 +199,6 @@ fun ListBooks(
                 }
             }
         }
-
         // Nút thêm ô nhập mới
         item {
             Row(
@@ -235,9 +221,7 @@ fun ListBooks(
                         tint = Color(0xFF4CAF50)
                     )
                 }
-
                 Spacer(modifier = Modifier.weight(1f))
-
                 // Nút xác nhận
                 Button(
                     onClick = { },
@@ -258,7 +242,6 @@ fun ListBooks(
         }
     }
 }
-
 @Preview
 @Composable
 fun BRDPreview() {

@@ -1,7 +1,7 @@
 package com.example.librarymanagement.data.borrow
 
 class BorrowRequestRepository(private val borrowDao: BorrowRequestDao) {
-//    suspend fun insertBorrow(borrowRequestDetail: BorrowRequestDetail) = borrowDao.insert(borrowRequestDetail)
+    suspend fun insertBorrowRequest(borrowRequest: BorrowRequest) = borrowDao.insert(borrowRequest)
 //
 //    suspend fun updateBook(borrowRequestDetail: BorrowRequestDetail) = borrowDao.update(borrowRequestDetail)
 //

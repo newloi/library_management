@@ -39,13 +39,14 @@ fun BorrowRequestDetailScreen(
     navigateBack: () -> Unit,
     borrowRequest : BorrowRequestDetail = BorrowRequestDetail(
         borrowId = 1,
-        bookName = "Quyen nay de test",
+        listBookIds = "",
+        listBooks = "Quyen nay de test",
         memberName = "LNL",
-        bookCount = 2,
+        memberId = 1,
         borrowDate = "01/01/2023",
         exceptDate = "01/01/2023",
         returnDate = "01/01/2024",
-        state = "Da tra"
+        state = true
     )
 ) {
     Scaffold(
@@ -95,7 +96,7 @@ fun BorrowRequestDetail(borrowRequest: BorrowRequestDetail, modifier: Modifier =
            Spacer(modifier= Modifier.width(40.dp))
            InfoAbout(
                label = "Số lượng sách mượn",
-               value = borrowRequest.bookCount.toString(),
+               value = "borrowRequest.bookCount.toString()",
                modifier=Modifier.weight(1f)
            )
        }
@@ -115,16 +116,18 @@ fun BorrowRequestDetail(borrowRequest: BorrowRequestDetail, modifier: Modifier =
         }
 
         Row(modifier = Modifier.padding(bottom=30.dp)){
-            InfoAbout(
-                label = "Ngày trả",
-                value = borrowRequest.returnDate,
-                modifier=Modifier.weight(1f)
-            )
+            borrowRequest.returnDate?.let {
+                InfoAbout(
+                    label = "Ngày trả",
+                    value = it,
+                    modifier=Modifier.weight(1f)
+                )
+            }
 
             Spacer(modifier= Modifier.width(40.dp))
             InfoAbout(
                 label = "Trạng thái",
-                value = borrowRequest.state,
+                value = borrowRequest.state.toString(),
                 modifier=Modifier.weight(1f)
             )
         }
@@ -197,20 +200,20 @@ fun BookRow(borrowRequest: BorrowRequestDetail) {
         )
 
         InfoAboutTable(
-            value = borrowRequest.bookName,
+            value = borrowRequest.listBooks,
             modifier=Modifier.weight(2f).border(width = 0.2.dp, color = Black)
         )
     }
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun BorrowRequestDetailPreview(){
-    BorrowRequestDetailScreen(
-        navigateBack = {},
-        navigateToEditBorrowRequest = {},
-        borrowRequest = BorrowRequestDetail(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BorrowRequestDetailPreview(){
+//    BorrowRequestDetailScreen(
+//        navigateBack = {},
+//        navigateToEditBorrowRequest = {},
+//        borrowRequest = BorrowRequestDetail(2,"Tai","Dac nhan tam"," 25/01/2004",5," 25/06/2004"," 25/07/2004","Đã trả")
+//    )
+//}
 

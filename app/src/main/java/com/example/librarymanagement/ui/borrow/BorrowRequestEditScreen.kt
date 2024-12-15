@@ -13,13 +13,8 @@ import com.example.librarymanagement.R
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.ConfirmCancel
-import com.example.librarymanagement.ui.book.BookEditDestination
-import com.example.librarymanagement.ui.book.BookEditDestination.bookIdArg
-import com.example.librarymanagement.ui.book.BookEditViewModel
-import com.example.librarymanagement.ui.member.AddNewMember
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
-import kotlinx.coroutines.launch
 
 object BorrowRequestEditDestination : NavigationDestination {
     override val route: String = "borrow_request_edit"
@@ -31,15 +26,15 @@ object BorrowRequestEditDestination : NavigationDestination {
 fun BorrowRequestEditScreen(
     @DrawableRes borrowImage: Int = R.drawable.lamda_image,
     navigateBack: () -> Unit,
-    borrowEditViewModel: BorrowEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    borrowEditViewModel: BorrowRequestEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             AddAppBar(
-                title = stringResource(R.string.don_muon, borrowEditViewModel.borrowUiState.borrowDetail.id),
-                navigateBack = borrowEditViewModel::showDialog
+                title = "stringResource(R.string.don_muon, borrowEditViewModel.borrowUiState.borrowDetail.borrowId)",
+                navigateBack = {  }
             )
         }
 //        floatingActionButton = {
@@ -58,17 +53,20 @@ fun BorrowRequestEditScreen(
 //        }
     ) { innerPadding ->
         AddNewBorrowRequest(
+//            onBorrowChange = {},
+//            borrowDetail = BorrowDetail(),
+//            onSaveClick = {},
             modifier = Modifier.padding(innerPadding)
         )
-        if(borrowEditViewModel.borrowUiState.isShowDialog) {
-            ConfirmCancel(
-                onDelete = {
-                    borrowEditViewModel.showDialog()
-                    navigateBack()
-                },
-                onCancel = borrowEditViewModel::showDialog
-            )
-        }
+//        if(borrowEditViewModel.borrowUiState.isShowDialog) {
+//            ConfirmCancel(
+//                onDelete = {
+//                    borrowEditViewModel.showDialog()
+//                    navigateBack()
+//                },
+//                onCancel = borrowEditViewModel::showDialog
+//            )
+//        }
     }
 }
 

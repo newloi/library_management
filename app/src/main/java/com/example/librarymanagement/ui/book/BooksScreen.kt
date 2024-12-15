@@ -377,7 +377,6 @@ fun Preview() {
             navigateToBorrowRequestsScreen = {},
             navigateToMembersScreen = {},
             navigateToSettingScreen = {},
-
         )
     }
 }

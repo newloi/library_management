@@ -5,11 +5,12 @@ package com.example.librarymanagement.data.borrow
  */
 data class BorrowRequestDetail(
     val borrowId : Int,
-    val bookName: String,
+    val listBooks: String,
+    val listBookIds: String,
+    val memberId: Int,
     val memberName: String,
     val borrowDate: String,
-    val bookCount: Int,
     val exceptDate: String,
-    val returnDate: String,
-    val state: String
+    val returnDate: String?,
+    val state: Boolean
 )

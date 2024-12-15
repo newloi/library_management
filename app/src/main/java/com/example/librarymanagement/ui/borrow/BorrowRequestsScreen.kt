@@ -244,35 +244,35 @@ private fun BorrowRequest(
     }
 }
 
-@Preview
-@Composable
-fun BorrowRequestsPreview() {
-    BorrowRequestsScreen(
-        navigateToAddNewBorrowRequest = {},
-        navigateToBooksScreen = {},
-        navigateToSettingScreen = {},
-        navigateToMembersScreen = {},
-        borrowRequests = listOf(
-            BorrowRequestDetail(
-                borrowId = 1,
-                memberName = "Nguyen Van A",
-                bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024",
-                bookCount = 3,
-                exceptDate = " 25/06/2004",
-                returnDate = " 25/07/2004",
-                state = "Đã trả"
-            ),
-            BorrowRequestDetail(
-                borrowId = 1,
-                memberName = "Nguyen Van A",
-                bookName = "Cau truc du lieu va giai thuat",
-                borrowDate = "01/12/2024",
-                bookCount = 3,
-                exceptDate = " 25/06/2004",
-                returnDate = " 25/07/2004",
-                state = "Đã trả"
-            )
-        )
-    )
-}
+//@Preview
+//@Composable
+//fun BorrowRequestsPreview() {
+//    BorrowRequestsScreen(
+//        navigateToAddNewBorrowRequest = {},
+//        navigateToBooksScreen = {},
+//        navigateToSettingScreen = {},
+//        navigateToMembersScreen = {},
+//        borrowRequests = listOf(
+//            BorrowRequestDetail(
+//                borrowId = 1,
+//                memberName = "Nguyen Van A",
+//                bookName = "Cau truc du lieu va giai thuat",
+//                borrowDate = "01/12/2024",
+//                bookCount = 3,
+//                exceptDate = " 25/06/2004",
+//                returnDate = " 25/07/2004",
+//                state = "Đã trả"
+//            ),
+//            BorrowRequestDetail(
+//                borrowId = 1,
+//                memberName = "Nguyen Van A",
+//                bookName = "Cau truc du lieu va giai thuat",
+//                borrowDate = "01/12/2024",
+//                bookCount = 3,
+//                exceptDate = " 25/06/2004",
+//                returnDate = " 25/07/2004",
+//                state = "Đã trả"
+//            )
+//        )
+//    )
+//}

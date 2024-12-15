@@ -25,13 +25,13 @@ import com.example.librarymanagement.data.member.Member
  */
 data class BorrowRequest(
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
+    val id : Int = 0,
     val memberId: Int,
     val borrowDate: String,
     val bookCount: Int,
     val exceptDate: String,
-    val returnDate: String,
-    val state: String
+    val returnDate: String?,
+    val state: Boolean
 )
 
 

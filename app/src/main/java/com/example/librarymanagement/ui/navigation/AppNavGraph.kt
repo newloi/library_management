@@ -161,10 +161,10 @@ fun AppNavHost(
                 )
             }
             composable(route = BorrowRequestEditDestination.route) {
-                BorrowRequestEditScreen()
+//                BorrowRequestEditScreen()
             }
             composable(route = AddNewBorrowRequestDestination.route) {
-                AddNewBorrowRequestScreen()
+//                AddNewBorrowRequestScreen()
             }
         }
 }
