@@ -162,7 +162,10 @@ fun AppNavHost(
 //                BorrowRequestEditScreen()
 //            }
             composable(route = AddNewBorrowRequestDestination.route) {
-//                AddNewBorrowRequestScreen()
+                AddNewBorrowRequestScreen(
+                    navigateDone = { navController.popBackStack() },
+                    navigateBack = { navController.navigateUp() }
+                )
             }
         }
 }

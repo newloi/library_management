@@ -10,6 +10,7 @@ import com.example.librarymanagement.ui.book.AddNewBookViewModel
 import com.example.librarymanagement.ui.book.BookDetailViewModel
 import com.example.librarymanagement.ui.book.BookEditViewModel
 import com.example.librarymanagement.ui.book.BooksScreenViewModel
+import com.example.librarymanagement.ui.borrow.AddNewBorrowRequestViewModel
 import com.example.librarymanagement.ui.member.AddNewMemberViewModel
 import com.example.librarymanagement.ui.member.MemberDetailViewModel
 import com.example.librarymanagement.ui.member.MemberEditViewModel
@@ -53,7 +54,12 @@ object AppViewModelProvider {
         }
         initializer {
             MembersScreenViewModel( libraryManagementApplication().container.memberRepository )
-
+        }
+        initializer {
+            AddNewBorrowRequestViewModel(
+                borrowRepository = libraryManagementApplication().container.borrowRepository,
+                borrowRequestRepository = libraryManagementApplication().container.borrowRequestRepository
+            )
         }
     }
 }

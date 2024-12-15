@@ -67,7 +67,7 @@ fun AddNewBorrowRequestScreen(
     Scaffold(
         topBar = {
             AddAppBar(
-                navigateBack = viewModel::showDialog,
+                navigateBack = navigateBack,
                 title = "Thêm đơn mượn"
             )
         }
