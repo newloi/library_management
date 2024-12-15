@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.rememberAsyncImagePainter
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.member.Member
 import com.example.librarymanagement.ui.AppViewModelProvider
@@ -114,7 +115,7 @@ private fun MemberDetail(
         }
         item {
             Image(
-                painter = painterResource(R.drawable.lamda_people),
+                painter = rememberAsyncImagePainter(member.imageUri),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

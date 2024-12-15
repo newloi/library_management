@@ -167,7 +167,7 @@ fun AddNewMember(
                 }
                 else{
                     Image(
-                        painter = painterResource(R.drawable.camera),
+                        rememberAsyncImagePainter(memberDetail.imageUri.ifEmpty { R.drawable.camera }),
                         contentDescription = null,
                         modifier = Modifier.size(117.dp, 140.dp)
                     )
