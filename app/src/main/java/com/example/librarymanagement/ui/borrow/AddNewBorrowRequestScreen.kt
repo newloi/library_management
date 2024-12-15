@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,10 +37,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.librarymanagement.R
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
 import com.example.librarymanagement.ui.AddInfo
+import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.DropList
 import com.example.librarymanagement.ui.InfoAbout
 import com.example.librarymanagement.ui.InfoAppBar
@@ -47,25 +51,47 @@ import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
+import kotlinx.coroutines.launch
+
 object AddNewBorrowRequestDestination : NavigationDestination {
     override val route: String = "add_new_borrow_request"
 }
 @Composable
 fun AddNewBorrowRequestScreen(
+    navigateDone: () -> Unit,
+    navigateBack: () -> Unit,
+    viewModel: AddNewBorrowRequestViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             AddAppBar(
-                navigateBack = {},
+                navigateBack = viewModel::showDialog,
                 title = "Thêm đơn mượn"
             )
         }
     ) { innerPadding ->
-        AddNewBorrowRequest(modifier = Modifier.padding(innerPadding))
+        AddNewBorrowRequest(
+            onBorrowChange = viewModel::updateUiState,
+            borrowDetail = viewModel.borrowUiState.borrowDetail,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.saveBorrow()
+                    navigateDone()
+                }
+            },
+            enable = viewModel.borrowUiState.isBorrowValid,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
 @Composable
 fun AddNewBorrowRequest(
+    onBorrowChange: (BorrowDetail) -> Unit,
+    borrowDetail: BorrowDetail,
+    onSaveClick: () -> Unit,
+    enable: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -84,7 +110,7 @@ fun AddNewBorrowRequest(
         )
         AddInfo(
             label = "Họ và tên người mượn",
-            value = "",
+            value = borrowDetail.memberName,
             onValueChange = {},
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,14 +119,14 @@ fun AddNewBorrowRequest(
         Row(modifier = Modifier.padding(bottom = 10.dp)) {
             AddInfo(
                 label = "Mã người mượn",
-                value = "borrowRequest.borrowId.toString()",
-                onValueChange = {},
+                value = borrowDetail.memberId,
+                onValueChange = { onBorrowChange(borrowDetail.copy(memberId = it)) },
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(40.dp))
             AddInfo(
                 label = "Số sách mượn",
-                value = "borrowRequest.bookCount.toString()",
+                value = borrowDetail.listBooks.size.toString(),
                 onValueChange = {},
                 modifier = Modifier.weight(1f)
             )
@@ -108,14 +134,14 @@ fun AddNewBorrowRequest(
         Row(modifier = Modifier.padding(bottom = 10.dp)) {
             AddInfo(
                 label = "Ngày mượn",
-                value = "borrowRequest.borrowDate",
-                onValueChange = {},
+                value = borrowDetail.borrowDate,
+                onValueChange = { onBorrowChange(borrowDetail.copy(borrowDate = it)) },
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(40.dp))
             AddInfo(
                 label = "Ngày trả dự kiến",
-                value = "borrowRequest.exceptDate",
+                value = borrowDetail.exceptDate,
                 onValueChange = {},
                 modifier = Modifier.weight(1f)
             )
@@ -141,109 +167,106 @@ fun AddNewBorrowRequest(
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.align(Alignment.Start)
         )
-        ListBooks()
-    }
-}
-@SuppressLint("MutableCollectionMutableState")
-@Composable
-fun ListBooks(
-    modifier: Modifier = Modifier
-) {
-    var bookIds by remember { mutableStateOf(listOf("")) }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        // Danh sách các TextField
-        bookIds.forEachIndexed { index, code ->
+        var bookIds by remember { mutableStateOf(listOf("")) }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Danh sách các TextField
+            bookIds.forEachIndexed { index, code ->
+                item {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        AddInfo(
+                            value = code,
+                            onValueChange = { newValue ->
+                                bookIds = bookIds.toMutableList().apply {
+                                    this[index] = newValue
+                                }
+                            },
+                            label = "Mã sách ${index + 1}",
+                            modifier = Modifier.weight(1f)
+                        )
+                        if (code.isNotBlank()) {
+                            AddInfo(
+                                label = "Tên sách",
+                                value = "Cho nay hien ten sach",
+                                onValueChange = {},
+                                modifier = Modifier.weight(1.5f)
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                bookIds = bookIds.toMutableList().apply {
+                                    removeAt(index)
+                                }
+                            },
+                            enabled = bookIds.size > 1 && enable
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Xóa mã sách",
+                                tint = if (bookIds.size > 1) Delete else Cancel
+                            )
+                        }
+                    }
+                }
+            }
+            // Nút thêm ô nhập mới
             item {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    AddInfo(
-                        value = code,
-                        onValueChange = { newValue ->
-                            bookIds = bookIds.toMutableList().apply {
-                                this[index] = newValue
-                            }
-                        },
-                        label = "Mã sách ${index + 1}",
-                        modifier = Modifier.weight(1f)
-                    )
-                    if (code.isNotBlank()) {
-                        AddInfo(
-                            label = "Tên sách",
-                            value = "Cho nay hien ten sach",
-                            onValueChange = {},
-                            modifier = Modifier.weight(1.5f)
-                        )
-                    }
                     IconButton(
-                        onClick = {
-                            bookIds = bookIds.toMutableList().apply {
-                                removeAt(index)
-                            }
-                        },
-                        enabled = bookIds.size > 1
+                        onClick = { bookIds += "" },
+                        modifier = Modifier
+                            .border(
+                                2.dp,
+                                Color(0xFF4CAF50),
+                                shape = RoundedCornerShape(16.dp)
+                            ) // Thêm viền cho IconButton
+                            .size(60.dp, 40.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Xóa mã sách",
-                            tint = if (bookIds.size > 1) Delete else Cancel
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Thêm mã sách",
+                            tint = Color(0xFF4CAF50)
                         )
                     }
-                }
-            }
-        }
-        // Nút thêm ô nhập mới
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = { bookIds += "" },
-                    modifier = Modifier
-                        .border(
-                            2.dp,
-                            Color(0xFF4CAF50),
-                            shape = RoundedCornerShape(16.dp)
-                        ) // Thêm viền cho IconButton
-                        .size(60.dp, 40.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Thêm mã sách",
-                        tint = Color(0xFF4CAF50)
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                // Nút xác nhận
-                Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                    enabled = bookIds.all { it.isNotBlank() },
-                    modifier = Modifier
+                    Spacer(modifier = Modifier.weight(1f))
+                    // Nút xác nhận
+                    Button(
+                        onClick = onSaveClick,
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+                        enabled = bookIds.all { it.isNotBlank() },
+                        modifier = Modifier
 //                    .align(Alignment.End)
-                        .size(100.dp, 40.dp)
-                ) {
-                    Text(
-                        text = "Xong",
-                        style = MaterialTheme.typography.labelMedium
-                    )
+                            .size(100.dp, 40.dp)
+                    ) {
+                        Text(
+                            text = "Xong",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 @Preview
 @Composable
 fun BRDPreview() {
-    AddNewBorrowRequestScreen()
+    AddNewBorrowRequestScreen(
+        navigateDone = {},
+        navigateBack = {}
+    )
 }

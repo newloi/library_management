@@ -19,8 +19,6 @@ import com.example.librarymanagement.ui.book.BooksScreen
 import com.example.librarymanagement.ui.book.BooksDestination
 import com.example.librarymanagement.ui.borrow.AddNewBorrowRequestDestination
 import com.example.librarymanagement.ui.borrow.AddNewBorrowRequestScreen
-import com.example.librarymanagement.ui.borrow.BorrowRequestEditDestination
-import com.example.librarymanagement.ui.borrow.BorrowRequestEditScreen
 import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
 import com.example.librarymanagement.ui.borrow.BorrowRequestsScreen
 import com.example.librarymanagement.ui.member.AddNewMemberDestination
@@ -160,9 +158,9 @@ fun AppNavHost(
                     navigateBack = { navController.navigateUp() },
                 )
             }
-            composable(route = BorrowRequestEditDestination.route) {
+//            composable(route = BorrowRequestEditDestination.route) {
 //                BorrowRequestEditScreen()
-            }
+//            }
             composable(route = AddNewBorrowRequestDestination.route) {
 //                AddNewBorrowRequestScreen()
             }

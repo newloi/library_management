@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AddNewBorrowRequestViewModel(
-    private val borrowRequestDetailRepository: BorrowRequestDetailRepository,
     private val borrowRequestRepository: BorrowRequestRepository,
     private val borrowRepository: BorrowRepository
 ) : ViewModel() {
@@ -25,39 +24,40 @@ class AddNewBorrowRequestViewModel(
         private set
 
     fun updateUiState(borrowDetail: BorrowDetail) {
-        borrowUiState = BorrowUiState(borrowDetail = borrowDetail, isBorrowValid = validateInput(borrowDetail))
+//        borrowUiState = BorrowUiState(borrowDetail = borrowDetail, isBorrowValid = validateInput(borrowDetail))
     }
 
     private fun validateInput(uiState: BorrowDetail = borrowUiState.borrowDetail): Boolean {
-        return with(uiState) {
-            listBooks.isNotEmpty() && memberName.isNotBlank()
-                    && borrowDate.isNotBlank() && exceptDate.isNotBlank()
-        }
+//        return with(uiState) {
+//            listBooks.isNotEmpty() && memberName.isNotBlank()
+//                    && borrowDate.isNotBlank() && exceptDate.isNotBlank()
+//        }
+        return true
     }
 
     suspend fun saveBorrow() {
-        withContext(Dispatchers.IO) {
-            // Chạy song song việc insert borrow và insert borrowRequest
-            val insertBorrowJob = async {
-                borrowUiState.borrowDetail.toListBorrow().forEach { borrow ->
-                    borrowRepository.insertBorrow(borrow)
-                }
-            }
-
-            val insertBorrowRequestJob = async {
-                borrowRequestRepository.insertBorrowRequest(
-                    borrowUiState.borrowDetail.toBorrowRequest()
-                )
-            }
-
-            // Đợi cả hai thao tác hoàn thành
-            insertBorrowJob.await()
-            insertBorrowRequestJob.await()
-        }
+//        withContext(Dispatchers.IO) {
+//            // Chạy song song việc insert borrow và insert borrowRequest
+//            val insertBorrowJob = async {
+//                borrowUiState.borrowDetail.toListBorrow().forEach { borrow ->
+//                    borrowRepository.insertBorrow(borrow)
+//                }
+//            }
+//
+//            val insertBorrowRequestJob = async {
+//                borrowRequestRepository.insertBorrowRequest(
+//                    borrowUiState.borrowDetail.toBorrowRequest()
+//                )
+//            }
+//
+//            // Đợi cả hai thao tác hoàn thành
+//            insertBorrowJob.await()
+//            insertBorrowRequestJob.await()
+//        }
     }
 
     fun showDialog() {
-        borrowUiState = borrowUiState.copy(isShowDialog = !borrowUiState.isShowDialog)
+//        borrowUiState = borrowUiState.copy(isShowDialog = !borrowUiState.isShowDialog)
     }
 }
 

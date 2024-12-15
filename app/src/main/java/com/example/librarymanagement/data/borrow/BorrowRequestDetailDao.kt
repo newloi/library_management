@@ -24,7 +24,7 @@ interface BorrowRequestDetailDao {
         LEFT JOIN books ON books.id = borrows.bookId
         LEFT JOIN borrowRequests ON borrowRequests.id = borrows.borrowId
         LEFT JOIN members ON members.id = borrowRequests.memberId
-        GROUP BY borrowRequests.id, members.name, bookCount, exceptDate, borrowRequests.borrowDate, borrowRequests.returnDate, state
+        GROUP BY borrowRequests.id, members.name, memberId, bookCount, exceptDate, borrowRequests.borrowDate, borrowRequests.returnDate, state
     """)
     fun getAllBorrowRequestsDetail(): Flow<List<BorrowRequestDetail>>
 
