@@ -12,5 +12,6 @@ data class Book(
     val publisher: String,
     val year: Int,
     val type: String,
-    val quantities: Int
+    val quantities: Int,
+    val imageUri: String
 )

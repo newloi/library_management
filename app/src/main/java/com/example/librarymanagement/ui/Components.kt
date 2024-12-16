@@ -73,6 +73,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -517,6 +518,43 @@ fun AddInfo(
         singleLine = true,
         shape = RoundedCornerShape(10.dp),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
+        keyboardActions = KeyboardActions(
+            onDone = {focusManager.clearFocus()}
+        ),
+        modifier = modifier.height(60.dp)
+    )
+}
+
+@Composable
+fun AddNumInfo(
+    onValueChange: (String) -> Unit,
+    value: String,
+//    bookDetail: BookDetail,
+    modifier: Modifier = Modifier,
+    label: String
+) {
+    val focusManager = LocalFocusManager.current
+//    var text by remember { mutableStateOf("") }
+    OutlinedTextField(
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium
+            )
+        },
+        value = value,
+        textStyle = TextStyle(
+            fontFamily = Roboto,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            color = Color.Black
+        ),
+        onValueChange = { onValueChange(it) },
+        singleLine = true,
+        shape = RoundedCornerShape(10.dp),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Default),
         keyboardActions = KeyboardActions(
             onDone = {focusManager.clearFocus()}
         ),

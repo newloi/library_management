@@ -192,9 +192,7 @@ fun AddNewMember(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = {
-                        launcher.launch("image/*")
-                    },
+                    onClick = { launcher.launch("image/*") },
                     shape = RoundedCornerShape(16.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),

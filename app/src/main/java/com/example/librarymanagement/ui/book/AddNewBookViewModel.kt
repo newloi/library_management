@@ -41,7 +41,8 @@ data class BookDetail(
     val publisher: String = "",
     val year: String = "",
     val type: String = "",
-    val quantities: String = ""
+    val quantities: String = "",
+    val imageUri: String = ""
 )
 
 data class BookUiState(
@@ -57,7 +58,8 @@ fun BookDetail.toBook(): Book = Book(
     publisher = publisher,
     year = year.toIntOrNull() ?: 0,
     type = type,
-    quantities = quantities.toIntOrNull() ?: 0
+    quantities = quantities.toIntOrNull() ?: 0,
+    imageUri = imageUri
 )
 
 fun Book.toBookDetail(): BookDetail = BookDetail(
@@ -67,7 +69,8 @@ fun Book.toBookDetail(): BookDetail = BookDetail(
     publisher = publisher,
     year = year.toString(),
     type = type,
-    quantities = quantities.toString()
+    quantities = quantities.toString(),
+    imageUri = imageUri
 )
 
 fun Book.toBookUiState(isBookValid: Boolean = false): BookUiState = BookUiState(

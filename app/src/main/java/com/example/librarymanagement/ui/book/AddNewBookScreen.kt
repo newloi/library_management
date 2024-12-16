@@ -1,6 +1,9 @@
 package com.example.librarymanagement.ui.book
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,25 +25,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.Bitmap
+import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.example.librarymanagement.R
 import com.example.librarymanagement.ui.AddAppBar
 import com.example.librarymanagement.ui.AddInfo
+import com.example.librarymanagement.ui.AddNumInfo
 import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.ConfirmCancel
 import com.example.librarymanagement.ui.InfoAbout
+import com.example.librarymanagement.ui.member.saveBitmapToInternalStorage
+import com.example.librarymanagement.ui.member.saveImageToInternalStorage
 import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.LibraryManagementTheme
 import com.example.librarymanagement.ui.theme.MainColor
 import kotlinx.coroutines.launch
+import kotlin.text.ifEmpty
 
 object AddNewBookDestination : NavigationDestination {
     override val route = "add_new_book"
@@ -95,9 +109,32 @@ fun AddNewBook(
     enable: Boolean = true,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
 
+    // Trạng thái để lưu bitmap từ camera hoặc URI từ thư viện
+    val imageUri = rememberSaveable { mutableStateOf(bookDetail.imageUri) }
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    // Bộ chọn ảnh từ thư viện
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            imageUri.value = it.toString()
+            bitmap.value = null // Reset bitmap nếu chọn từ thư viện
+        }
+    }
+    // Chụp ảnh từ camera
+    val camLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview()
+    ) {
+        if(it != null){
+            bitmap.value = it
+            imageUri.value = "" // Reset URI nếu chụp từ camera
+        }
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -117,11 +154,27 @@ fun AddNewBook(
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                Image(
-                    painter = painterResource(R.drawable.camera),
-                    contentDescription = null,
-                    modifier = Modifier.size(117.dp, 140.dp)
-                )
+                if(bitmap.value != null){
+                    Image(
+                        bitmap = bitmap.value!!.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.size(117.dp, 140.dp)
+                    )
+                }
+                else if(imageUri.value.isNotEmpty()){
+                    AsyncImage(
+                        model = imageUri.value,
+                        contentDescription = null,
+                        modifier = Modifier.size(117.dp, 140.dp)
+                    )
+                }
+                else{
+                    Image(
+                        rememberAsyncImagePainter(bookDetail.imageUri.ifEmpty { R.drawable.camera }),
+                        contentDescription = null,
+                        modifier = Modifier.size(117.dp, 140.dp)
+                    )
+                }
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -131,7 +184,7 @@ fun AddNewBook(
                     .fillMaxHeight()
             ) {
                 Button(
-                    onClick = {},
+                    onClick = { camLauncher.launch(null) },
                     shape = RoundedCornerShape(16.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
@@ -144,7 +197,7 @@ fun AddNewBook(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = {},
+                    onClick = { launcher.launch("image/*") },
                     shape = RoundedCornerShape(16.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MainColor),
@@ -249,7 +302,7 @@ fun AddNewBook(
 //            modifier = Modifier.height(60.dp).fillMaxWidth()
 //        )
         Row {
-            AddInfo(
+            AddNumInfo(
                 onValueChange = { onBookChange(bookDetail.copy(year = it)) },
                 value = bookDetail.year,
                 label = "Năm xuất bản",
@@ -309,7 +362,7 @@ fun AddNewBook(
 //                modifier = Modifier.height(60.dp).width(200.dp)
 //            )
         }
-        AddInfo(
+        AddNumInfo(
             onValueChange = { onBookChange(bookDetail.copy(quantities = it)) },
             value = bookDetail.quantities,
             label = "Số lượng",
@@ -339,7 +392,24 @@ fun AddNewBook(
 //            modifier = Modifier.height(60.dp)
 //        )
         Button(
-            onClick = onSaveClick,
+            onClick = {
+                if (bitmap.value != null) {
+                    val savedUri = saveBitmapToInternalStorage(
+                        context,
+                        bitmap.value!!,
+                        "book_${System.currentTimeMillis()}.jpg"
+                    )
+                    onBookChange(bookDetail.copy(imageUri = savedUri.toString()))
+                } else if (imageUri.value.isNotEmpty()) {
+                    val savedUri = saveImageToInternalStorage(
+                        context,
+                        Uri.parse(imageUri.value),
+                        "book_${System.currentTimeMillis()}.jpg"
+                    )
+                    onBookChange(bookDetail.copy(imageUri = savedUri.toString()))
+                }
+                onSaveClick()
+            },
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MainColor),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),

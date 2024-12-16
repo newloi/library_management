@@ -10,7 +10,7 @@ class MemberRepository(private val memberDao: MemberDao) {
     suspend fun updateMember(member: Member) = memberDao.update(member)
 
     suspend fun deleteMember(member: Member) {
-        member.imageUri?.let { uriString ->
+        member.imageUri.let { uriString ->
             val uri = Uri.parse(uriString)
             if (uri.scheme == "file") { // Kiểm tra xem URI có trỏ tới file không
                 val file = File(uri.path ?: "")

@@ -53,6 +53,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.rememberAsyncImagePainter
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.book.Book
 import com.example.librarymanagement.ui.AddButton
@@ -241,7 +242,7 @@ private fun BookInfo(
                 .padding(12.dp)
                 .weight(1f)) {
                 Image(
-                    painter = painterResource(R.drawable.rectangle_4165),
+                    painter = rememberAsyncImagePainter(book.imageUri),
                     contentDescription = book.name,
                     modifier = Modifier.size(81.dp, 97.dp)
                 )

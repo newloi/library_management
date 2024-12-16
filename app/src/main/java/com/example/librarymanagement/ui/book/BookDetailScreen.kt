@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.rememberAsyncImagePainter
 import com.example.librarymanagement.R
 import com.example.librarymanagement.data.book.Book
 import com.example.librarymanagement.ui.AppViewModelProvider
@@ -113,7 +114,7 @@ private fun BookDetail(
         }
         item {
             Image(
-                painter = painterResource(R.drawable.lamda_image),
+                painter = rememberAsyncImagePainter(book.imageUri),
                 contentDescription = "Hình ảnh minh họa của sách",
                 modifier = Modifier
                     .fillMaxWidth()

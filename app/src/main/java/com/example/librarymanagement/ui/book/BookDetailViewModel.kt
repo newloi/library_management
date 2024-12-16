@@ -46,5 +46,6 @@ data class BookDetailUiState(
         year = 0,
         type = "",
         quantities = 0,
+        imageUri = ""
     )
 )
