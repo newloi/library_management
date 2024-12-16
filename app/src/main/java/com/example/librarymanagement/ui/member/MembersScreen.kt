@@ -1,6 +1,7 @@
 package com.example.librarymanagement.ui.member
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,6 +63,7 @@ import com.example.librarymanagement.ui.FilterBar
 import com.example.librarymanagement.ui.HomeBottomAppBar
 import com.example.librarymanagement.ui.SearchTopBar
 import com.example.librarymanagement.ui.navigation.NavigationDestination
+import com.example.librarymanagement.ui.theme.BorderGray
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.Title
 import kotlinx.coroutines.launch
@@ -228,10 +231,16 @@ private fun MemberInfo(
                 .padding(12.dp)
                 .weight(1f)) {
                 Image(
-                    painter  = rememberAsyncImagePainter(member.imageUri),
+                    painter  = rememberAsyncImagePainter(member.imageUri.ifEmpty { R.drawable.defaulr_avatar }),
                     contentDescription = member.name,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(65.dp)
+                        .border(
+                            width = 1.5.dp,
+                            color = BorderGray,
+                            shape = CircleShape
+                        )
                         .clip(CircleShape),
 
                 )

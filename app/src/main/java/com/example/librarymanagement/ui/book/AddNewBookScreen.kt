@@ -170,7 +170,7 @@ fun AddNewBook(
                 }
                 else{
                     Image(
-                        rememberAsyncImagePainter(bookDetail.imageUri.ifEmpty { R.drawable.camera }),
+                        rememberAsyncImagePainter(bookDetail.imageUri.ifEmpty { R.drawable.default_book }),
                         contentDescription = null,
                         modifier = Modifier.size(117.dp, 140.dp)
                     )

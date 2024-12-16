@@ -112,7 +112,7 @@ fun AddNewMember(
     val interactionSource = remember { MutableInteractionSource() }
 
     // Trạng thái để lưu bitmap từ camera hoặc URI từ thư viện
-    val imageUri = rememberSaveable { mutableStateOf(memberDetail.imageUri ?: "") }
+    val imageUri = rememberSaveable { mutableStateOf(memberDetail.imageUri) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
     // Bộ chọn ảnh từ thư viện
@@ -167,7 +167,7 @@ fun AddNewMember(
                 }
                 else{
                     Image(
-                        rememberAsyncImagePainter(memberDetail.imageUri.ifEmpty { R.drawable.camera }),
+                        rememberAsyncImagePainter(memberDetail.imageUri.ifEmpty { R.drawable.defaulr_avatar }),
                         contentDescription = null,
                         modifier = Modifier.size(117.dp, 140.dp)
                     )

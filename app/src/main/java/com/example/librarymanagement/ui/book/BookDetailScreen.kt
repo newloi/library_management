@@ -114,7 +114,7 @@ private fun BookDetail(
         }
         item {
             Image(
-                painter = rememberAsyncImagePainter(book.imageUri),
+                painter = rememberAsyncImagePainter(book.imageUri.ifEmpty { R.drawable.default_book }),
                 contentDescription = "Hình ảnh minh họa của sách",
                 modifier = Modifier
                     .fillMaxWidth()

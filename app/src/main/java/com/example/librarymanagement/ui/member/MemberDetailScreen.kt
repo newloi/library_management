@@ -115,7 +115,7 @@ private fun MemberDetail(
         }
         item {
             Image(
-                painter = rememberAsyncImagePainter(member.imageUri),
+                painter = rememberAsyncImagePainter(member.imageUri.ifEmpty { R.drawable.defaulr_avatar }),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
