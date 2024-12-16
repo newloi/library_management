@@ -24,7 +24,7 @@ class MemberRepository(private val memberDao: MemberDao) {
 
     fun getAllMembersStream(): Flow<List<Member>> = memberDao.getAllMember()
 
-    fun getMemberStream(id: Int): Flow<Member> = memberDao.getMember(id)
+    fun getMemberStream(id: Int): Flow<Member?> = memberDao.getMember(id)
 
     fun searchMembersStream(searchText: String): Flow<List<Member>> = memberDao.searchMembers(searchText)
 }

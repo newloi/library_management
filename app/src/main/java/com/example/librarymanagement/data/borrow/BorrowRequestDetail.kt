@@ -5,7 +5,7 @@ package com.example.librarymanagement.data.borrow
  */
 data class BorrowRequestDetail(
     val borrowId : Int,
-    val listBooks: String,
+//    val listBooks: String,
     val listBookIds: String,
     val memberId: Int,
     val memberName: String,

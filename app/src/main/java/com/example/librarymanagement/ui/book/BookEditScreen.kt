@@ -25,22 +25,22 @@ object BookEditDestination : NavigationDestination {
 fun BookEditScreen(
     @DrawableRes bookImage: Int = R.drawable.lamda_image,
     navigateBack: () -> Unit,
-    bookEditViewModel: BookEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: BookEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             AddAppBar(
-                navigateBack = bookEditViewModel::showDialog,
-                title = stringResource(R.string.don_muon, bookEditViewModel.bookUiState.bookDetail.id)
+                navigateBack = viewModel::showDialog,
+                title = stringResource(R.string.don_muon, viewModel.bookUiState.bookDetail.id)
             )
         },
 //        floatingActionButton = {
 //            Button(
 //                onClick = {
 //                    coroutineScope.launch {
-//                        bookEditViewModel.updateBook()
+//                        viewModel.updateBook()
 //                        navigateBack()
 //                    }
 //                },
@@ -57,24 +57,24 @@ fun BookEditScreen(
 //        }
     ) { innerPadding ->
         AddNewBook(
-            onBookChange = bookEditViewModel::updateUiState,
-            bookDetail = bookEditViewModel.bookUiState.bookDetail,
+            onBookChange = viewModel::updateUiState,
+            bookDetail = viewModel.bookUiState.bookDetail,
             onSaveClick = {
                 coroutineScope.launch {
-                    bookEditViewModel.updateBook()
+                    viewModel.updateBook()
                     navigateBack()
                 }
             },
-            enable = bookEditViewModel.bookUiState.isBookValid,
+            enable = viewModel.bookUiState.isBookValid,
             modifier = Modifier.padding(innerPadding)
         )
-        if(bookEditViewModel.bookUiState.isShowDialog) {
+        if(viewModel.bookUiState.isShowDialog) {
             ConfirmCancel(
                 onDelete = {
-                    bookEditViewModel.showDialog()
+                    viewModel.showDialog()
                     navigateBack()
                 },
-                onCancel = bookEditViewModel::showDialog
+                onCancel = viewModel::showDialog
             )
         }
     }

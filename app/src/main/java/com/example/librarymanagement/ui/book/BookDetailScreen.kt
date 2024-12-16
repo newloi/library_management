@@ -54,34 +54,34 @@ fun BookDetailScreen(
     navigateToEditBook: (Int) -> Unit,
     navigateBack: () -> Unit,
     navigateDone: () -> Unit,
-    bookDetailViewModel: BookDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: BookDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
-    val bookDetailUiState by bookDetailViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     var isShowDialog by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             InfoAppBar(
-                navigateToEdit = { navigateToEditBook(bookDetailUiState.currentBook.id) },
+                navigateToEdit = { navigateToEditBook(uiState.currentBook.id) },
                 navigateBack = navigateBack,
                 onDelete = { isShowDialog = true },
-                title = stringResource(R.string.sach, bookDetailUiState.currentBook.id))
+                title = stringResource(R.string.sach, uiState.currentBook.id))
         }
     ) { innerPadding ->
         BookDetail(
 //            bookImage = bookImage,
-            book = bookDetailUiState.currentBook,
+            book = uiState.currentBook,
             modifier = modifier.padding(innerPadding)
         )
         if(isShowDialog) {
             ConfirmDelete(
                 title = "Xóa sách",
-                content = stringResource(R.string.delete_book_warning, bookDetailUiState.currentBook.name),
+                content = stringResource(R.string.delete_book_warning, uiState.currentBook.name),
                 onDelete = {
                     coroutineScope.launch {
-                        bookDetailViewModel.deleteBook()
+                        viewModel.deleteBook()
                         isShowDialog = false
                         navigateDone()
                     }

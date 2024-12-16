@@ -34,21 +34,23 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
         viewModelScope.launch {
             bookRepository.getAllBooksStream()
                 .map { books ->
-                    val currentBooks = books
+//                    val currentBooks = books
                     BooksScreenUiState(
-                        books = if(_booksScreenUiState.value.isSortIncreasing) {
-                                    currentBooks.sortedBy { it.name }
-                                } else {
-                                    currentBooks.sortedByDescending { it.name }
-                                },
-                        isSortIncreasing = _booksScreenUiState.value.isSortIncreasing,
-                        sortBy = _booksScreenUiState.value.sortBy
+//                        books = if(_booksScreenUiState.value.isSortIncreasing) {
+//                                    currentBooks.sortedBy { it.name }
+//                                } else {
+//                                    currentBooks.sortedByDescending { it.name }
+//                                },
+//                        isSortIncreasing = _booksScreenUiState.value.isSortIncreasing,
+//                        sortBy = _booksScreenUiState.value.sortBy,
+                        books = books
                     )
                 }
                 .collect {
                     _booksScreenUiState.value = it
                 }
         }
+
     }
 
     fun searchBooks(searchText: String) {
@@ -99,7 +101,8 @@ class BooksScreenViewModel(private val bookRepository: BookRepository) : ViewMod
     suspend fun deleteBook(book: Book) {
         bookRepository.deleteBook(book)
         // Làm mới danh sách sau khi xóa
-        searchBooks("") // Hiển thị lại toàn bộ sách
+//        searchBooks("") // Hiển thị lại toàn bộ sách
+        loadAllBooks()
     }
 }
 

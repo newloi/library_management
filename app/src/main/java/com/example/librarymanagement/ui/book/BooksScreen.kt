@@ -89,7 +89,7 @@ fun BooksScreen(
     navigateToSettingScreen: () -> Unit,
     navigateToEditBook: (Int) -> Unit,
     navigateToBookDetailScreen: (Int) -> Unit,
-    bookScreenViewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: BooksScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 //    books: List<Book> = listOf(
 //        Book(
 //            id = 0,
@@ -112,22 +112,22 @@ fun BooksScreen(
 //    ),
     modifier: Modifier = Modifier
 ) {
-    val bookScreenUiState by bookScreenViewModel.booksScreenUiState.collectAsState()
+    val uiState by viewModel.booksScreenUiState.collectAsState()
     val vietnameseCollator = Collator.getInstance(Locale("vi", "VN"))
     val books =
-        if(bookScreenUiState.isSortIncreasing) {
-            when(bookScreenUiState.sortBy) {
-                0 -> bookScreenUiState.books.sortedWith(compareBy(vietnameseCollator) { it.name })
-                1 -> bookScreenUiState.books.sortedBy { it.type }
-                2 -> bookScreenUiState.books.sortedBy { it.quantities }
-                else -> bookScreenUiState.books.sortedWith(compareBy(vietnameseCollator) { it.name })
+        if(uiState.isSortIncreasing) {
+            when(uiState.sortBy) {
+                0 -> uiState.books.sortedWith(compareBy(vietnameseCollator) { it.name })
+                1 -> uiState.books.sortedBy { it.type }
+                2 -> uiState.books.sortedBy { it.quantities }
+                else -> uiState.books.sortedWith(compareBy(vietnameseCollator) { it.name })
             }
         } else {
-            when(bookScreenUiState.sortBy) {
-                0 -> bookScreenUiState.books.sortedWith(compareByDescending(vietnameseCollator) { it.name })
-                1 -> bookScreenUiState.books.sortedByDescending { it.type }
-                2 -> bookScreenUiState.books.sortedByDescending { it.quantities }
-                else -> bookScreenUiState.books.sortedWith(compareByDescending(vietnameseCollator) { it.name })
+            when(uiState.sortBy) {
+                0 -> uiState.books.sortedWith(compareByDescending(vietnameseCollator) { it.name })
+                1 -> uiState.books.sortedByDescending { it.type }
+                2 -> uiState.books.sortedByDescending { it.quantities }
+                else -> uiState.books.sortedWith(compareByDescending(vietnameseCollator) { it.name })
             }
         }
     val coroutineScope = rememberCoroutineScope()
@@ -139,7 +139,7 @@ fun BooksScreen(
                 SearchTopBar(
                     search = { searchText ->
                         coroutineScope.launch {
-                            bookScreenViewModel.searchBooks(searchText)
+                            viewModel.searchBooks(searchText)
                         }
                     },
                     placeholder = "Nhập tên hoặc mã sách",
@@ -151,12 +151,12 @@ fun BooksScreen(
                         .padding(top = 12.dp)
                 )
                 FilterBar(
-                    isIncreasing = bookScreenUiState.isSortIncreasing,
-                    onSortByOpt0 = { bookScreenViewModel.setSortBy(0) },
-                    onSortByOpt1 = { bookScreenViewModel.setSortBy(1) },
-                    onSortByOpt2 = { bookScreenViewModel.setSortBy(2) },
+                    isIncreasing = uiState.isSortIncreasing,
+                    onSortByOpt0 = { viewModel.setSortBy(0) },
+                    onSortByOpt1 = { viewModel.setSortBy(1) },
+                    onSortByOpt2 = { viewModel.setSortBy(2) },
                     sortOptions = listOf("Xếp theo tên", "Xếp theo thể loại", "Xếp theo số lượng"),
-                    onToggleSortOrder = bookScreenViewModel::toggleSortOrder
+                    onToggleSortOrder = viewModel::toggleSortOrder
                 )
                 Divider(modifier = Modifier.shadow(4.dp))
             }
@@ -189,7 +189,7 @@ fun BooksScreen(
                             navigateToEditBook = { navigateToEditBook(book.id) },
                             onDelete = {
                                 coroutineScope.launch {
-                                    bookScreenViewModel.deleteBook(book)
+                                    viewModel.deleteBook(book)
                                 }
                             },
                             book = book,

@@ -8,6 +8,7 @@
     <string name="so_luong">"Số lượng: %d"</string>
     <string name="delete_book_warning">Bạn có chắc muốn xóa sách \"%s\" không?</string>
     <string name="delete_member_warning">Bạn có chắc muốn xóa thành viên \"%s\" không?</string>
+    <string name="delete_borrow_warning">Bạn có chắc muốn xóa đơn mượn \"%06d\" không?</string>
     <string name="ma_so">Mã số: %06d</string>
     <string name="ngay_dang_ki">Ngày đăng ký: %s</string>
     <string name="ngay_muon">Ngày mượn: %s</string>

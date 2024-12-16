@@ -81,6 +81,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.example.librarymanagement.R
+import com.example.librarymanagement.ui.borrow.BorrowRequestsUiState
 //import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
 import com.example.librarymanagement.ui.theme.Cancel
 import com.example.librarymanagement.ui.theme.Delete
@@ -110,7 +111,7 @@ fun SearchTopBar(
         },
 
         trailingIcon = {
-            if(searchText.isNotEmpty()){
+            if (searchText.isNotEmpty()) {
                 Icon(
                     Icons.Rounded.Clear,
                     contentDescription = "Xóa",
@@ -127,8 +128,7 @@ fun SearchTopBar(
                         )
                         .size(20.dp)
                 )
-            }
-            else{
+            } else {
                 Icon(
                     painter = painterResource(R.drawable.search),
                     contentDescription = "Tìm kiếm"
@@ -143,7 +143,7 @@ fun SearchTopBar(
         singleLine = true,
         shape = RoundedCornerShape(99.dp),
         keyboardActions = KeyboardActions(
-            onDone = {focusManager.clearFocus()}
+            onDone = { focusManager.clearFocus() }
         ),
         modifier = modifier
             .padding(horizontal = 16.dp)
@@ -193,7 +193,7 @@ fun FilterBar(
             }
         }
         IconButton(
-            onClick = {isExpanded = true},
+            onClick = { isExpanded = true },
             modifier = Modifier.padding(end = 12.dp)
         ) {
             Icon(
@@ -217,9 +217,11 @@ fun FilterBar(
                     },
                     modifier = Modifier.height(40.dp)
                 )
-                Divider(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(0.5.dp))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(0.5.dp)
+                )
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
@@ -233,9 +235,11 @@ fun FilterBar(
                     },
                     modifier = Modifier.height(40.dp)
                 )
-                Divider(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(0.5.dp))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(0.5.dp)
+                )
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
@@ -258,9 +262,12 @@ fun FilterBar(
 @Composable
 fun InfoAppBar(
     title: String,
-    navigateToEdit: () -> Unit,
+    navigateToEdit: () -> Unit = {},
     onDelete: () -> Unit,
     navigateBack: () -> Unit,
+    markReturned: () -> Unit = {},
+    isBorrow: Boolean = false,
+    isReturned: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
@@ -293,29 +300,54 @@ fun InfoAppBar(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false },
             ) {
-                DropdownMenuItem(
-                    onClick = {
-                        isExpanded = false
-                        navigateToEdit()
-                    },
-                    text = {
-                        Text(
-                            text = "Sửa",
-                            style = MaterialTheme.typography.labelMedium,
-                            modifier = Modifier.padding(start = 20.dp)
-                        )
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painter = painterResource(R.drawable.edit),
-                            contentDescription = "Sửa thông tin"
-                        )
-                    },
-                    modifier = Modifier.height(40.dp)
-                )
-                Divider(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp))
+                if (isBorrow && !isReturned) {
+                    DropdownMenuItem(
+                        onClick = {
+                            isExpanded = false
+                            markReturned()
+                        },
+                        text = {
+                            Text(
+                                text = "Đánh dấu đã trả",
+                                style = MaterialTheme.typography.labelMedium,
+//                                modifier = Modifier.padding(start = 20.dp),
+                                color = MainColor
+                            )
+                        },
+                        modifier = Modifier.height(40.dp)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                    )
+                } else if (!isBorrow) {
+                    DropdownMenuItem(
+                        onClick = {
+                            isExpanded = false
+                            navigateToEdit()
+                        },
+                        text = {
+                            Text(
+                                text = "Sửa",
+                                style = MaterialTheme.typography.labelMedium,
+                                modifier = Modifier.padding(start = 20.dp)
+                            )
+                        },
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.edit),
+                                contentDescription = "Sửa thông tin"
+                            )
+                        },
+                        modifier = Modifier.height(40.dp)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                    )
+                }
                 DropdownMenuItem(
                     onClick = {
                         isExpanded = false
@@ -343,6 +375,7 @@ fun InfoAppBar(
         modifier = modifier.shadow(4.dp)
     )
 }
+
 @Composable
 fun HomeBottomAppBar(
     navigateToBooksScreen: () -> Unit = {},
@@ -421,7 +454,7 @@ private fun TabIcon(
         },
         icon = {
             Icon(
-                painter = if(selected) painterResource(selectedIcon)
+                painter = if (selected) painterResource(selectedIcon)
                 else painterResource(unSelectedIcon),
                 contentDescription = label,
                 modifier = Modifier.size(28.dp)
@@ -463,7 +496,8 @@ fun InfoAbout(
     value: String,
     onValueChange: (String) -> Unit = {},
     canEdit: Boolean = false,
-    modifier:Modifier = Modifier
+    color: Color = Color.Black,
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         Text(
@@ -477,7 +511,7 @@ fun InfoAbout(
                 fontFamily = Roboto,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
-                color = Color.Black
+                color = color
             ),
             singleLine = true,
             onValueChange = { onValueChange(it) },
@@ -496,7 +530,8 @@ fun AddInfo(
     value: String,
 //    bookDetail: BookDetail,
     modifier: Modifier = Modifier,
-    label: String
+    label: String,
+    canEdit: Boolean = true
 ) {
     val focusManager = LocalFocusManager.current
 //    var text by remember { mutableStateOf("") }
@@ -519,8 +554,9 @@ fun AddInfo(
         shape = RoundedCornerShape(10.dp),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Default),
         keyboardActions = KeyboardActions(
-            onDone = {focusManager.clearFocus()}
+            onDone = { focusManager.clearFocus() }
         ),
+        enabled = canEdit,
         modifier = modifier.height(60.dp)
     )
 }
@@ -596,7 +632,8 @@ fun AddAppBar(
 fun TextFieldAbout(
     @DrawableRes icon: Int? = null,
     label: String,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
     TextField(
         label = {
             Text(
@@ -605,10 +642,10 @@ fun TextFieldAbout(
             )
         },
         value = "",
-        onValueChange = {  },
-        shape= RoundedCornerShape(16.dp),
+        onValueChange = { },
+        shape = RoundedCornerShape(16.dp),
         trailingIcon = {
-            if(icon != null){
+            if (icon != null) {
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = null
@@ -619,7 +656,7 @@ fun TextFieldAbout(
             focusedIndicatorColor = Color.Transparent, // Tắt đường gạch dưới khi focus
             unfocusedIndicatorColor = Color.Transparent // Tắt đường gạch dưới khi không focus
         ),
-        modifier = modifier.padding(top= 8.dp, bottom = 8.dp)
+        modifier = modifier.padding(top = 8.dp, bottom = 8.dp)
     )
 }
 
@@ -649,7 +686,7 @@ fun DropList(
             onValueChange = {},
             trailingIcon = {
                 Icon(
-                    imageVector = if(isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = null
                 )
             },
@@ -677,7 +714,7 @@ fun DropList(
                         isExpanded = false
                     },
                     modifier = Modifier.height(32.dp)
-                    )
+                )
             }
         }
     }
@@ -725,7 +762,7 @@ fun GenderDropList(
                 shape = RoundedCornerShape(10.dp),
                 trailingIcon = {
                     Icon(
-                        imageVector = if(expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                         contentDescription = "Dropdown icon"
                     )
                 }
@@ -811,8 +848,20 @@ fun ConfirmDialog(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterByDateBar(modifier: Modifier = Modifier) {
+fun FilterByDateBar(
+//    day: String,
+//    month: String,
+//    year: String,
+//    updateDate: (String, String, String) -> Unit,
+    search: (String, String, String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var day by rememberSaveable { mutableStateOf("") }
+    var month by rememberSaveable { mutableStateOf("") }
+    var year by rememberSaveable { mutableStateOf("") }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -820,11 +869,80 @@ fun FilterByDateBar(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        InputDate(placeholder = "DD")
+        TextField(
+            value = day,
+            onValueChange = {
+                day = it
+                search(day, month, year)
+            },
+            placeholder = {
+                Text(
+                    text = "DD",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = Color.Transparent,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedPlaceholderColor = MainColor,
+                unfocusedPlaceholderColor = Color.Gray
+            ),
+            singleLine = true,
+            modifier = Modifier.width(72.dp)
+        )
         Text(text = "/", style = MaterialTheme.typography.bodyMedium)
-        InputDate(placeholder = "MM")
+        TextField(
+            value = month,
+            onValueChange = {
+                month = it
+                search(day, month, year)
+            },
+            placeholder = {
+                Text(
+                    text = "MM",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = Color.Transparent,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedPlaceholderColor = MainColor,
+                unfocusedPlaceholderColor = Color.Gray
+            ),
+            singleLine = true,
+            modifier = Modifier.width(72.dp)
+        )
         Text(text = "/", style = MaterialTheme.typography.bodyMedium)
-        InputDate(placeholder = "YYYY")
+        TextField(
+            value = year,
+            onValueChange = {
+                year = it
+                search(day, month, year)
+            },
+            placeholder = {
+                Text(
+                    text = "YYYY",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = Color.Transparent,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedPlaceholderColor = MainColor,
+                unfocusedPlaceholderColor = Color.Gray
+            ),
+            singleLine = true,
+            modifier = Modifier.width(72.dp)
+        )
         IconButton(
             onClick = {}
         ) {
@@ -843,7 +961,7 @@ private fun InputDate(
     modifier: Modifier = Modifier,
     placeholder: String,
 
-) {
+    ) {
     TextField(
         value = "",
         onValueChange = {},
@@ -879,9 +997,11 @@ fun Modifier.shadowWithOffset(
 
 @Composable
 fun BorrowStateBottomBar(
+    onSwitch: () -> Unit,
+    selectedTab: Int,
     modifier: Modifier = Modifier
 ) {
-    var selectedTabIndex by remember { mutableStateOf(0) }
+//    var selectedTabIndex by remember { mutableStateOf(0) }
 
     Box(
         modifier = Modifier
@@ -889,10 +1009,10 @@ fun BorrowStateBottomBar(
             .shadowWithOffset(elevation = 2.dp, offsetY = (4).dp)
     ) {
         TabRow(
-            selectedTabIndex = selectedTabIndex,
+            selectedTabIndex = selectedTab,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
                     color = MainColor, // Thay đổi màu sắc cho gạch dưới (indicator)
                 )
             },
@@ -900,15 +1020,16 @@ fun BorrowStateBottomBar(
             ) {
             listOf("Chưa trả", "Đã trả").forEachIndexed { index, state ->
                 Tab(
-                    selected = true,
+                    selected = selectedTab == index,
                     text = {
                         Text(
                             text = state,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     },
-                    onClick = {},
+                    onClick = onSwitch,
                     selectedContentColor = MainColor,
+                    unselectedContentColor = Color.DarkGray,
                     modifier = Modifier.height(30.dp)
                 )
             }
@@ -919,24 +1040,24 @@ fun BorrowStateBottomBar(
 @Composable
 fun InfoAboutTable(
     value: String,
-    modifier:Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
-        OutlinedTextField(
-            value = value,
-            textStyle = TextStyle(
-                fontFamily = Roboto,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.Black
-            ),
-            singleLine = true,
-            onValueChange = {},
-            enabled = false,
-            shape = RoundedCornerShape(5.dp),
-            modifier = modifier
-                .height(52.dp)
-                .fillMaxWidth()
-        )
+    OutlinedTextField(
+        value = value,
+        textStyle = TextStyle(
+            fontFamily = Roboto,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color.Black
+        ),
+        singleLine = true,
+        onValueChange = {},
+        enabled = false,
+        shape = RoundedCornerShape(5.dp),
+        modifier = modifier
+            .height(52.dp)
+            .fillMaxWidth()
+    )
 }
 
 @Composable
@@ -1014,7 +1135,9 @@ fun DatePickerWithLabel(
             }
         },
         shape = RoundedCornerShape(10.dp),
-        modifier = Modifier.height(60.dp).fillMaxWidth()
+        modifier = modifier
+            .height(60.dp)
+            .fillMaxWidth()
     )
 //    if (showDialog) {
 //        Popup(

@@ -1,5 +1,7 @@
 package com.example.librarymanagement.ui.borrow
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,24 +28,33 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.librarymanagement.R
+import com.example.librarymanagement.data.borrow.BorrowRequest
 import com.example.librarymanagement.data.borrow.BorrowRequestDetail
 import com.example.librarymanagement.ui.AddButton
+import com.example.librarymanagement.ui.AppViewModelProvider
 import com.example.librarymanagement.ui.BorrowStateBottomBar
+import com.example.librarymanagement.ui.ConfirmDelete
 import com.example.librarymanagement.ui.FilterByDateBar
 import com.example.librarymanagement.ui.HomeBottomAppBar
 import com.example.librarymanagement.ui.SearchTopBar
@@ -51,6 +62,9 @@ import com.example.librarymanagement.ui.navigation.NavigationDestination
 import com.example.librarymanagement.ui.theme.Delete
 import com.example.librarymanagement.ui.theme.MainColor
 import com.example.librarymanagement.ui.theme.Title
+import kotlinx.coroutines.launch
+import java.text.Collator
+import java.util.Locale
 
 object BorrowRequestsDestination : NavigationDestination {
     override val route = "borrow_requests"
@@ -62,15 +76,37 @@ fun BorrowRequestsScreen(
     navigateToBooksScreen: () -> Unit,
     navigateToMembersScreen: () -> Unit,
     navigateToSettingScreen: () -> Unit,
-    borrowRequests: List<BorrowRequestDetail> = listOf(),
-    modifier: Modifier = Modifier
+    navigateToEditBorrowRequest: (Int) -> Unit,
+    navigateToBorrowRequestDetail: (Int) -> Unit,
+    viewModel: BorrowRequestsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val uiState by viewModel.borrowRequestsUiState.collectAsState()
+//    val vietnameseCollator = Collator.getInstance(Locale("vi", "VN"))
+    val borrowRequests =
+        if(uiState.onReturned) {
+            uiState.borrowRequests.filter {
+                it.state
+            }
+        } else {
+            uiState.borrowRequests.filter {
+                !it.state
+            }
+        }
+    val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth().padding(top = 56.dp)) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 56.dp)) {
                     SearchTopBar(
-                        search = {},
-                        placeholder = "Nhập mã đơn hoặc tên thành viên",
+                        search = { searchText ->
+                            coroutineScope.launch {
+                                viewModel.searchBorrowRequests(searchText)
+                            }
+                        },
+                        placeholder = "Nhập mã đơn hoặc thông tin thành viên",
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                     Divider(
@@ -78,14 +114,26 @@ fun BorrowRequestsScreen(
                             .fillMaxWidth()
                             .padding(top = 12.dp)
                     )
-                    FilterByDateBar()
+                    FilterByDateBar(
+//                        day = uiState.day,
+//                        month = uiState.month,
+//                        year = uiState.year,
+                        search = { day, month, year ->
+                            coroutineScope.launch {
+                                viewModel.searchByDate(day, month, year)
+                            }
+                        }
+                    )
                     Divider(modifier = Modifier.shadow(4.dp))
             }
         },
         floatingActionButton = { AddButton(onClick = navigateToAddNewBorrowRequest) },
         bottomBar = {
             Column {
-                BorrowStateBottomBar()
+                BorrowStateBottomBar(
+                    selectedTab = if(uiState.onReturned) 1 else 0,
+                    onSwitch = viewModel::switchStateTab
+                )
                 HomeBottomAppBar(
                     currentTabIndex = 2,
                     navigateToBooksScreen = navigateToBooksScreen,
@@ -93,15 +141,34 @@ fun BorrowRequestsScreen(
                     navigateToSettingScreen = navigateToSettingScreen
                 )
             }
-        }
+        },
+        modifier = Modifier.clickable(
+            indication = null,
+            interactionSource = interactionSource
+        ){ focusManager.clearFocus() }
     ) { innerPadding ->
-        Box(modifier = modifier.padding(innerPadding).fillMaxSize()) {
+        Box(modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()) {
             if(borrowRequests.isNotEmpty()) {
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
                 ) {
                     items(borrowRequests) { borrowRequest ->
-                        BorrowRequest(borrowRequest)
+                        BorrowRequestInfo(
+                           borrowRequest = borrowRequest,
+                            onDelete = {
+                                coroutineScope.launch {
+                                    viewModel.deleteBorrowRequest(borrowRequest)
+                                }
+                            },
+                            navigateToEditBorrowRequest = { navigateToEditBorrowRequest(borrowRequest.id) },
+                            getMemberName = {
+                                viewModel.getMemberName(it)
+                            },
+                            markReturned = { viewModel.markReturned(borrowRequest.id) },
+                            modifier = Modifier.clickable { navigateToBorrowRequestDetail(borrowRequest.id) }
+                        )
                     }
                 }
             } else {
@@ -109,7 +176,9 @@ fun BorrowRequestsScreen(
                     text = "Chưa có đơn mượn nào!",
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxSize().padding(top = 16.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 16.dp)
                 )
             }
         }
@@ -117,10 +186,21 @@ fun BorrowRequestsScreen(
 }
 
 @Composable
-private fun BorrowRequest(
-    borrowRequest: BorrowRequestDetail,
+private fun BorrowRequestInfo(
+    borrowRequest: BorrowRequest,
+    markReturned: () -> Unit,
+    onDelete: () -> Unit,
+    navigateToEditBorrowRequest: () -> Unit,
+    getMemberName: suspend (Int) -> String,
     modifier: Modifier = Modifier
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var memberName by rememberSaveable { mutableStateOf("") }
+    LaunchedEffect(borrowRequest.memberId) {
+        memberName = getMemberName(borrowRequest.memberId)
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -130,8 +210,6 @@ private fun BorrowRequest(
             containerColor = Color.White
         )
     ) {
-        var isExpanded by remember { mutableStateOf(false) }
-
         Row(
             modifier = Modifier,
         ) {
@@ -143,12 +221,12 @@ private fun BorrowRequest(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(R.string.id, borrowRequest.borrowId),
+                    text = stringResource(R.string.id, borrowRequest.id),
                     style = MaterialTheme.typography.titleMedium,
                     color = Title
                 )
                 Text(
-                    text = borrowRequest.memberName,
+                    text = memberName,
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
@@ -171,35 +249,35 @@ private fun BorrowRequest(
                     expanded = isExpanded,
                     onDismissRequest = { isExpanded = false },
                 ) {
+//                    DropdownMenuItem(
+//                        onClick = {
+//                            isExpanded = false
+//                            navigateToEditBorrowRequest()
+//                        },
+//                        text = {
+//                            Text(
+//                                text = "Sửa",
+//                                style = MaterialTheme.typography.labelMedium,
+//                                modifier = Modifier.padding(start = 20.dp)
+//                            )
+//                        },
+//                        trailingIcon = {
+//                            Icon(
+//                                painter = painterResource(R.drawable.edit),
+//                                contentDescription = "Sửa thông tin"
+//                            )
+//                        },
+//                        modifier = Modifier.height(40.dp)
+//                    )
+//                    Divider(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(1.dp)
+//                    )
                     DropdownMenuItem(
                         onClick = {
                             isExpanded = false
-                            /* Sua thong tin */
-                        },
-                        text = {
-                            Text(
-                                text = "Sửa",
-                                style = MaterialTheme.typography.labelMedium,
-                                modifier = Modifier.padding(start = 20.dp)
-                            )
-                        },
-                        trailingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.edit),
-                                contentDescription = "Sửa thông tin"
-                            )
-                        },
-                        modifier = Modifier.height(40.dp)
-                    )
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                    )
-                    DropdownMenuItem(
-                        onClick = {
-                            isExpanded = false
-                            /* Xoa */
+                            showDialog = true
                         },
                         text = {
                             Text(
@@ -218,29 +296,43 @@ private fun BorrowRequest(
                         },
                         modifier = Modifier.height(40.dp)
                     )
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                    )
-                    DropdownMenuItem(
-                        onClick = {
-                            isExpanded = false
-                            /* Danh dau da tra */
-                        },
-                        text = {
-                            Text(
-                                text = "Đánh dấu đã trả",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MainColor,
-                                modifier = Modifier.padding(start = 10.dp)
-                            )
-                        },
-                        modifier = Modifier.height(40.dp)
-                    )
+
+                    if(!borrowRequest.state) {
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                isExpanded = false
+                                markReturned()
+                            },
+                            text = {
+                                Text(
+                                    text = "Đánh dấu đã trả",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MainColor,
+                                    modifier = Modifier.padding(start = 10.dp)
+                                )
+                            },
+                            modifier = Modifier.height(40.dp)
+                        )
+                    }
                 }
             }
         }
+    }
+    if(showDialog) {
+        ConfirmDelete(
+            title = "Xóa đơn mượn",
+            content = stringResource(R.string.delete_borrow_warning, borrowRequest.id),
+            onDelete = {
+                onDelete()
+                showDialog = false
+            },
+            onCancel = { showDialog = false }
+        )
     }
 }
 

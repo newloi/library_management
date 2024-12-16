@@ -20,6 +20,7 @@ class AddNewBookViewModel(private val bookRepository: BookRepository) : ViewMode
             name.isNotBlank() && author.isNotBlank() &&
                     publisher.isNotBlank() && year.isNotBlank() &&
                     type.isNotBlank() && quantities.isNotBlank()
+//                    && quantities.toInt() >= 0
         }
     }
 

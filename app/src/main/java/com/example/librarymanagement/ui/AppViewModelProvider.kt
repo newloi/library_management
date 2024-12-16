@@ -11,6 +11,9 @@ import com.example.librarymanagement.ui.book.BookDetailViewModel
 import com.example.librarymanagement.ui.book.BookEditViewModel
 import com.example.librarymanagement.ui.book.BooksScreenViewModel
 import com.example.librarymanagement.ui.borrow.AddNewBorrowRequestViewModel
+import com.example.librarymanagement.ui.borrow.BorrowRequestDetailViewModel
+import com.example.librarymanagement.ui.borrow.BorrowRequestEditViewModel
+import com.example.librarymanagement.ui.borrow.BorrowRequestsViewModel
 import com.example.librarymanagement.ui.member.AddNewMemberViewModel
 import com.example.librarymanagement.ui.member.MemberDetailViewModel
 import com.example.librarymanagement.ui.member.MemberEditViewModel
@@ -58,7 +61,33 @@ object AppViewModelProvider {
         initializer {
             AddNewBorrowRequestViewModel(
                 borrowRepository = libraryManagementApplication().container.borrowRepository,
+                borrowRequestRepository = libraryManagementApplication().container.borrowRequestRepository,
+                bookRepository = libraryManagementApplication().container.bookRepository,
+                memberRepository = libraryManagementApplication().container.memberRepository
+            )
+        }
+        initializer {
+            BorrowRequestsViewModel(
+                borrowRequestRepository = libraryManagementApplication().container.borrowRequestRepository,
+                memberRepository = libraryManagementApplication().container.memberRepository
+            )
+        }
+        initializer {
+            BorrowRequestDetailViewModel(
+                this.createSavedStateHandle(),
+                borrowRepository = libraryManagementApplication().container.borrowRepository,
+                bookRepository = libraryManagementApplication().container.bookRepository,
+                memberRepository = libraryManagementApplication().container.memberRepository,
                 borrowRequestRepository = libraryManagementApplication().container.borrowRequestRepository
+            )
+        }
+        initializer {
+            BorrowRequestEditViewModel(
+                this.createSavedStateHandle(),
+                borrowRepository = libraryManagementApplication().container.borrowRepository,
+                borrowRequestRepository = libraryManagementApplication().container.borrowRequestRepository,
+                bookRepository = libraryManagementApplication().container.bookRepository,
+                memberRepository = libraryManagementApplication().container.memberRepository
             )
         }
     }

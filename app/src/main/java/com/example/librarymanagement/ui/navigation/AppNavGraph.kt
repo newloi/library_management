@@ -19,6 +19,8 @@ import com.example.librarymanagement.ui.book.BooksScreen
 import com.example.librarymanagement.ui.book.BooksDestination
 import com.example.librarymanagement.ui.borrow.AddNewBorrowRequestDestination
 import com.example.librarymanagement.ui.borrow.AddNewBorrowRequestScreen
+import com.example.librarymanagement.ui.borrow.BorrowRequestEditDestination
+import com.example.librarymanagement.ui.borrow.BorrowRequestEditScreen
 import com.example.librarymanagement.ui.borrow.BorrowRequestsDestination
 import com.example.librarymanagement.ui.borrow.BorrowRequestsScreen
 import com.example.librarymanagement.ui.member.AddNewMemberDestination
@@ -89,22 +91,6 @@ fun AppNavHost(
                     navigateBack = { navController.navigateUp() },
                 )
             }
-
-            composable(route = BorrowRequestDetailDestination.route) {
-                BorrowRequestDetailScreen(
-                    navigateToEditBorrowRequest = {},
-                    navigateBack = { navController.navigateUp() }
-                )
-            }
-            composable(route = BorrowRequestsDestination.route) {
-                BorrowRequestsScreen(
-                    navigateToAddNewBorrowRequest = {},
-                    navigateToBooksScreen = { navController.navigate(BooksDestination.route) },
-                    navigateToMembersScreen = { navController.navigate(MembersDestination.route) },
-                    navigateToSettingScreen = {}
-                )
-            }
-
             composable(route = AddNewMemberDestination.route) {
                 AddNewMemberScreen(
                     navigateDone = { navController.popBackStack() },
@@ -149,18 +135,33 @@ fun AppNavHost(
                     navigateToBooksScreen = { navController.navigate(BooksDestination.route) },
                     navigateToMembersScreen = { navController.navigate(MembersDestination.route) },
                     navigateToSettingScreen = {},
-                    navigateToAddNewBorrowRequest = { navController.navigate(AddNewBorrowRequestDestination.route) }
+                    navigateToAddNewBorrowRequest = { navController.navigate(AddNewBorrowRequestDestination.route) },
+                    navigateToEditBorrowRequest = { navController.navigate("${BorrowRequestEditDestination.route}/${it}") },
+                    navigateToBorrowRequestDetail = { navController.navigate("${BorrowRequestDetailDestination.route}/${it}") }
                 )
             }
-            composable(route = BorrowRequestDetailDestination.route) {
+            composable(
+                route = BorrowRequestDetailDestination.routeWithArgs,
+                arguments = listOf(navArgument(BorrowRequestDetailDestination.borrowRequestIdArg) {
+                    type = NavType.IntType
+
+                })
+            ) {
                 BorrowRequestDetailScreen(
-                    navigateToEditBorrowRequest = {},
+                    navigateToEditBorrowRequest = { navController.navigate("${BorrowRequestEditDestination.route}/${it}") },
                     navigateBack = { navController.navigateUp() },
+                    navigateDone = { navController.popBackStack() }
                 )
             }
-//            composable(route = BorrowRequestEditDestination.route) {
-//                BorrowRequestEditScreen()
-//            }
+            composable(route = BorrowRequestEditDestination.routeWithArgs,
+                arguments = listOf(navArgument(BorrowRequestEditDestination.borrowRequestIdArg) {
+                    type = NavType.IntType
+
+                })) {
+                BorrowRequestEditScreen(
+                    navigateBack = { navController.navigateUp() }
+                )
+            }
             composable(route = AddNewBorrowRequestDestination.route) {
                 AddNewBorrowRequestScreen(
                     navigateDone = { navController.popBackStack() },

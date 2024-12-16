@@ -10,4 +10,5 @@ class BorrowRepository(private val borrowDao: BorrowDao) {
 //
 //    suspend fun deleteBorrow(borrow: Borrow) = borrowDao.delete(borrow)
 
+    fun getAllBookIdsStreamWith(borrowId: Int): Flow<List<Int>> = borrowDao.getBookIdList(borrowId)
 }
