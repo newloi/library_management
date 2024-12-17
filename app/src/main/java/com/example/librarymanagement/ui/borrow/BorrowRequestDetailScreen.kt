@@ -245,7 +245,7 @@ fun BorrowRequestList(
             )
 
             InfoAboutTable(
-                value = "Ten sach",
+                value = "Tên sách",
                 modifier= Modifier
                     .weight(2.5f)
                     .border(width = 0.2.dp, color = Black)

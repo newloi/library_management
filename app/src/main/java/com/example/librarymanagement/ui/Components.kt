@@ -663,6 +663,7 @@ fun TextFieldAbout(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropList(
+    value: String,
     onValueChange: (String) -> Unit,
     label: String,
     items: List<String>,
@@ -682,7 +683,7 @@ fun DropList(
                     style = MaterialTheme.typography.labelMedium
                 )
             },
-            value = selected,
+            value = value,
             onValueChange = {},
             trailingIcon = {
                 Icon(
@@ -709,8 +710,8 @@ fun DropList(
                         )
                     },
                     onClick = {
-                        selected = item
-                        onValueChange(selected)
+//                        selected = item
+                        onValueChange(item)
                         isExpanded = false
                     },
                     modifier = Modifier.height(32.dp)

@@ -76,6 +76,7 @@ class BorrowRequestDetailViewModel(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun markReturned(borrowRequestId: Int) {
+        addQuantityByOne()
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         viewModelScope.launch {
@@ -87,6 +88,18 @@ class BorrowRequestDetailViewModel(
                     state = true
                 )
             )
+        }
+    }
+
+    private fun addQuantityByOne() {
+        viewModelScope.launch {
+            uiState.value.listBooks.forEach {
+                val currentBook = bookRepository
+                    .getBookStream(it).first()
+                if (currentBook != null) {
+                    bookRepository.updateBook(currentBook.copy(quantities = currentBook.quantities + 1))
+                }
+            }
         }
     }
 }

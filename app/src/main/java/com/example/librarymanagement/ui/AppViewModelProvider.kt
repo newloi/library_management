@@ -69,7 +69,9 @@ object AppViewModelProvider {
         initializer {
             BorrowRequestsViewModel(
                 borrowRequestRepository = libraryManagementApplication().container.borrowRequestRepository,
-                memberRepository = libraryManagementApplication().container.memberRepository
+                memberRepository = libraryManagementApplication().container.memberRepository,
+                bookRepository = libraryManagementApplication().container.bookRepository,
+                borrowRepository = libraryManagementApplication().container.borrowRepository
             )
         }
         initializer {

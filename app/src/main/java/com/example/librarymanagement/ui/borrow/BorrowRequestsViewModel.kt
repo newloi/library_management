@@ -5,6 +5,8 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.librarymanagement.data.book.Book
+import com.example.librarymanagement.data.book.BookRepository
+import com.example.librarymanagement.data.borrow.BorrowRepository
 import com.example.librarymanagement.data.borrow.BorrowRequest
 import com.example.librarymanagement.data.borrow.BorrowRequestDetailRepository
 import com.example.librarymanagement.data.borrow.BorrowRequestRepository
@@ -21,8 +23,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class BorrowRequestsViewModel(
+    private val borrowRepository: BorrowRepository,
     private val borrowRequestRepository: BorrowRequestRepository,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val bookRepository: BookRepository
 ) : ViewModel() {
     private val _borroRequestsUiState = MutableStateFlow(BorrowRequestsUiState())
     val borrowRequestsUiState: StateFlow<BorrowRequestsUiState> = _borroRequestsUiState
@@ -148,6 +152,7 @@ class BorrowRequestsViewModel(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun markReturned(borrowRequestId: Int) {
+        addQuantityByOne(borrowRequestId)
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         viewModelScope.launch {
@@ -159,6 +164,21 @@ class BorrowRequestsViewModel(
                     state = true
                 )
             )
+        }
+    }
+
+    private fun addQuantityByOne(borrowId: Int) {
+        viewModelScope.launch {
+            borrowRepository.getAllBookIdsStreamWith(borrowId).collect { bookList ->
+                bookList.forEach { book ->
+                    // Lấy thông tin sách hiện tại từ bookRepository
+                    val currentBook = bookRepository.getBookStream(book).first()
+                    if (currentBook != null) {
+                        // Tăng số lượng lên 1 và cập nhật lại trong cơ sở dữ liệu
+                        bookRepository.updateBook(currentBook.copy(quantities = currentBook.quantities + 1))
+                    }
+                }
+            }
         }
     }
 

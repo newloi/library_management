@@ -166,15 +166,7 @@ fun AddNewBorrowRequest(
 //            }
 //        }
 
-        AddInfo(
-            label = "Họ và tên người mượn",
-            value = borrowDetail.memberName,
-            onValueChange = {},
-            canEdit = false,
-            modifier = Modifier
-                .fillMaxWidth()
-//                .padding(bottom = 10.dp)
-        )
+
         Row(modifier = Modifier.padding(bottom = 10.dp)) {
             AddInfo(
                 label = "Mã người mượn",
@@ -191,21 +183,42 @@ fun AddNewBorrowRequest(
                 modifier = Modifier.weight(1f)
             )
         }
-        Row(modifier = Modifier.padding(bottom = 10.dp)) {
-            DatePickerWithLabel(
-                label = "Ngày mượn",
-                value = borrowDetail.borrowDate,
-                onValueChange = { onBorrowChange(borrowDetail.copy(borrowDate = it)) },
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(modifier = Modifier.width(40.dp))
-            DatePickerWithLabel(
-                label = "Ngày trả dự kiến",
-                value = borrowDetail.exceptDate,
-                onValueChange = { onBorrowChange(borrowDetail.copy(exceptDate = it)) },
-                modifier = Modifier.weight(1f)
-            )
-        }
+        AddInfo(
+            label = "Họ và tên người mượn",
+            value = borrowDetail.memberName,
+            onValueChange = {},
+            canEdit = false,
+            modifier = Modifier
+                .fillMaxWidth()
+//                .padding(bottom = 10.dp)
+        )
+//        Row(modifier = Modifier.padding(bottom = 10.dp)) {
+//            DatePickerWithLabel(
+//                label = "Ngày mượn",
+//                value = borrowDetail.borrowDate,
+//                onValueChange = { onBorrowChange(borrowDetail.copy(borrowDate = it)) },
+//                modifier = Modifier.weight(1f)
+//            )
+//            Spacer(modifier = Modifier.width(40.dp))
+//            DatePickerWithLabel(
+//                label = "Ngày trả dự kiến",
+//                value = borrowDetail.exceptDate,
+//                onValueChange = { onBorrowChange(borrowDetail.copy(exceptDate = it)) },
+//                modifier = Modifier.weight(1f)
+//            )
+//        }
+        DatePickerWithLabel(
+            label = "Ngày mượn",
+            value = borrowDetail.borrowDate,
+            onValueChange = { onBorrowChange(borrowDetail.copy(borrowDate = it)) },
+//            modifier = Modifier.weight(1f)
+        )
+        DatePickerWithLabel(
+            label = "Ngày trả dự kiến",
+            value = borrowDetail.exceptDate,
+            onValueChange = { onBorrowChange(borrowDetail.copy(exceptDate = it)) },
+//            modifier = Modifier.weight(1f)
+        )
 //        Row(modifier = Modifier.padding(bottom = 30.dp)) {
 //            AddInfo(
 //                label = "Ngày trả",

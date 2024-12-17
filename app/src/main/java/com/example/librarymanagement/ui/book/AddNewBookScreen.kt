@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -135,7 +137,7 @@ fun AddNewBook(
             imageUri.value = "" // Reset URI nếu chụp từ camera
         }
     }
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(32.dp)
@@ -145,81 +147,87 @@ fun AddNewBook(
             ) { focusManager.clearFocus() },
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .height(180.dp)) {
-            Column {
-                Text(
-                    text = "Nhập ảnh",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                if(bitmap.value != null){
-                    Image(
-                        bitmap = bitmap.value!!.asImageBitmap(),
-                        contentDescription = null,
-                        modifier = Modifier.size(117.dp, 140.dp)
-                    )
-                }
-                else if(imageUri.value.isNotEmpty()){
-                    AsyncImage(
-                        model = imageUri.value,
-                        contentDescription = null,
-                        modifier = Modifier.size(117.dp, 140.dp)
-                    )
-                }
-                else{
-                    Image(
-                        rememberAsyncImagePainter(bookDetail.imageUri.ifEmpty { R.drawable.default_book }),
-                        contentDescription = null,
-                        modifier = Modifier.size(117.dp, 140.dp)
-                    )
-                }
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+        item {
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .height(180.dp)
             ) {
-                Button(
-                    onClick = { camLauncher.launch(null) },
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-                    modifier = Modifier.size(150.dp, 34.dp)
-                ) {
+                Column {
                     Text(
-                        text = "Chụp ảnh",
-                        style = MaterialTheme.typography.labelMedium
+                        text = "Nhập ảnh",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
+                    if (bitmap.value != null) {
+                        Image(
+                            bitmap = bitmap.value!!.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier.size(117.dp, 140.dp)
+                        )
+                    } else if (imageUri.value.isNotEmpty()) {
+                        AsyncImage(
+                            model = imageUri.value,
+                            contentDescription = null,
+                            modifier = Modifier.size(117.dp, 140.dp)
+                        )
+                    } else {
+                        Image(
+                            rememberAsyncImagePainter(bookDetail.imageUri.ifEmpty { R.drawable.default_book }),
+                            contentDescription = null,
+                            modifier = Modifier.size(117.dp, 140.dp)
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                    onClick = { launcher.launch("image/*") },
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-                    modifier = Modifier.size(150.dp, 34.dp)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
                 ) {
-                    Text(
-                        text = "Chọn từ thư viện",
-                        style = MaterialTheme.typography.labelMedium
-                    )
+                    Button(
+                        onClick = { camLauncher.launch(null) },
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                        modifier = Modifier.size(150.dp, 34.dp)
+                    ) {
+                        Text(
+                            text = "Chụp ảnh",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = { launcher.launch("image/*") },
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                        modifier = Modifier.size(150.dp, 34.dp)
+                    ) {
+                        Text(
+                            text = "Chọn từ thư viện",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
                 }
             }
         }
-        Text(
-            text = "Nhập thông tin sách",
-            style = MaterialTheme.typography.titleLarge
-        )
-        AddInfo(
-            onValueChange = { onBookChange(bookDetail.copy(name = it)) },
-            value = bookDetail.name,
-            label = "Tên sách",
-            modifier = Modifier.fillMaxWidth()
-        )
+        item {
+            Text(
+                text = "Nhập thông tin sách",
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+        item {
+            AddInfo(
+                onValueChange = { onBookChange(bookDetail.copy(name = it)) },
+                value = bookDetail.name,
+                label = "Tên sách",
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 //        OutlinedTextField(
 //            label = {
 //                Text(
@@ -243,12 +251,14 @@ fun AddNewBook(
 //            ),
 //            modifier = Modifier.height(60.dp).fillMaxWidth()
 //        )
-        AddInfo(
-            onValueChange = { onBookChange(bookDetail.copy(author = it)) },
-            value = bookDetail.author,
-            label = "Tác giả",
-            modifier = Modifier.fillMaxWidth()
-        )
+        item {
+            AddInfo(
+                onValueChange = { onBookChange(bookDetail.copy(author = it)) },
+                value = bookDetail.author,
+                label = "Tác giả",
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 //        OutlinedTextField(
 //            label = {
 //                Text(
@@ -272,12 +282,14 @@ fun AddNewBook(
 //            ),
 //            modifier = Modifier.height(60.dp).fillMaxWidth()
 //        )
-        AddInfo(
-            onValueChange = { onBookChange(bookDetail.copy(publisher = it)) },
-            value = bookDetail.publisher,
-            label = "Nhà xuất bản",
-            modifier = Modifier.fillMaxWidth()
-        )
+        item {
+            AddInfo(
+                onValueChange = { onBookChange(bookDetail.copy(publisher = it)) },
+                value = bookDetail.publisher,
+                label = "Nhà xuất bản",
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 //        OutlinedTextField(
 //            label = {
 //                Text(
@@ -301,13 +313,14 @@ fun AddNewBook(
 //            ),
 //            modifier = Modifier.height(60.dp).fillMaxWidth()
 //        )
-        Row {
-            AddNumInfo(
-                onValueChange = { onBookChange(bookDetail.copy(year = it)) },
-                value = bookDetail.year,
-                label = "Năm xuất bản",
-                modifier = Modifier.width(120.dp)
-            )
+        item {
+            Row {
+                AddNumInfo(
+                    onValueChange = { onBookChange(bookDetail.copy(year = it)) },
+                    value = bookDetail.year,
+                    label = "Năm xuất bản",
+                    modifier = Modifier.width(120.dp)
+                )
 //            OutlinedTextField(
 //                label = {
 //                    Text(
@@ -331,13 +344,13 @@ fun AddNewBook(
 //                ),
 //                modifier = Modifier.height(60.dp).width(120.dp)
 //            )
-            Spacer(modifier = Modifier.width(16.dp))
-            AddInfo(
-                onValueChange = { onBookChange(bookDetail.copy(type = it)) },
-                value = bookDetail.type,
-                label = "Thể loại",
-                modifier = Modifier.width(200.dp)
-            )
+                Spacer(modifier = Modifier.width(16.dp))
+                AddInfo(
+                    onValueChange = { onBookChange(bookDetail.copy(type = it)) },
+                    value = bookDetail.type,
+                    label = "Thể loại",
+                    modifier = Modifier.width(200.dp)
+                )
 //            OutlinedTextField(
 //                label = {
 //                    Text(
@@ -361,13 +374,16 @@ fun AddNewBook(
 //                ),
 //                modifier = Modifier.height(60.dp).width(200.dp)
 //            )
+            }
         }
-        AddNumInfo(
-            onValueChange = { onBookChange(bookDetail.copy(quantities = it)) },
-            value = bookDetail.quantities,
-            label = "Số lượng",
-            modifier = Modifier.width(120.dp)
-        )
+        item {
+            AddNumInfo(
+                onValueChange = { onBookChange(bookDetail.copy(quantities = it)) },
+                value = bookDetail.quantities,
+                label = "Số lượng",
+                modifier = Modifier.width(120.dp)
+            )
+        }
 //        OutlinedTextField(
 //            label = {
 //                Text(
@@ -391,37 +407,42 @@ fun AddNewBook(
 //            ),
 //            modifier = Modifier.height(60.dp)
 //        )
-        Button(
-            onClick = {
-                if (bitmap.value != null) {
-                    val savedUri = saveBitmapToInternalStorage(
-                        context,
-                        bitmap.value!!,
-                        "book_${System.currentTimeMillis()}.jpg"
+        item {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    onClick = {
+                        if (bitmap.value != null) {
+                            val savedUri = saveBitmapToInternalStorage(
+                                context,
+                                bitmap.value!!,
+                                "book_${System.currentTimeMillis()}.jpg"
+                            )
+                            onBookChange(bookDetail.copy(imageUri = savedUri.toString()))
+                        } else if (imageUri.value.isNotEmpty()) {
+                            val savedUri = saveImageToInternalStorage(
+                                context,
+                                Uri.parse(imageUri.value),
+                                "book_${System.currentTimeMillis()}.jpg"
+                            )
+                            onBookChange(bookDetail.copy(imageUri = savedUri.toString()))
+                        }
+                        onSaveClick()
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+                    enabled = enable,
+                    modifier = Modifier
+//                        .align(Alignment.End)
+                        .size(100.dp, 40.dp)
+                ) {
+                    Text(
+                        text = "Xong",
+                        style = MaterialTheme.typography.labelMedium
                     )
-                    onBookChange(bookDetail.copy(imageUri = savedUri.toString()))
-                } else if (imageUri.value.isNotEmpty()) {
-                    val savedUri = saveImageToInternalStorage(
-                        context,
-                        Uri.parse(imageUri.value),
-                        "book_${System.currentTimeMillis()}.jpg"
-                    )
-                    onBookChange(bookDetail.copy(imageUri = savedUri.toString()))
                 }
-                onSaveClick()
-            },
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-            enabled = enable,
-            modifier = Modifier
-                .align(Alignment.End)
-                .size(100.dp, 40.dp)
-        ) {
-            Text(
-                text = "Xong",
-                style = MaterialTheme.typography.labelMedium
-            )
+            }
         }
     }
 }

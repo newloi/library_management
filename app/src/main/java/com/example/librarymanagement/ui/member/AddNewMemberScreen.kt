@@ -167,7 +167,7 @@ fun AddNewMember(
                 }
                 else{
                     Image(
-                        rememberAsyncImagePainter(memberDetail.imageUri.ifEmpty { R.drawable.defaulr_avatar }),
+                        rememberAsyncImagePainter(memberDetail.imageUri.ifEmpty { R.drawable.default_avatar }),
                         contentDescription = null,
                         modifier = Modifier.size(117.dp, 140.dp)
                     )
@@ -217,6 +217,7 @@ fun AddNewMember(
         )
         Row {
             DropList(
+                value = memberDetail.gender,
                 onValueChange = { onMemberChange(memberDetail.copy(gender = it)) },
                 label = "Giới tính",
                 items = listOf("Nam", "Nữ", "Khác"),

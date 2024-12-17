@@ -231,7 +231,7 @@ private fun MemberInfo(
                 .padding(12.dp)
                 .weight(1f)) {
                 Image(
-                    painter  = rememberAsyncImagePainter(member.imageUri.ifEmpty { R.drawable.defaulr_avatar }),
+                    painter  = rememberAsyncImagePainter(member.imageUri.ifEmpty { R.drawable.default_avatar }),
                     contentDescription = member.name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
